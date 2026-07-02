@@ -30,6 +30,7 @@ export class OneBotGateway {
   constructor(
     private readonly config: AppConfig,
     private readonly logger: Logger,
+    private readonly onOutboundMessage?: (chatType: OneBotReplyContext['chatType']) => void,
   ) {}
 
   async start(onEvent: (payload: unknown) => Promise<void>): Promise<void> {
@@ -200,6 +201,7 @@ export class OneBotGateway {
         : { user_id: params.targetId, message: params.message };
 
     const response = await this.transport.sendAction(action, actionParams);
+    this.onOutboundMessage?.(params.chatType);
     return this.extractMessageId(response);
   }
 

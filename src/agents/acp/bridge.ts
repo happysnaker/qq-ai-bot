@@ -107,6 +107,10 @@ export class ACPAgentBridge {
   constructor(
     private readonly config: AppConfig,
     private readonly logger: Logger,
+    private readonly hooks?: {
+      onPromptStarted?: () => void;
+      onPromptFailed?: () => void;
+    },
   ) {
     this.state = {
       accumulatedText: '',
@@ -190,6 +194,7 @@ export class ACPAgentBridge {
       contextLines: params.contextLines,
     });
     const sessionId = this.remoteSessionId;
+    this.hooks?.onPromptStarted?.();
 
     try {
       const response = await this.connection.prompt({
@@ -207,6 +212,7 @@ export class ACPAgentBridge {
         sessionId: this.remoteSessionId ?? sessionId,
       };
     } catch (error) {
+      this.hooks?.onPromptFailed?.();
       if (this.isRecoverableConnectionError(error)) {
         this.logger.warn(
           {

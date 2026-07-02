@@ -6,6 +6,7 @@ export interface AdminServerDeps {
   port: number;
   logger: Logger;
   getStatus: () => Record<string, unknown>;
+  getMetrics: () => string;
 }
 
 export class AdminServer {
@@ -29,6 +30,12 @@ export class AdminServer {
         res.statusCode = 200;
         res.setHeader('content-type', 'application/json');
         res.end(JSON.stringify(this.deps.getStatus(), null, 2));
+        return;
+      }
+      if (req.url === '/metrics') {
+        res.statusCode = 200;
+        res.setHeader('content-type', 'text/plain; version=0.0.4; charset=utf-8');
+        res.end(this.deps.getMetrics());
         return;
       }
       res.statusCode = 404;

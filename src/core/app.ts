@@ -9,6 +9,7 @@ import { PersistentSessionStore } from './persistent-session-store.js';
 import { ConversationManager } from './conversation-manager.js';
 import { AdminServer } from './admin-server.js';
 import { getBuildInfo } from './build-info.js';
+import { RuntimeMetrics } from './runtime-metrics.js';
 import type { NormalizedOneBotEvent, OneBotReplyContext } from '../types/onebot.js';
 import type { GroupConversationPolicy } from '../config/index.js';
 import type { AgentImageOutput } from '../types/agent.js';
@@ -35,13 +36,19 @@ export class BotApplication {
   private readonly store: PersistentSessionStore;
   private readonly conversations: ConversationManager;
   private readonly adminServer: AdminServer;
+  private readonly metrics: RuntimeMetrics;
   private cleanupTimer: NodeJS.Timeout | null = null;
 
   constructor(
     private readonly config: AppConfig,
     private readonly logger: Logger,
   ) {
-    this.gateway = new OneBotGateway(config, logger.child({ component: 'onebot' }));
+    this.metrics = new RuntimeMetrics();
+    this.gateway = new OneBotGateway(
+      config,
+      logger.child({ component: 'onebot' }),
+      (chatType) => this.metrics.recordOutboundMessage(chatType),
+    );
     this.store = new PersistentSessionStore(
       config.storage.sessionFilePath,
       logger.child({ component: 'session-store' }),
@@ -50,12 +57,17 @@ export class BotApplication {
       config,
       logger.child({ component: 'conversation-manager' }),
       this.store,
+      {
+        onAcpPromptStarted: () => this.metrics.recordAcpPromptCall(),
+        onAcpPromptFailed: () => this.metrics.recordAcpPromptFailure(),
+      },
     );
     this.adminServer = new AdminServer({
       host: config.server.host,
       port: config.server.port,
       logger: logger.child({ component: 'admin-server' }),
       getStatus: () => this.getStatus(),
+      getMetrics: () => this.getMetrics(),
     });
   }
 
@@ -125,11 +137,23 @@ export class BotApplication {
     };
   }
 
+  getMetrics(): string {
+    const onebotStatus = this.gateway.getStatus();
+    return this.metrics.render({
+      build: getBuildInfo(),
+      onebotConnected: Boolean(onebotStatus.connected),
+      onebotReconnectAttempts: onebotStatus.reconnectAttempts ?? 0,
+      activeConversations: this.conversations.listActive().length,
+      persistedConversations: this.conversations.listPersisted().length,
+    });
+  }
+
   private async handleIncomingPayload(payload: unknown): Promise<void> {
     const event = normalizeOneBotEvent(payload);
     if (!event) {
       return;
     }
+    this.metrics.recordInboundMessage();
     const command = this.parseCommand(event.commandText);
 
     if (event.isSelfMessage) {
@@ -194,6 +218,8 @@ export class BotApplication {
     const conversationKey = conversationKeyOf(event);
     const policy = this.resolveConversationPolicy(event);
     const prefix = this.config.onebot.commandPrefix;
+    this.metrics.recordProcessedMessage('command');
+    this.metrics.recordCommand(command.name);
 
     switch (command.name) {
       case '':
@@ -253,6 +279,7 @@ export class BotApplication {
   }
 
   private async processUserMessage(event: NormalizedOneBotEvent): Promise<void> {
+    this.metrics.recordProcessedMessage('user_message');
     const conversationKey = conversationKeyOf(event);
     const policy = this.resolveConversationPolicy(event);
     const runtime = this.conversations.getOrCreate({
@@ -303,6 +330,7 @@ export class BotApplication {
       await this.conversations.persistRuntime(runtime);
     } catch (error) {
       progressReporter.stop();
+      this.metrics.recordError('message_processing');
       this.logger.error(
         {
           conversationKey,

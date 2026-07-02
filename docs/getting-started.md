@@ -150,9 +150,10 @@ ws://127.0.0.1:16700/onebot/v11/ws
 ```bash
 curl http://127.0.0.1:18080/healthz
 curl http://127.0.0.1:18080/readyz
+curl http://127.0.0.1:18080/metrics
 ```
 
-`/readyz` 更适合排查问题，能看到当前是否接上 QQ、配置了多少群策略之类的信息。
+`/readyz` 更适合排查问题，能看到当前是否接上 QQ、配置了多少群策略之类的信息。`/metrics` 会以 Prometheus 文本格式暴露最基础的运行指标，例如 OneBot 连接状态、入站 / 出站消息数、ACP prompt 调用数、活跃会话数等。
 
 现在它也会返回 build / version 信息，方便你确认当前跑起来的到底是哪一个版本。
 

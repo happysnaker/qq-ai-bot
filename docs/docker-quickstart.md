@@ -77,6 +77,7 @@ bot 的 HTTP 健康检查：
 ```bash
 curl http://127.0.0.1:18080/healthz
 curl http://127.0.0.1:18080/readyz
+curl http://127.0.0.1:18080/metrics
 ```
 
 ## 5. 这套演示默认用了什么 agent

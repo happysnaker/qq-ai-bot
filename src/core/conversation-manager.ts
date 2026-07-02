@@ -16,6 +16,10 @@ export class ConversationManager {
     private readonly config: AppConfig,
     private readonly logger: Logger,
     private readonly store: PersistentSessionStore,
+    private readonly hooks?: {
+      onAcpPromptStarted?: () => void;
+      onAcpPromptFailed?: () => void;
+    },
   ) {}
 
   async load(): Promise<void> {
@@ -51,7 +55,14 @@ export class ConversationManager {
 
     const runtime: ConversationRuntime = {
       ...meta,
-      bridge: new ACPAgentBridge(this.config, this.logger.child({ conversationKey: meta.conversationKey })),
+      bridge: new ACPAgentBridge(
+        this.config,
+        this.logger.child({ conversationKey: meta.conversationKey }),
+        {
+          onPromptStarted: () => this.hooks?.onAcpPromptStarted?.(),
+          onPromptFailed: () => this.hooks?.onAcpPromptFailed?.(),
+        },
+      ),
       lastActivityAt: Date.now(),
     };
     this.runtimes.set(meta.conversationKey, runtime);

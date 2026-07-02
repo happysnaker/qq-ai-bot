@@ -156,6 +156,7 @@ ws://127.0.0.1:16700/onebot/v11/ws
 - 可插拔 session store（优先 Redis）
 - `/metrics` 与基础 observability
 - 在 `/readyz` / `/status` 中暴露 build / version 信息
+- 在 `/metrics` 中暴露 OneBot 连接状态、入站 / 出站消息数、ACP prompt 调用数与会话 gauges
 - richer media / 附件处理
 
 如果你准备提 PR，建议先看 [CONTRIBUTING.md](./CONTRIBUTING.md)。

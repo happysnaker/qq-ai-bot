@@ -125,6 +125,7 @@ group.systemPrompt > ACP_DEFAULT_SYSTEM_PROMPT > 无
 
 - HTTP `/readyz` 和 `/status` 会返回 `build` 字段
 - QQ 内的 `/status` 也会显示当前版本与启动时间
+- HTTP `/metrics` 会返回 Prometheus 风格文本指标，当前包含 OneBot 连接状态、重连次数、入站 / 出站消息计数、ACP prompt 调用 / 失败计数、活跃 / 持久化会话数等
 
 如果你在 Docker / CI / 发布流程里注入了 `APP_GIT_COMMIT` 或 `APP_BUILD_REF`，它们也会一起显示出来，便于排查线上实例到底跑的是哪个版本。
 

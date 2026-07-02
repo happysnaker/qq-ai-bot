@@ -1,4 +1,8 @@
-import type { PlannedOutboundAction, PlannedOutboundPayload } from '../../types/onebot.js';
+import type {
+  OneBotOutboundImage,
+  PlannedOutboundAction,
+  PlannedOutboundPayload,
+} from '../../types/onebot.js';
 
 const MARKDOWN_IMAGE_PATTERN = /!\[[^\]]*\]\((https?:\/\/[^)\s]+)(?:\s+"[^"]*")?\)/giu;
 
@@ -42,6 +46,39 @@ function uniqueHttpUrls(urls: string[]): string[] {
   return next;
 }
 
+function mergeOutboundImages(params: {
+  mediaUrls?: string[];
+  mediaImages?: OneBotOutboundImage[];
+  markdownImageUrls: string[];
+}): OneBotOutboundImage[] {
+  const result: OneBotOutboundImage[] = [];
+  const seenUrls = new Set<string>();
+
+  const pushImage = (image: OneBotOutboundImage): void => {
+    if (image.kind === 'url') {
+      if (!/^https?:\/\//i.test(image.value) || seenUrls.has(image.value)) {
+        return;
+      }
+      seenUrls.add(image.value);
+    }
+    result.push(image);
+  };
+
+  for (const image of params.mediaImages || []) {
+    pushImage(image);
+  }
+
+  for (const url of uniqueHttpUrls(params.mediaUrls || [])) {
+    pushImage({ kind: 'url', value: url });
+  }
+
+  for (const url of uniqueHttpUrls(params.markdownImageUrls)) {
+    pushImage({ kind: 'url', value: url });
+  }
+
+  return result;
+}
+
 export function splitLongText(text: string, maxLength: number): string[] {
   if (text.length <= maxLength) {
     return [text];
@@ -75,24 +112,30 @@ export function splitLongText(text: string, maxLength: number): string[] {
 export function planOutboundPayload(params: {
   text: string;
   mediaUrls?: string[];
+  mediaImages?: OneBotOutboundImage[];
   maxTextLength: number;
 }): PlannedOutboundPayload {
   const extracted = extractMarkdownImageUrls(params.text || '');
-  const imageUrls = uniqueHttpUrls([
-    ...(params.mediaUrls || []),
-    ...extracted.imageUrls,
-  ]);
+  const images = mergeOutboundImages({
+    mediaUrls: params.mediaUrls,
+    mediaImages: params.mediaImages,
+    markdownImageUrls: extracted.imageUrls,
+  });
+  const imageUrls = images
+    .filter((image): image is Extract<OneBotOutboundImage, { kind: 'url' }> => image.kind === 'url')
+    .map((image) => image.value);
 
   const actions: PlannedOutboundAction[] = splitLongText(extracted.cleanedText, params.maxTextLength)
+    .filter((text) => text.length > 0)
     .map((text) => ({
       kind: 'text' as const,
       text,
     }));
 
-  for (const url of imageUrls) {
+  for (const image of images) {
     actions.push({
       kind: 'image',
-      url,
+      image,
     });
   }
 

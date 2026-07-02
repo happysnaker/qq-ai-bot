@@ -11,6 +11,7 @@ import { AdminServer } from './admin-server.js';
 import { getBuildInfo } from './build-info.js';
 import type { NormalizedOneBotEvent, OneBotReplyContext } from '../types/onebot.js';
 import type { GroupConversationPolicy } from '../config/index.js';
+import type { AgentImageOutput } from '../types/agent.js';
 
 function conversationKeyOf(event: NormalizedOneBotEvent): string {
   return `${event.mode}:${event.conversationId}`;
@@ -294,7 +295,10 @@ export class BotApplication {
       progressReporter.stop();
 
       const replyText = this.decorateStopReason(response.text, response.stopReason);
-      await this.gateway.sendPayload(replyContext, { text: replyText });
+      await this.gateway.sendPayload(replyContext, {
+        text: replyText,
+        mediaImages: response.images.map((image) => this.toOutboundImage(image)),
+      });
       runtime.lastActivityAt = Date.now();
       await this.conversations.persistRuntime(runtime);
     } catch (error) {
@@ -437,5 +441,24 @@ export class BotApplication {
       return '处理消息失败：本地 AI 连接刚刚断开，已自动清理连接。请直接重试一次；如果还失败，请先发送 /reset 再试。';
     }
     return `处理消息失败：${message}`;
+  }
+
+  private toOutboundImage(image: AgentImageOutput): {
+    kind: 'url' | 'base64';
+    value: string;
+    mimeType?: string;
+  } {
+    if (image.uri && /^https?:\/\//i.test(image.uri)) {
+      return {
+        kind: 'url',
+        value: image.uri,
+        mimeType: image.mimeType,
+      };
+    }
+    return {
+      kind: 'base64',
+      value: image.base64Data,
+      mimeType: image.mimeType,
+    };
   }
 }

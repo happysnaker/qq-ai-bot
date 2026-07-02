@@ -132,6 +132,19 @@ class MockAgent {
       },
     });
 
+    await client.notify(acp.methods.client.session.update, {
+      sessionId: params.sessionId,
+      update: {
+        sessionUpdate: 'agent_message_chunk',
+        content: {
+          type: 'image',
+          mimeType: 'image/png',
+          data: 'ZmFrZS1vdXRwdXQtaW1hZ2U=',
+          uri: 'https://example.com/mock-output.png',
+        },
+      },
+    });
+
     return {
       stopReason: 'end_turn',
       usage: {

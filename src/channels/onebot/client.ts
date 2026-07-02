@@ -1,6 +1,7 @@
 import type { Logger } from 'pino';
 import type { AppConfig } from '../../config/index.js';
 import type {
+  OneBotOutboundImage,
   OneBotActionResponse,
   OneBotReplyContext,
   PlannedOutboundPayload,
@@ -96,11 +97,13 @@ export class OneBotGateway {
     params: {
       text: string;
       mediaUrls?: string[];
+      mediaImages?: OneBotOutboundImage[];
     },
   ): Promise<string[]> {
     const plan = planOutboundPayload({
       text: params.text,
       mediaUrls: params.mediaUrls,
+      mediaImages: params.mediaImages,
       maxTextLength: this.config.onebot.outboundMaxTextLength,
     });
     return this.sendPlannedPayload(context, plan);
@@ -126,12 +129,12 @@ export class OneBotGateway {
           messageIds.push(messageId);
         }
       }
-      if (action.kind === 'image' && action.url) {
+      if (action.kind === 'image' && action.image) {
         const messageId = await this.sendConversationMessage({
           ...context,
           replyToId: first ? context.replyToId : undefined,
           message: this.buildMessageSegments({
-            imageUrl: action.url,
+            image: action.image,
             replyToId: first ? context.replyToId : undefined,
           }),
         });
@@ -146,7 +149,7 @@ export class OneBotGateway {
 
   private buildMessageSegments(params: {
     text?: string;
-    imageUrl?: string;
+    image?: OneBotOutboundImage;
     replyToId?: string;
   }): string | Array<Record<string, unknown>> {
     const segments: Array<Record<string, unknown>> = [];
@@ -162,16 +165,23 @@ export class OneBotGateway {
         data: { text: params.text },
       });
     }
-    if (params.imageUrl) {
+    if (params.image) {
       segments.push({
         type: 'image',
-        data: { file: params.imageUrl },
+        data: { file: this.toOneBotImageFile(params.image) },
       });
     }
     if (segments.length === 1 && params.text && !params.replyToId) {
       return params.text;
     }
     return segments;
+  }
+
+  private toOneBotImageFile(image: OneBotOutboundImage): string {
+    if (image.kind === 'url') {
+      return image.value;
+    }
+    return `base64://${image.value}`;
   }
 
   private async sendConversationMessage(params: {

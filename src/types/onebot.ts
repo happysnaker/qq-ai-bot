@@ -61,10 +61,22 @@ export interface OneBotReplyContext {
   replyToId?: string;
 }
 
+export type OneBotOutboundImage =
+  | {
+      kind: 'url';
+      value: string;
+      mimeType?: string;
+    }
+  | {
+      kind: 'base64';
+      value: string;
+      mimeType?: string;
+    };
+
 export interface PlannedOutboundAction {
   kind: 'text' | 'image';
   text?: string;
-  url?: string;
+  image?: OneBotOutboundImage;
 }
 
 export interface PlannedOutboundPayload {

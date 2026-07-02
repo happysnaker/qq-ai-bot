@@ -9,6 +9,7 @@ import type {
   ACPAgentCapabilities,
   ACPBridgeState,
   AgentImageInput,
+  AgentImageOutput,
   AgentResponse,
   PermissionStrategy,
   ToolCallEntry,
@@ -78,6 +79,17 @@ function pickPermissionOption(
   );
 }
 
+function extractImageOutput(content: schema.ContentBlock): AgentImageOutput | null {
+  if (content.type !== 'image' || typeof content.data !== 'string' || typeof content.mimeType !== 'string') {
+    return null;
+  }
+  return {
+    mimeType: content.mimeType,
+    base64Data: content.data,
+    uri: typeof content.uri === 'string' ? content.uri : undefined,
+  };
+}
+
 export class ACPAgentBridge {
   private process: ChildProcess | null = null;
   private connection: acp.ClientSideConnection | null = null;
@@ -98,6 +110,7 @@ export class ACPAgentBridge {
   ) {
     this.state = {
       accumulatedText: '',
+      accumulatedImages: [],
       accumulatedThoughts: [],
       accumulatedToolCalls: [],
       verboseMode: config.ai.verboseMode,
@@ -115,6 +128,7 @@ export class ACPAgentBridge {
   getState(): ACPBridgeState {
     return {
       ...this.state,
+      accumulatedImages: [...this.state.accumulatedImages],
       accumulatedThoughts: [...this.state.accumulatedThoughts],
       accumulatedToolCalls: [...this.state.accumulatedToolCalls],
     };
@@ -160,6 +174,7 @@ export class ACPAgentBridge {
     this.progressCallback = params.onProgress;
     this.state = {
       accumulatedText: '',
+      accumulatedImages: [],
       accumulatedThoughts: [],
       accumulatedToolCalls: [],
       currentPlan: undefined,
@@ -186,6 +201,7 @@ export class ACPAgentBridge {
 
       return {
         text: this.state.accumulatedText,
+        images: [...this.state.accumulatedImages],
         stopReason: response.stopReason,
         usage: response.usage,
         sessionId: this.remoteSessionId ?? sessionId,
@@ -487,9 +503,14 @@ export class ACPAgentBridge {
     }
 
     if (update.sessionUpdate === 'agent_message_chunk') {
-      const messageChunk = update as schema.SessionNotification['update'] & { content: { type: string; text?: string } };
+      const messageChunk = update as schema.SessionNotification['update'] & { content: schema.ContentBlock };
       if (messageChunk.content.type === 'text') {
         this.state.accumulatedText += messageChunk.content.text;
+      } else if (messageChunk.content.type === 'image') {
+        const image = extractImageOutput(messageChunk.content);
+        if (image) {
+          this.state.accumulatedImages = [...this.state.accumulatedImages, image];
+        }
       }
       return;
     }

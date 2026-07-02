@@ -9,6 +9,12 @@ export interface AgentImageInput {
   sourceUrl?: string;
 }
 
+export interface AgentImageOutput {
+  mimeType: string;
+  base64Data: string;
+  uri?: string;
+}
+
 export interface ToolCallEntry {
   toolCallId: string;
   title: string;
@@ -27,6 +33,7 @@ export interface ACPBridgeState {
   accumulatedThoughts: ThoughtEntry[];
   accumulatedToolCalls: ToolCallEntry[];
   accumulatedText: string;
+  accumulatedImages: AgentImageOutput[];
   verboseMode: VerboseMode;
   currentRunId?: string;
 }
@@ -40,6 +47,7 @@ export interface ACPAgentCapabilities {
 
 export interface AgentResponse {
   text: string;
+  images: AgentImageOutput[];
   stopReason?: schema.StopReason;
   usage?: schema.Usage | null;
   sessionId: string;

@@ -55,6 +55,10 @@ function summarizeThought(state: ACPBridgeState): string[] {
 function renderProgress(state: ACPBridgeState, verboseMode: VerboseMode): string {
   const lines = ['⏳ 正在处理中'];
 
+  if (state.correlationId) {
+    lines.push(`🔗 correlation: ${state.correlationId}`);
+  }
+
   if (verboseMode !== 'normal') {
     lines.push(...summarizePlan(state));
     const tools = summarizeTools(state);
@@ -136,12 +140,16 @@ export class ProgressReporter {
         {
           ...this.context,
           replyToId: this.sentCount === 1 ? this.context.replyToId : undefined,
+          purpose: 'progress',
         },
         text,
       );
     } catch (error) {
       this.logger.warn(
-        { error: error instanceof Error ? error.message : String(error) },
+        {
+          correlationId: this.context.correlationId,
+          error: error instanceof Error ? error.message : String(error),
+        },
         'failed to send progress message',
       );
     }

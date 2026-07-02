@@ -84,6 +84,17 @@ export class OneBotGateway {
   }
 
   async sendText(context: OneBotReplyContext, text: string): Promise<string | undefined> {
+    this.logger.info(
+      {
+        correlationId: context.correlationId,
+        purpose: context.purpose ?? 'reply',
+        chatType: context.chatType,
+        targetId: context.targetId,
+        replyToId: context.replyToId,
+        textPreview: text.length > 120 ? `${text.slice(0, 120)}...` : text,
+      },
+      'sending onebot text message',
+    );
     return this.sendConversationMessage({
       ...context,
       message: this.buildMessageSegments({
@@ -101,6 +112,19 @@ export class OneBotGateway {
       mediaImages?: OneBotOutboundImage[];
     },
   ): Promise<string[]> {
+    this.logger.info(
+      {
+        correlationId: context.correlationId,
+        purpose: context.purpose ?? 'reply',
+        chatType: context.chatType,
+        targetId: context.targetId,
+        replyToId: context.replyToId,
+        textPreview: params.text.length > 120 ? `${params.text.slice(0, 120)}...` : params.text,
+        mediaUrls: params.mediaUrls?.length ?? 0,
+        mediaImages: params.mediaImages?.length ?? 0,
+      },
+      'sending onebot payload',
+    );
     const plan = planOutboundPayload({
       text: params.text,
       mediaUrls: params.mediaUrls,
@@ -202,7 +226,17 @@ export class OneBotGateway {
 
     const response = await this.transport.sendAction(action, actionParams);
     this.onOutboundMessage?.(params.chatType);
-    return this.extractMessageId(response);
+    const messageId = this.extractMessageId(response);
+    this.logger.info(
+      {
+        chatType: params.chatType,
+        targetId: params.targetId,
+        replyToId: params.replyToId,
+        messageId,
+      },
+      'onebot send action completed',
+    );
+    return messageId;
   }
 
   private extractMessageId(response: OneBotActionResponse): string | undefined {

@@ -191,6 +191,28 @@ group.systemPrompt > ACP_DEFAULT_SYSTEM_PROMPT > 无
 - `ACP_PROGRESS_THROTTLE_MS`
 - `ACP_MAX_PROGRESS_UPDATES`
 
+## correlation ID / 单轮链路追踪
+
+现在每一条被接受处理的入站消息都会派生一个 `correlationId`，并尽量贯穿到：
+
+- receive / 接收日志
+- dedupe / 去重判定日志
+- ACP prompt dispatch 日志
+- progress / 进度播报日志
+- final reply / 最终回复日志
+
+适合的使用方式：
+
+- 当某一轮消息“看起来重复了 / 卡住了 / 回复慢了”时，先按 `correlationId` 聚合同一轮日志
+- 如果你在看 JSON 日志，直接筛 `correlationId`
+- 如果你在看终端 pretty logs，也可以搜索同一个 `correlationId` 字符串
+
+说明：
+
+- 有可靠 `message_id` 时，`correlationId` 会尽量稳定地带上会话和消息标识
+- 没有可靠 `message_id` 时，会退回到去重指纹的短哈希
+- 这不是分布式 trace 标准实现，但足够把单轮 QQ → OneBot → ACP → reply 的日志串起来
+
 ## 轻量入站去重
 
 为了降低 OneBot 重连、重复上报或边界情况下的重复 prompt 触发，bot 现在会在进入命令处理 / ACP dispatch 之前做一层**轻量入站去重**。

@@ -157,6 +157,7 @@ export class ACPAgentBridge {
     sessionIdHint?: string;
     systemPrompt?: string;
     contextLines?: string[];
+    correlationId?: string;
     onProgress?: (state: ACPBridgeState) => void;
   }): Promise<AgentResponse> {
     return this.enqueuePrompt(async () => this.sendPromptInternal(params));
@@ -168,14 +169,9 @@ export class ACPAgentBridge {
     sessionIdHint?: string;
     systemPrompt?: string;
     contextLines?: string[];
+    correlationId?: string;
     onProgress?: (state: ACPBridgeState) => void;
   }): Promise<AgentResponse> {
-    await this.ensureStarted(params.sessionIdHint);
-    if (!this.connection || !this.remoteSessionId) {
-      throw new Error('ACP session is not ready');
-    }
-
-    this.progressCallback = params.onProgress;
     this.state = {
       accumulatedText: '',
       accumulatedImages: [],
@@ -183,8 +179,15 @@ export class ACPAgentBridge {
       accumulatedToolCalls: [],
       currentPlan: undefined,
       verboseMode: this.config.ai.verboseMode,
+      correlationId: params.correlationId,
       currentRunId: randomUUID(),
     };
+    await this.ensureStarted(params.sessionIdHint);
+    if (!this.connection || !this.remoteSessionId) {
+      throw new Error('ACP session is not ready');
+    }
+
+    this.progressCallback = params.onProgress;
 
     const prompt = buildPromptBlocks({
       text: params.text,
@@ -195,6 +198,15 @@ export class ACPAgentBridge {
     });
     const sessionId = this.remoteSessionId;
     this.hooks?.onPromptStarted?.();
+    this.logger.info(
+      {
+        correlationId: params.correlationId,
+        sessionId,
+        reusedSession: Boolean(params.sessionIdHint),
+        imageCount: params.images?.length ?? 0,
+      },
+      'dispatching ACP prompt',
+    );
 
     try {
       const response = await this.connection.prompt({
@@ -216,6 +228,7 @@ export class ACPAgentBridge {
       if (this.isRecoverableConnectionError(error)) {
         this.logger.warn(
           {
+            correlationId: params.correlationId,
             sessionId,
             error: error instanceof Error ? error.message : String(error),
           },
@@ -225,7 +238,10 @@ export class ACPAgentBridge {
           await this.stop();
         } catch (stopError) {
           this.logger.warn(
-            { error: stopError instanceof Error ? stopError.message : String(stopError) },
+            {
+              correlationId: params.correlationId,
+              error: stopError instanceof Error ? stopError.message : String(stopError),
+            },
             'failed to stop ACP bridge after connection drop',
           );
         }
@@ -242,7 +258,10 @@ export class ACPAgentBridge {
         await this.connection.closeSession?.({ sessionId: this.remoteSessionId });
       } catch (error) {
         this.logger.debug(
-          { error: error instanceof Error ? error.message : String(error) },
+          {
+            correlationId: this.state.correlationId,
+            error: error instanceof Error ? error.message : String(error),
+          },
           'failed to close ACP session gracefully',
         );
       }
@@ -281,13 +300,32 @@ export class ACPAgentBridge {
     }
 
     childProcess.stderr?.on('data', (data: Buffer) => {
-      this.logger.debug({ stderr: data.toString() }, 'acp agent stderr');
+      this.logger.debug(
+        {
+          correlationId: this.state.correlationId,
+          stderr: data.toString(),
+        },
+        'acp agent stderr',
+      );
     });
     childProcess.once('error', (error) => {
-      this.logger.error({ error: error.message }, 'acp agent process failed');
+      this.logger.error(
+        {
+          correlationId: this.state.correlationId,
+          error: error.message,
+        },
+        'acp agent process failed',
+      );
     });
     childProcess.once('exit', (code, signal) => {
-      this.logger.info({ code, signal }, 'acp agent process exited');
+      this.logger.info(
+        {
+          correlationId: this.state.correlationId,
+          code,
+          signal,
+        },
+        'acp agent process exited',
+      );
       this.process = null;
       this.connection = null;
       this.remoteSessionId = undefined;
@@ -325,6 +363,7 @@ export class ACPAgentBridge {
 
     this.logger.info(
       {
+        correlationId: this.state.correlationId,
         canLoadSession: this.capabilities.canLoadSession,
         canListSessions: this.capabilities.canListSessions,
         canCloseSession: this.capabilities.canCloseSession,
@@ -346,11 +385,21 @@ export class ACPAgentBridge {
           mcpServers: [],
         });
         this.remoteSessionId = sessionId;
-        this.logger.info({ sessionId }, 'loaded existing ACP session');
+        this.logger.info(
+          {
+            correlationId: this.state.correlationId,
+            sessionId,
+          },
+          'loaded existing ACP session',
+        );
         return;
       } catch (error) {
         this.logger.warn(
-          { sessionId, error: error instanceof Error ? error.message : String(error) },
+          {
+            correlationId: this.state.correlationId,
+            sessionId,
+            error: error instanceof Error ? error.message : String(error),
+          },
           'failed to load ACP session, falling back to new session',
         );
       }
@@ -361,7 +410,13 @@ export class ACPAgentBridge {
       mcpServers: [],
     });
     this.remoteSessionId = newSession.sessionId;
-    this.logger.info({ sessionId: this.remoteSessionId }, 'created new ACP session');
+    this.logger.info(
+      {
+        correlationId: this.state.correlationId,
+        sessionId: this.remoteSessionId,
+      },
+      'created new ACP session',
+    );
   }
 
   private enqueuePrompt<T>(task: () => Promise<T>): Promise<T> {
@@ -370,7 +425,13 @@ export class ACPAgentBridge {
 
     const run = this.promptChain.catch(() => undefined).then(async () => {
       if (queuedAhead > 0) {
-        this.logger.warn({ queuedAhead }, 'serialized concurrent ACP prompt on the same conversation');
+        this.logger.warn(
+          {
+            correlationId: this.state.correlationId,
+            queuedAhead,
+          },
+          'serialized concurrent ACP prompt on the same conversation',
+        );
       }
       try {
         return await task();
@@ -412,6 +473,7 @@ export class ACPAgentBridge {
         }
         this.logger.info(
           {
+            correlationId: this.state.correlationId,
             toolCallId: params.toolCall.toolCallId,
             title: params.toolCall.title,
             selected: option.kind,
@@ -435,7 +497,13 @@ export class ACPAgentBridge {
     if (update.sessionUpdate === 'plan' && this.state.verboseMode !== 'normal') {
       this.state.currentPlan = update as schema.Plan;
       this.emitProgress();
-      this.logger.debug({ activeStep: formatPlanEntry(update as schema.Plan) }, 'received ACP plan update');
+      this.logger.debug(
+        {
+          correlationId: this.state.correlationId,
+          activeStep: formatPlanEntry(update as schema.Plan),
+        },
+        'received ACP plan update',
+      );
       return;
     }
 
@@ -469,6 +537,7 @@ export class ACPAgentBridge {
         this.emitProgress();
         this.logger.debug(
           {
+            correlationId: this.state.correlationId,
             toolCallId,
             title,
             kind,
@@ -498,6 +567,7 @@ export class ACPAgentBridge {
         this.emitProgress();
         this.logger.debug(
           {
+            correlationId: this.state.correlationId,
             toolCallId,
             status,
             preview: summarizeText(extractToolOutput(toolCallUpdate)),

@@ -1,20 +1,15 @@
 import type { NormalizedOneBotEvent } from '../types/onebot.js';
+import { buildInboundDedupeKey } from './interaction-correlation.js';
 
 type SeenEvent = {
   key: string;
   seenAt: number;
 };
 
-function stableTextPart(value: string | undefined): string {
-  if (!value) {
-    return '';
-  }
-  const trimmed = value.trim();
-  if (!trimmed) {
-    return '';
-  }
-  return trimmed.length > 120 ? trimmed.slice(0, 120) : trimmed;
-}
+export type DedupeResult = {
+  duplicate: boolean;
+  key: string;
+};
 
 export class InboundEventDeduper {
   private readonly seen = new Map<string, SeenEvent>();
@@ -24,47 +19,28 @@ export class InboundEventDeduper {
     private readonly maxEntries: number,
   ) {}
 
-  isDuplicate(event: NormalizedOneBotEvent, now = Date.now()): boolean {
+  check(event: NormalizedOneBotEvent, now = Date.now()): DedupeResult {
     this.cleanup(now);
-    const key = this.buildKey(event);
+    const key = buildInboundDedupeKey(event);
     const existing = this.seen.get(key);
     if (existing && now - existing.seenAt <= this.windowMs) {
       existing.seenAt = now;
       this.seen.delete(key);
       this.seen.set(key, existing);
-      return true;
+      return { duplicate: true, key };
     }
 
     this.seen.set(key, { key, seenAt: now });
     this.trimToLimit();
-    return false;
+    return { duplicate: false, key };
+  }
+
+  isDuplicate(event: NormalizedOneBotEvent, now = Date.now()): boolean {
+    return this.check(event, now).duplicate;
   }
 
   size(): number {
     return this.seen.size;
-  }
-
-  private buildKey(event: NormalizedOneBotEvent): string {
-    const messageId = event.messageId?.trim();
-    if (messageId) {
-      return `mid:${event.mode}:${event.conversationId}:${messageId}`;
-    }
-
-    const replyToId = event.replyToId?.trim() || 'none';
-    const timestampBucket = event.timestamp ? String(Math.floor(event.timestamp / 1000)) : 'no-ts';
-    const cleanedText = stableTextPart(event.cleanedText || event.rawText);
-    const mediaPart = event.mediaUrls.slice(0, 3).join(',');
-
-    return [
-      'fallback',
-      event.mode,
-      event.conversationId,
-      event.senderId,
-      replyToId,
-      timestampBucket,
-      cleanedText,
-      mediaPart,
-    ].join(':');
   }
 
   private cleanup(now: number): void {

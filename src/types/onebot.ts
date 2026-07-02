@@ -55,10 +55,14 @@ export interface NormalizedOneBotEvent {
   raw: OneBotMessageEvent;
 }
 
+export type OneBotReplyPurpose = 'command' | 'progress' | 'reply' | 'error';
+
 export interface OneBotReplyContext {
   chatType: OneBotChatType;
   targetId: string;
   replyToId?: string;
+  correlationId?: string;
+  purpose?: OneBotReplyPurpose;
 }
 
 export type OneBotOutboundImage =

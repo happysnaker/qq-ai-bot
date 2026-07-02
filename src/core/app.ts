@@ -11,6 +11,7 @@ import { getBuildInfo } from './build-info.js';
 import { RuntimeMetrics } from './runtime-metrics.js';
 import { createSessionStore } from './session-store-factory.js';
 import { InboundEventDeduper } from './inbound-event-deduper.js';
+import { deriveInboundCorrelationId } from './interaction-correlation.js';
 import type { NormalizedOneBotEvent, OneBotReplyContext } from '../types/onebot.js';
 import type { AgentImageOutput } from '../types/agent.js';
 
@@ -163,13 +164,31 @@ export class BotApplication {
     if (!event) {
       return;
     }
+    const correlationId = deriveInboundCorrelationId(event);
+    const eventLogger = this.logger.child({
+      correlationId,
+      conversationId: event.conversationId,
+      senderId: event.senderId,
+      messageId: event.messageId,
+    });
     this.metrics.recordInboundMessage();
+    eventLogger.info(
+      {
+        mode: event.mode,
+        wasMentioned: event.wasMentioned,
+        commandPreview: event.commandText.length > 120 ? `${event.commandText.slice(0, 120)}...` : event.commandText,
+        mediaCount: event.mediaUrls.length,
+      },
+      'received inbound onebot event',
+    );
 
-    if (this.inboundDeduper.isDuplicate(event)) {
+    const dedupe = this.inboundDeduper.check(event);
+    if (dedupe.duplicate) {
       this.metrics.recordInboundDuplicate();
-      this.logger.info(
+      eventLogger.info(
         {
           eventId: event.id,
+          dedupeKey: dedupe.key,
           messageId: event.messageId,
           conversationId: event.conversationId,
           senderId: event.senderId,
@@ -182,18 +201,25 @@ export class BotApplication {
     const command = this.parseCommand(event.commandText);
 
     if (event.isSelfMessage) {
+      eventLogger.debug('skip self message');
       return;
     }
 
     if (!this.isEventAllowed(event, command)) {
+      eventLogger.info(
+        {
+          command: command?.name,
+        },
+        'skip inbound event by policy',
+      );
       return;
     }
 
-    if (command && (await this.handleCommand(event, command))) {
+    if (command && (await this.handleCommand(event, command, correlationId, eventLogger))) {
       return;
     }
 
-    await this.processUserMessage(event);
+    await this.processUserMessage(event, correlationId, eventLogger);
   }
 
   private isEventAllowed(event: NormalizedOneBotEvent, command: ParsedCommand | null): boolean {
@@ -238,13 +264,19 @@ export class BotApplication {
     return true;
   }
 
-  private async handleCommand(event: NormalizedOneBotEvent, command: ParsedCommand): Promise<boolean> {
-    const replyContext = this.buildReplyContext(event);
+  private async handleCommand(
+    event: NormalizedOneBotEvent,
+    command: ParsedCommand,
+    correlationId: string,
+    eventLogger: Logger,
+  ): Promise<boolean> {
+    const replyContext = this.buildReplyContext(event, correlationId, 'command');
     const conversationKey = conversationKeyOf(event);
     const policy = this.resolveConversationPolicy(event);
     const prefix = this.config.onebot.commandPrefix;
     this.metrics.recordProcessedMessage('command');
     this.metrics.recordCommand(command.name);
+    eventLogger.info({ command: command.name, conversationKey }, 'handling command');
 
     switch (command.name) {
       case '':
@@ -304,7 +336,11 @@ export class BotApplication {
     }
   }
 
-  private async processUserMessage(event: NormalizedOneBotEvent): Promise<void> {
+  private async processUserMessage(
+    event: NormalizedOneBotEvent,
+    correlationId: string,
+    eventLogger: Logger,
+  ): Promise<void> {
     this.metrics.recordProcessedMessage('user_message');
     const conversationKey = conversationKeyOf(event);
     const policy = this.resolveConversationPolicy(event);
@@ -316,15 +352,22 @@ export class BotApplication {
     runtime.lastActivityAt = Date.now();
 
     const persisted = this.conversations.getPersisted(conversationKey);
-    const replyContext = this.buildReplyContext(event);
+    const replyContext = this.buildReplyContext(event, correlationId, 'reply');
     const progressReporter = new ProgressReporter(
       this.gateway,
       replyContext,
-      this.logger.child({ component: 'progress', conversationKey }),
+      this.logger.child({ component: 'progress', conversationKey, correlationId }),
       this.config.onebot.progressMode,
       this.config.ai.verboseMode,
       this.config.ai.progressThrottleMs,
       this.config.ai.maxProgressUpdates,
+    );
+    eventLogger.info(
+      {
+        conversationKey,
+        reusedSessionHint: this.config.ai.reuseSession ? persisted?.remoteSessionId : undefined,
+      },
+      'processing user message',
     );
 
     try {
@@ -333,7 +376,7 @@ export class BotApplication {
         urls: event.mediaUrls,
         maxImages: this.config.ai.maxInboundImages,
         maxBytes: this.config.ai.maxInboundImageBytes,
-        logger: this.logger.child({ component: 'image-downloader', conversationKey }),
+        logger: this.logger.child({ component: 'image-downloader', conversationKey, correlationId }),
       });
       const response = await runtime.bridge.sendPrompt({
         text: event.cleanedText,
@@ -341,6 +384,7 @@ export class BotApplication {
         sessionIdHint: this.config.ai.reuseSession ? persisted?.remoteSessionId : undefined,
         systemPrompt: policy.systemPrompt,
         contextLines: this.buildPromptContext(event, policy),
+        correlationId,
         onProgress: (state) => {
           progressReporter.update(state);
         },
@@ -348,31 +392,59 @@ export class BotApplication {
       progressReporter.stop();
 
       const replyText = this.decorateStopReason(response.text, response.stopReason);
-      await this.gateway.sendPayload(replyContext, {
+      await this.gateway.sendPayload(
+        {
+          ...replyContext,
+          purpose: 'reply',
+        },
+        {
         text: replyText,
         mediaImages: response.images.map((image) => this.toOutboundImage(image)),
-      });
+        },
+      );
+      eventLogger.info(
+        {
+          conversationKey,
+          sessionId: response.sessionId,
+          stopReason: response.stopReason,
+          outputImages: response.images.length,
+          replyLength: replyText.length,
+        },
+        'completed user message processing',
+      );
       runtime.lastActivityAt = Date.now();
       await this.conversations.persistRuntime(runtime);
     } catch (error) {
       progressReporter.stop();
       this.metrics.recordError('message_processing');
-      this.logger.error(
+      eventLogger.error(
         {
           conversationKey,
           error: error instanceof Error ? error.stack || error.message : String(error),
         },
         'failed to process incoming message',
       );
-      await this.gateway.sendText(replyContext, this.formatUserFacingError(error));
+      await this.gateway.sendText(
+        {
+          ...replyContext,
+          purpose: 'error',
+        },
+        this.formatUserFacingError(error),
+      );
     }
   }
 
-  private buildReplyContext(event: NormalizedOneBotEvent): OneBotReplyContext {
+  private buildReplyContext(
+    event: NormalizedOneBotEvent,
+    correlationId?: string,
+    purpose?: OneBotReplyContext['purpose'],
+  ): OneBotReplyContext {
     return {
       chatType: event.mode,
       targetId: event.replyTarget,
       replyToId: event.replyToId ?? event.messageId,
+      correlationId,
+      purpose,
     };
   }
 

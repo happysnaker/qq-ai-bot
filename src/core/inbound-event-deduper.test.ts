@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { InboundEventDeduper } from './inbound-event-deduper.js';
+import { buildInboundDedupeKey, deriveInboundCorrelationId } from './interaction-correlation.js';
 import type { NormalizedOneBotEvent } from '../types/onebot.js';
 
 function makeEvent(overrides: Partial<NormalizedOneBotEvent> = {}): NormalizedOneBotEvent {
@@ -83,5 +84,42 @@ describe('InboundEventDeduper', () => {
     expect(deduper.isDuplicate(makeEvent({ messageId: '2', id: 'group:123:2' }), 1_001)).toBe(false);
     expect(deduper.isDuplicate(makeEvent({ messageId: '3', id: 'group:123:3' }), 1_002)).toBe(false);
     expect(deduper.size()).toBe(2);
+  });
+
+  it('returns dedupe metadata including the matched key', () => {
+    const deduper = new InboundEventDeduper(60_000, 100);
+    const event = makeEvent();
+
+    expect(deduper.check(event, 1_000)).toEqual({
+      duplicate: false,
+      key: 'mid:group:123:1',
+    });
+    expect(deduper.check(event, 1_100)).toEqual({
+      duplicate: true,
+      key: 'mid:group:123:1',
+    });
+  });
+});
+
+describe('interaction correlation', () => {
+  it('derives a stable correlation id from message id when available', () => {
+    const event = makeEvent();
+    expect(deriveInboundCorrelationId(event)).toBe('ob11-g-123-1');
+  });
+
+  it('falls back to a hashed fingerprint when message id is missing', () => {
+    const event = makeEvent({
+      messageId: undefined,
+      id: 'group:123:no-mid',
+      raw: {
+        post_type: 'message',
+        message_type: 'group',
+        group_id: '123',
+        user_id: 'u1',
+      },
+    });
+
+    expect(buildInboundDedupeKey(event)).toContain('fallback:group:123:u1');
+    expect(deriveInboundCorrelationId(event)).toMatch(/^ob11-[0-9a-f]{12}$/);
   });
 });

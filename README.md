@@ -194,7 +194,8 @@ ws://127.0.0.1:16700/onebot/v11/ws
 
 - 对 OneBot 重连 / 重放导致的重复入站事件，仓库现在会做一层**轻量入站去重**，尽量避免重复命令处理和重复 ACP prompt
 - 当前是单实例内存级 replay guard，目标是先减少明显重复触发，而不是承诺严格 exactly-once
-- 下一步更偏工程化的演进方向是把单轮交互的 correlation ID 贯穿到 receive / dedupe / progress / reply
+- 单轮交互现在会派生一个 **correlation ID**，并贯穿到 receive / dedupe / ACP dispatch / progress / final reply 相关日志里，便于排查“这一次到底发生了什么”
+- 建议 grep `correlationId=`（或 JSON 日志里的 `correlationId` 字段）把一次消息相关的接收、去重、进度和回复串起来看
 - 相关配置与说明见 [配置说明](docs/configuration.md)
 
 ## Support

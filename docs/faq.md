@@ -182,3 +182,30 @@ SESSION_STORE=file
 
 - [SUPPORT.md](../SUPPORT.md)
 - [Review page](https://happysnaker.github.io/review/)
+
+## 12. 我怎么排查“同一条消息到底触发了几次、卡在哪一步”？
+
+先看日志里的 `correlationId`。
+
+现在 bot 会尽量把同一轮交互的：
+
+- 接收
+- 去重
+- ACP dispatch
+- 进度播报
+- 最终回复
+
+串到同一个 `correlationId` 下。
+
+最实用的方式：
+
+- 找到那条异常消息附近的一条日志
+- 记下 `correlationId`
+- 再按这个字段 grep / 搜索整轮链路
+
+这样比只看“有没有报错”更容易知道问题是在：
+
+- OneBot 重放 / 去重
+- agent 处理慢
+- progress 发出去了但 final reply 没发出去
+- 还是 reply 发出去了但 QQ 侧没表现正常

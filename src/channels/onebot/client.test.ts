@@ -51,4 +51,36 @@ describe('OneBotGateway message segment building', () => {
 
     expect(message).toBe('你好');
   });
+
+  it('keeps correlation id and purpose on outbound context without affecting segment shape', async () => {
+    const gateway = createGateway();
+    const calls: Array<{ context: Record<string, unknown>; text: string }> = [];
+
+    const fakeGateway = gateway as unknown as {
+      sendConversationMessage: (params: Record<string, unknown>) => Promise<string | undefined>;
+    };
+    fakeGateway.sendConversationMessage = async (params) => {
+      calls.push({
+        context: params,
+        text: '',
+      });
+      return '42';
+    };
+
+    await gateway.sendText(
+      {
+        chatType: 'group',
+        targetId: '123',
+        replyToId: '1',
+        correlationId: 'ob11-g-123-1',
+        purpose: 'progress',
+      },
+      '处理中',
+    );
+
+    expect(calls).toHaveLength(1);
+    expect(calls[0]?.context.chatType).toBe('group');
+    expect(calls[0]?.context.targetId).toBe('123');
+    expect(calls[0]?.context.replyToId).toBe('1');
+  });
 });

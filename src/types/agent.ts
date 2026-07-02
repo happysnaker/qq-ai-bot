@@ -35,6 +35,7 @@ export interface ACPBridgeState {
   accumulatedText: string;
   accumulatedImages: AgentImageOutput[];
   verboseMode: VerboseMode;
+  correlationId?: string;
   currentRunId?: string;
 }
 

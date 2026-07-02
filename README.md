@@ -11,6 +11,8 @@
 
 `qq-ai-bot` 基于 **OneBot 11** 接入 QQ，基于 **ACP** 对接本地 agent，并将结果、会话状态和处理中进度返回到 QQ。它不绑定某一个特定 agent：只要你的 agent 能以 ACP 方式启动和通信，就可以挂到这个机器人后面。
 
+常见接法包括：把 **DeepSeek** 或其他本地 / 自托管模型能力，封装在一个 **ACP-compatible agent runtime** 后面，再由 `qq-ai-bot` 负责 QQ / OneBot 接线、会话管理和进度回传。
+
 > **English pitch:** A production-grade, self-hosted **QQ ↔ AI bridge** for **OneBot 11 / NapCat / LLOneBot** and **ACP-compatible agents**, with persistent sessions, progress streaming, and a Docker demo stack.
 
 - 项目页：[happysnaker.github.io/qq-ai-bot](https://happysnaker.github.io/qq-ai-bot/)
@@ -21,7 +23,7 @@
 - 安全反馈：[SECURITY.md](./SECURITY.md)
 - 想直接拿来改成你自己的 bot 脚手架：点 GitHub 上方的 **Use this template**
 - 技术栈：Node.js 22+、TypeScript、Docker、GitHub Actions
-- 适用场景：自托管 QQ bot、NapCat / LLOneBot 集成、ACP agent 接线层
+- 适用场景：自托管 QQ bot、NapCat / LLOneBot 集成、ACP agent 接线层、DeepSeek / 其他本地 agent 的 QQ 接入层
 
 ![qq-ai-bot architecture overview](./assets/architecture-overview.png)
 

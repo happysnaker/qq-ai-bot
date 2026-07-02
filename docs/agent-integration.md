@@ -2,6 +2,8 @@
 
 这个项目不会直接调用某个模型平台 SDK，它只做一件事：启动你配置的本地 agent，然后通过 ACP 和它通信。
 
+这意味着它很适合放在 **DeepSeek** 或其他本地 / 自托管模型能力的前面，作为一层 **QQ / OneBot 11 接线 + session orchestration + progress streaming** 基础设施。
+
 ## bot 是怎么接 agent 的
 
 bot 会按下面这三个配置启动 agent 进程：
@@ -80,6 +82,8 @@ npm run smoke:agent
 ```bash
 npm run smoke:traecli
 ```
+
+如果你的 `traecli` 或其他 ACP runtime 背后接的是 **DeepSeek**，`qq-ai-bot` 这一层通常不需要特殊改动；它只关心 ACP 协议是否能正常拉起、收发消息和复用 session。
 
 ## 自定义 agent 示例
 

@@ -14,7 +14,9 @@ WORKDIR /app
 ENV NODE_ENV=production
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
+RUN mkdir -p /app/data /app/examples
 COPY --from=build /app/dist ./dist
+COPY examples/group-rules.example.json ./examples/group-rules.example.json
 COPY .env.example README.md ARCHITECTURE.md LICENSE ./
 EXPOSE 8080
 CMD ["node", "dist/index.js"]

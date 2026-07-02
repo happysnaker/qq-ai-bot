@@ -37,6 +37,23 @@
 
 ## 快速开始
 
+### 0. 想先 5 分钟跑通？先用 Docker 演示栈
+
+仓库自带了一个 **NapCat + qq-ai-bot + mock ACP agent** 的最小演示栈：
+
+```bash
+cp .env.docker.example .env.docker
+docker compose -f docker-compose.demo.yml up -d --build
+```
+
+然后：
+
+- 打开 `http://127.0.0.1:6099/webui`
+- 默认 WebUI token：`napcat`
+- 给机器人发 `/ping` 或 `/status`
+
+这套演示默认跑的是仓库内置 mock ACP agent，适合先验证 **QQ → OneBot → qq-ai-bot → ACP bridge** 链路是否打通。完整说明见 [Docker 快速演示](docs/docker-quickstart.md)。
+
 ### 1. 准备环境
 
 - Node.js 22+
@@ -92,6 +109,7 @@ ws://127.0.0.1:16700/onebot/v11/ws
 
 ## 文档
 
+- [Docker 快速演示](docs/docker-quickstart.md)
 - [快速开始](docs/getting-started.md)
 - [ACP Agent 接入](docs/agent-integration.md)
 - [配置说明](docs/configuration.md)

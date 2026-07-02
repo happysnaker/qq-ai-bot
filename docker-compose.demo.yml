@@ -1,0 +1,36 @@
+services:
+  napcat:
+    image: mlikiowa/napcat-docker:latest
+    container_name: napcat
+    restart: unless-stopped
+    environment:
+      - NAPCAT_UID=${NAPCAT_UID:-1000}
+      - NAPCAT_GID=${NAPCAT_GID:-1000}
+      - WEBUI_TOKEN=${WEBUI_TOKEN:-napcat}
+    ports:
+      - "3000:3000"
+      - "6099:6099"
+    volumes:
+      - ./deploy/napcat.onebot11.reverse-ws.json:/app/napcat/config/onebot11.json:ro
+      - ./napcat/QQ:/app/.config/QQ
+    networks:
+      - qq_ai_bot_demo
+
+  qq-ai-bot:
+    build:
+      context: .
+    image: ghcr.io/happysnaker/qq-ai-bot:latest
+    container_name: qq-ai-bot
+    restart: unless-stopped
+    env_file:
+      - ./.env.docker
+    ports:
+      - "18080:8080"
+    volumes:
+      - ./data:/app/data
+    networks:
+      - qq_ai_bot_demo
+
+networks:
+  qq_ai_bot_demo:
+    driver: bridge

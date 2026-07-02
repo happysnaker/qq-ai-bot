@@ -2,8 +2,11 @@ node_modules/
 dist/
 data/
 .env
+.env.docker
 .env.local
 coverage/
 *.log
 .DS_Store
 run-logs/
+napcat/
+examples/group-rules.local.json

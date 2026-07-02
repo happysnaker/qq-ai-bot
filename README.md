@@ -2,7 +2,7 @@
 
 一个面向实际部署的 QQ AI 机器人项目。
 
-`qq-ai-bot` 基于 **OneBot 11** 接入 QQ，基于 **ACP** 对接本地 agent（例如 `traecli`），并将结果、会话状态和处理中进度返回到 QQ。
+`qq-ai-bot` 基于 **OneBot 11** 接入 QQ，基于 **ACP** 对接本地 agent，并将结果、会话状态和处理中进度返回到 QQ。只要你的 agent 能以 ACP 方式接入，就可以挂到这个机器人后面；文档里的 `traecli` 只是默认示例，不是唯一选择。
 
 ## 核心能力
 

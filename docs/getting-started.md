@@ -10,7 +10,7 @@
 - 一个 **OneBot 11** 实现（推荐 [NapCatQQ](https://github.com/NapNeko/NapCatQQ) 或 [LLOneBot](https://github.com/LLOneBot/LuckyLilliaBot)）
 - 一个支持 **ACP** 的本地 agent
 
-本文默认你使用 `traecli` 作为本地 agent。
+本文默认你使用 `traecli` 作为本地 agent 示例；如果你已经有其他 ACP 兼容 agent，可以直接替换对应的启动命令和参数。
 
 ## 0. 先确认 `traecli` 已安装
 

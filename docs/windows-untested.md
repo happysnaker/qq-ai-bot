@@ -8,14 +8,16 @@
 
 - QQ 侧：使用支持 OneBot 11 的实现，例如 [NapCatQQ](https://github.com/NapNeko/NapCatQQ) 或 [LLOneBot](https://github.com/LLOneBot/LuckyLilliaBot)
 - bot 侧：直接运行本仓库
-- agent 侧：本机启动 `traecli acp serve` 或你自己的 ACP agent
+- agent 侧：配置任意 ACP 兼容 agent
+
+如果你只是想先验证链路，也可以直接使用仓库自带 mock agent，配置方式见 [ACP Agent 接入](agent-integration.md)。
 
 ## 1. 安装 Node.js 并拉起 bot
 
-```bash
+```powershell
 npm install
-cp .env.example .env
-cp examples/group-rules.example.json examples/group-rules.local.json
+Copy-Item .env.example .env
+Copy-Item examples/group-rules.example.json examples/group-rules.local.json
 npm run dev
 ```
 
@@ -31,13 +33,19 @@ ONEBOT_REVERSE_WS_PORT=16700
 ONEBOT_REVERSE_WS_PATH=/onebot/v11/ws
 ONEBOT_GROUP_CONFIG_FILE=./examples/group-rules.local.json
 
-ACP_AGENT_COMMAND=traecli
-ACP_AGENT_ARGS_JSON=["acp","serve"]
-ACP_AGENT_WORKDIR=C:\\path\\to\\your\\workdir
+ACP_AGENT_COMMAND=your-acp-agent-command
+ACP_AGENT_ARGS_JSON=[]
+ACP_AGENT_WORKDIR=C:\path\to\your\workdir
 ACP_REUSE_SESSION=true
 ```
 
-如果你的 agent 命令在 Windows 下实际是 `traecli.exe` 或 `traecli.cmd`，这里填真实可执行文件名。
+如果你使用 `traecli`，对应配置通常是：
+
+```env
+ACP_AGENT_COMMAND=traecli.exe
+ACP_AGENT_ARGS_JSON=["acp","serve"]
+ACP_AGENT_WORKDIR=C:\path\to\your\workdir
+```
 
 ## 3. 配置 QQ / OneBot 11
 
@@ -53,7 +61,7 @@ access token 也保持一致。
 
 建议顺序：
 
-1. 先跑 `npm run smoke:traecli`
+1. 先跑 `npm run smoke:agent`
 2. 再用 QQ 私聊机器人发一条普通消息
 3. 再测群聊 `@机器人`
 4. 最后测 `/status` 和 `/prompt`

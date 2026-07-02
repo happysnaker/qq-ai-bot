@@ -1,5 +1,7 @@
 # 配置说明
 
+项目启动时会自动读取项目根目录下的 `.env`。
+
 ## `.env` 主要配置
 
 ### 服务本身
@@ -40,8 +42,8 @@
 
 | 配置项 | 说明 |
 | --- | --- |
-| `ACP_AGENT_COMMAND` | agent 可执行文件，例如 `traecli` |
-| `ACP_AGENT_ARGS_JSON` | 参数数组，推荐写合法 JSON |
+| `ACP_AGENT_COMMAND` | agent 可执行文件，例如 `node`、`traecli` 或你的自定义命令 |
+| `ACP_AGENT_ARGS_JSON` | 启动参数，推荐写合法 JSON 数组 |
 | `ACP_AGENT_WORKDIR` | agent 工作目录 |
 | `ACP_CLIENT_NAME` | ACP client name |
 | `ACP_REUSE_SESSION` | 是否复用远端 session |
@@ -52,6 +54,8 @@
 | `ACP_MAX_PROGRESS_UPDATES` | 单轮最多进度更新次数 |
 | `ACP_MAX_INBOUND_IMAGES` | 单轮最多处理图片数 |
 | `ACP_MAX_INBOUND_IMAGE_BYTES` | 单张图片大小上限 |
+
+如果你需要可直接复制的 agent 配置示例，看 [ACP Agent 接入](agent-integration.md)。
 
 ## 分群配置文件
 

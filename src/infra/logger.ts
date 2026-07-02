@@ -1,4 +1,7 @@
 import pino from 'pino';
+import { loadDotEnv } from './env-file.js';
+
+loadDotEnv();
 
 const transport = process.stdout.isTTY
   ? {

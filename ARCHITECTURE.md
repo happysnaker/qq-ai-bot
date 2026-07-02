@@ -21,7 +21,7 @@ QQ / NapCat / LLOneBot
         │
         ▼
  Local ACP-compatible Agent
- (e.g. traecli acp serve)
+ (e.g. repo mock agent, traecli, or any ACP-compatible agent)
 ```
 
 ## 设计目标

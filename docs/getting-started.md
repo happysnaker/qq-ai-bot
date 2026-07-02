@@ -1,6 +1,6 @@
 # 快速开始
 
-这份文档只讲一件事：把 bot 跑起来，并确认 QQ → bot → 本地 agent 这条链路是通的。
+这份文档只讲一件事：把 bot 跑起来，并确认 QQ → bot → ACP agent 这条链路是通的。
 
 ## 前置条件
 
@@ -8,19 +8,9 @@
 
 - **Node.js 22+**
 - 一个 **OneBot 11** 实现（推荐 [NapCatQQ](https://github.com/NapNeko/NapCatQQ) 或 [LLOneBot](https://github.com/LLOneBot/LuckyLilliaBot)）
-- 一个支持 **ACP** 的本地 agent
+- 一个可以通过 **ACP** 启动和通信的 agent
 
-本文默认你使用 `traecli` 作为本地 agent 示例；如果你已经有其他 ACP 兼容 agent，可以直接替换对应的启动命令和参数。
-
-## 0. 先确认 `traecli` 已安装
-
-先在终端里确认命令存在：
-
-```bash
-traecli --help
-```
-
-如果命令不存在，或者执行报错，先把 `traecli` 安装好，再继续下面步骤。
+如果你还没有现成 agent，先看 [ACP Agent 接入](agent-integration.md)。里面有仓库自带 mock agent 和 `traecli` 的完整示例。
 
 ## 1. 拉代码并进入项目目录
 
@@ -37,7 +27,7 @@ cd qq-ai-bot
 npm install
 ```
 
-这一步安装的是当前仓库自己的 Node.js 依赖，不会帮你安装 `traecli`、QQ 或 NapCat。
+这一步安装的是当前仓库自己的 Node.js 依赖，不会帮你安装 QQ、NapCat 或你的 ACP agent。
 
 安装内容来自项目根目录下的 `package.json`，主要包括：
 
@@ -63,7 +53,7 @@ cp examples/group-rules.example.json examples/group-rules.local.json
 - 项目根目录下的 `.env`
 - 项目根目录下的 `examples/group-rules.local.json`
 
-如果你不需要分群配置，可以把 `.env` 里的 `ONEBOT_GROUP_CONFIG_FILE` 留空。
+程序启动时会自动读取项目根目录下的 `.env`。
 
 ## 4. 先改 `.env`
 
@@ -84,8 +74,8 @@ ONEBOT_ALLOW_GROUP_COMMANDS_WITHOUT_MENTION=false
 ONEBOT_GROUP_CONFIG_FILE=./examples/group-rules.local.json
 ONEBOT_PROGRESS_MODE=message
 
-ACP_AGENT_COMMAND=traecli
-ACP_AGENT_ARGS_JSON=["acp","serve"]
+ACP_AGENT_COMMAND=your-acp-agent-command
+ACP_AGENT_ARGS_JSON=[]
 ACP_AGENT_WORKDIR=/path/to/your/workdir
 ACP_REUSE_SESSION=true
 ACP_VERBOSE_MODE=verbose
@@ -94,22 +84,30 @@ ACP_PERMISSION_STRATEGY=allow_once
 
 几个关键项：
 
-- `ACP_AGENT_COMMAND=traecli`：bot 会直接执行这个命令
-- `ACP_AGENT_ARGS_JSON=["acp","serve"]`：等价于执行 `traecli acp serve`
-- `ACP_AGENT_WORKDIR=/path/to/your/workdir`：改成你的真实工作目录
-- `ONEBOT_ACCESS_TOKEN=test-token`：和你的 OneBot 11 配置保持一致
+- `ACP_AGENT_COMMAND`：agent 可执行文件或启动命令
+- `ACP_AGENT_ARGS_JSON`：启动参数，推荐写标准 JSON 数组
+- `ACP_AGENT_WORKDIR`：agent 实际工作的目录
+- `ONEBOT_ACCESS_TOKEN`：要和你的 OneBot 11 配置保持一致
 
-## 5. 单独验证本地 agent
+如果你需要可直接复制的 agent 配置示例，看 [ACP Agent 接入](agent-integration.md)。
 
-先验证 bot 能不能正常拉起本地 agent：
+## 5. 单独验证 ACP agent
+
+先验证 bot 能不能正常拉起你配置的 ACP agent：
 
 ```bash
-npm run smoke:traecli
+npm run smoke:agent
 ```
 
-如果输出中出现 `TRAE_ACP_OK`，说明 bot → `traecli` 这段已经通了。
+默认情况下，这个脚本会要求 agent 的回复里包含 `ACP_SMOKE_OK`。
 
-如果这里都没过，先不要继续接 QQ，先把 agent 这段问题解决掉。
+如果你的 agent 有自己的固定回复风格，也可以临时覆盖：
+
+```bash
+ACP_SMOKE_PROMPT='请回复 READY_OK' ACP_SMOKE_EXPECTED_TEXT='READY_OK' npm run smoke:agent
+```
+
+如果这里没过，先不要继续接 QQ，先把 agent 这段问题解决掉。
 
 ## 6. 启动 bot
 
@@ -164,6 +162,7 @@ npm run start
 npm run lint
 npm run typecheck
 npm run test
+npm run smoke:agent
 npm run smoke:traecli
 npm run e2e:fake-onebot:traecli
 ```

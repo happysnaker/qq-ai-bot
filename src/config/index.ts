@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { z } from 'zod';
 import { parseBoolean, parseCsv, parseJsonStringArray, parseNumber } from '../utils/env.js';
+import { loadDotEnv } from '../infra/env-file.js';
 import type { PermissionStrategy, VerboseMode } from '../types/agent.js';
 
 const oneBotModeSchema = z.enum(['forward', 'reverse']);
@@ -138,6 +139,9 @@ function loadGroupPolicyFile(filePath: string | undefined): {
 }
 
 export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
+  if (env === process.env) {
+    loadDotEnv();
+  }
   const dataDir = env.DATA_DIR || './data';
   const groupPolicyFile = loadGroupPolicyFile(env.ONEBOT_GROUP_CONFIG_FILE);
   const defaultSystemPrompt =

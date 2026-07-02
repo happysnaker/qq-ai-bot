@@ -6,7 +6,7 @@
 
 一个面向实际部署的 **QQ ↔ AI** 机器人项目。
 
-`qq-ai-bot` 基于 **OneBot 11** 接入 QQ，基于 **ACP** 对接本地 agent，并将结果、会话状态和处理中进度返回到 QQ。只要你的 agent 能以 ACP 方式接入，就可以挂到这个机器人后面；文档里的 `traecli` 只是默认示例，不是唯一选择。
+`qq-ai-bot` 基于 **OneBot 11** 接入 QQ，基于 **ACP** 对接本地 agent，并将结果、会话状态和处理中进度返回到 QQ。它不绑定某一个特定 agent：只要你的 agent 能以 ACP 方式启动和通信，就可以挂到这个机器人后面。
 
 - 项目页：[happysnaker.github.io/qq-ai-bot](https://happysnaker.github.io/qq-ai-bot/)
 - 架构说明：[ARCHITECTURE.md](./ARCHITECTURE.md)
@@ -34,13 +34,9 @@
 
 - Node.js 22+
 - 一个 OneBot 11 实现（推荐 [NapCatQQ](https://github.com/NapNeko/NapCatQQ) 或 [LLOneBot](https://github.com/LLOneBot/LuckyLilliaBot)）
-- 一个支持 ACP 的本地 agent
+- 一个 ACP 兼容 agent
 
-如果你使用 `traecli`，先确认命令存在：
-
-```bash
-traecli --help
-```
+如果你还没决定接哪个 agent，先看 [ACP Agent 接入](docs/agent-integration.md)。里面给了三种可直接用的方式：仓库自带 mock agent、`traecli` 示例、以及自定义 agent 配置。
 
 ### 2. 拉代码并准备配置
 
@@ -52,33 +48,30 @@ cp .env.example .env
 cp examples/group-rules.example.json examples/group-rules.local.json
 ```
 
+项目启动时会自动读取项目根目录下的 `.env`。
+
 你真正要修改的是：
 
 - 项目根目录下的 `.env`
 - 项目根目录下的 `examples/group-rules.local.json`
 
-最小配置示例：
+最重要的 ACP 配置是这三项：
 
 ```env
-ONEBOT_MODE=reverse
-ONEBOT_ACCESS_TOKEN=test-token
-ONEBOT_REVERSE_WS_PORT=16700
-ONEBOT_GROUP_CONFIG_FILE=./examples/group-rules.local.json
-
-ACP_AGENT_COMMAND=traecli
-ACP_AGENT_ARGS_JSON=["acp","serve"]
+ACP_AGENT_COMMAND=your-acp-agent-command
+ACP_AGENT_ARGS_JSON=[]
 ACP_AGENT_WORKDIR=/path/to/your/workdir
 ```
 
 ### 3. 先测 agent，再接 QQ
 
-先确认 bot 能拉起本地 agent：
+先确认 bot 能拉起你配置的 ACP agent：
 
 ```bash
-npm run smoke:traecli
+npm run smoke:agent
 ```
 
-看到 `TRAE_ACP_OK` 后，再启动 bot：
+看到输出里包含 `ACP_SMOKE_OK` 后，再启动 bot：
 
 ```bash
 npm run dev
@@ -93,6 +86,7 @@ ws://127.0.0.1:16700/onebot/v11/ws
 ## 文档
 
 - [快速开始](docs/getting-started.md)
+- [ACP Agent 接入](docs/agent-integration.md)
 - [配置说明](docs/configuration.md)
 - [macOS 接入 NapCat](docs/macos-napcat.md)
 - [Windows 接入说明（未验证）](docs/windows-untested.md)

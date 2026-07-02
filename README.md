@@ -22,6 +22,8 @@
 
 ## 核心能力
 
+![qq-ai-bot progress streaming demo](./assets/progress-demo.png)
+
 - OneBot 11 forward / reverse WebSocket
 - 兼容 NapCat / LLOneBot
 - 私聊、群聊独立会话

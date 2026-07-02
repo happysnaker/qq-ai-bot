@@ -1,0 +1,74 @@
+<svg width="1200" height="920" viewBox="0 0 1200 920" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="920" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0B1020"/>
+      <stop offset="1" stop-color="#182447"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#1E2848"/>
+      <stop offset="1" stop-color="#12192E"/>
+    </linearGradient>
+    <linearGradient id="userBubble" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#334A86"/>
+      <stop offset="1" stop-color="#253862"/>
+    </linearGradient>
+    <linearGradient id="botBubble" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#1A2D3B"/>
+      <stop offset="1" stop-color="#162634"/>
+    </linearGradient>
+    <style>
+      .title { font: 700 34px -apple-system,BlinkMacSystemFont,'Segoe UI',Inter,sans-serif; fill: #EEF2FF; }
+      .subtitle { font: 500 18px -apple-system,BlinkMacSystemFont,'Segoe UI',Inter,sans-serif; fill: #A9B6D8; }
+      .label { font: 700 18px -apple-system,BlinkMacSystemFont,'Segoe UI',Inter,sans-serif; fill: #EEF2FF; }
+      .body { font: 500 16px -apple-system,BlinkMacSystemFont,'Segoe UI',Inter,sans-serif; fill: #DCE5FF; }
+      .muted { font: 500 14px -apple-system,BlinkMacSystemFont,'Segoe UI',Inter,sans-serif; fill: #9FB0D8; }
+      .tiny { font: 700 12px -apple-system,BlinkMacSystemFont,'Segoe UI',Inter,sans-serif; fill: #CFE0FF; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="920" rx="32" fill="url(#bg)"/>
+  <rect x="38" y="38" width="1124" height="844" rx="28" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)"/>
+  <text x="72" y="98" class="title">qq-ai-bot progress streaming demo</text>
+  <text x="72" y="130" class="subtitle">What a user actually sees in QQ: mention → progress updates → final answer</text>
+
+  <rect x="72" y="168" width="1056" height="676" rx="28" fill="url(#panel)" stroke="#2B3C67"/>
+
+  <circle cx="128" cy="228" r="24" fill="#6E8BFF"/>
+  <text x="116" y="236" class="label">U</text>
+  <rect x="168" y="188" width="530" height="88" rx="22" fill="url(#userBubble)"/>
+  <text x="194" y="224" class="label">@bot 帮我看下这个报错，顺便给个修复步骤</text>
+  <text x="194" y="250" class="muted">group mention · image/text can be forwarded into the ACP flow</text>
+
+  <circle cx="1072" cy="334" r="24" fill="#62D2A2"/>
+  <text x="1060" y="342" class="label">B</text>
+  <rect x="520" y="294" width="520" height="84" rx="22" fill="url(#botBubble)"/>
+  <text x="548" y="328" class="label">正在分析上下文并恢复会话…</text>
+  <text x="548" y="354" class="muted">progress update 1 · session reuse / session load</text>
+
+  <circle cx="1072" cy="448" r="24" fill="#62D2A2"/>
+  <text x="1060" y="456" class="label">B</text>
+  <rect x="434" y="408" width="606" height="100" rx="22" fill="url(#botBubble)"/>
+  <text x="462" y="442" class="label">计划：1) 读取日志 2) 定位配置问题 3) 给出修复命令</text>
+  <text x="462" y="468" class="muted">progress update 2 · plan / tool_call events are converted into readable QQ messages</text>
+
+  <circle cx="1072" cy="578" r="24" fill="#62D2A2"/>
+  <text x="1060" y="586" class="label">B</text>
+  <rect x="384" y="538" width="656" height="112" rx="22" fill="url(#botBubble)"/>
+  <text x="412" y="572" class="label">结论：你的 WS token 不一致。先把 LLBot / NapCat / bot 三边 token 统一。</text>
+  <text x="412" y="598" class="body">下一步：修改配置 → 重启 bot → 再发 /status 验证当前 prompt 与连接状态。</text>
+  <text x="412" y="624" class="muted">final answer · compact result after the streamed progress phase</text>
+
+  <rect x="92" y="700" width="1016" height="110" rx="22" fill="rgba(122,162,255,0.08)" stroke="#38518B"/>
+  <text x="122" y="740" class="label">Why this matters</text>
+  <text x="122" y="770" class="body">qq-ai-bot does not only send a final reply. It can surface agent progress, tool activity, and session continuity back into QQ.</text>
+  <text x="122" y="796" class="muted">This is the main “feels more real than a toy chat demo” signal for the repo and landing page.</text>
+
+  <rect x="72" y="860" width="172" height="28" rx="14" fill="#213055" stroke="#38518B"/>
+  <text x="96" y="878" class="tiny">OneBot 11 transport</text>
+  <rect x="256" y="860" width="160" height="28" rx="14" fill="#213055" stroke="#38518B"/>
+  <text x="300" y="878" class="tiny">ACP progress</text>
+  <rect x="428" y="860" width="164" height="28" rx="14" fill="#213055" stroke="#38518B"/>
+  <text x="470" y="878" class="tiny">Session reuse</text>
+  <rect x="604" y="860" width="184" height="28" rx="14" fill="#213055" stroke="#38518B"/>
+  <text x="646" y="878" class="tiny">Self-hosted bot infra</text>
+</svg>

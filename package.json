@@ -41,7 +41,14 @@
     "agent",
     "acp",
     "bot",
-    "typescript"
+    "typescript",
+    "onebot-11",
+    "llonebot",
+    "qq-bot",
+    "agent-client-protocol",
+    "chat-bridge",
+    "self-hosted",
+    "docker"
   ],
   "license": "MIT",
   "dependencies": {
@@ -61,5 +68,16 @@
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.46.2",
     "vitest": "^4.1.9"
+  },
+  "homepage": "https://happysnaker.github.io/qq-ai-bot/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/happysnaker/qq-ai-bot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/happysnaker/qq-ai-bot/issues"
+  },
+  "funding": {
+    "url": "https://happysnaker.github.io/support/#from-qq-ai-bot"
   }
 }

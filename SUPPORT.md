@@ -2,8 +2,9 @@
 
 If `qq-ai-bot` saved you OneBot + ACP wiring time, the fastest way to support ongoing maintenance is here:
 
-- **Support page:** https://happysnaker.github.io/support/
+- **Support page:** https://happysnaker.github.io/support/#from-qq-ai-bot
 - **Best payment note:** `qq-ai-bot`
+- **Also works well:** `qq-ai-bot setup`
 - **Low-friction tip:** `¥9.9 / ¥19.9` if the repo saved you ten minutes
 - **Paid feedback:** `¥29.9` quick blunt read or `¥99` async GitHub / README / landing-page packaging review
 

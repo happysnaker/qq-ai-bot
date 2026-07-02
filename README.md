@@ -18,6 +18,7 @@
 - 路线图：[ROADMAP.md](./ROADMAP.md)
 - 参与贡献：[CONTRIBUTING.md](./CONTRIBUTING.md)
 - 安全反馈：[SECURITY.md](./SECURITY.md)
+- 想直接拿来改成你自己的 bot 脚手架：点 GitHub 上方的 **Use this template**
 - 技术栈：Node.js 22+、TypeScript、Docker、GitHub Actions
 - 适用场景：自托管 QQ bot、NapCat / LLOneBot 集成、ACP agent 接线层
 

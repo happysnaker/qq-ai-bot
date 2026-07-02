@@ -1,8 +1,19 @@
 # qq-ai-bot
 
-一个面向实际部署的 QQ AI 机器人项目。
+[![Stars](https://img.shields.io/github/stars/happysnaker/qq-ai-bot?style=social)](https://github.com/happysnaker/qq-ai-bot/stargazers)
+[![Project Page](https://img.shields.io/badge/project-page-7aa2ff)](https://happysnaker.github.io/qq-ai-bot/)
+[![Support](https://img.shields.io/badge/support-WeChat%20%26%20Alipay-9b87f5)](https://happysnaker.github.io/support/)
+
+一个面向实际部署的 **QQ ↔ AI** 机器人项目。
 
 `qq-ai-bot` 基于 **OneBot 11** 接入 QQ，基于 **ACP** 对接本地 agent，并将结果、会话状态和处理中进度返回到 QQ。只要你的 agent 能以 ACP 方式接入，就可以挂到这个机器人后面；文档里的 `traecli` 只是默认示例，不是唯一选择。
+
+- 项目页：[happysnaker.github.io/qq-ai-bot](https://happysnaker.github.io/qq-ai-bot/)
+- 架构说明：[ARCHITECTURE.md](./ARCHITECTURE.md)
+- 技术栈：Node.js 22+、TypeScript、Docker、GitHub Actions
+- 适用场景：自托管 QQ bot、NapCat / LLOneBot 集成、ACP agent 接线层
+
+> 如果这个仓库帮你省掉了 OneBot 接线、会话管理或 ACP bridge 的搭建时间，欢迎给个 star，或者直接支持我的开源维护：[happysnaker.github.io/support](https://happysnaker.github.io/support/)
 
 ## 核心能力
 
@@ -107,7 +118,11 @@ ws://127.0.0.1:16700/onebot/v11/ws
 - **Windows**：提供接入说明，但当前标记为 **未验证**。
 - **Linux**：bot 侧本身没有特殊限制。
 
-## 支持项目
+## Support
 
-- Star / Issue / PR
-- [支持项目](https://happysnaker.github.io/support/)
+如果这个仓库帮你省掉了 OneBot 接线、会话管理或 ACP bridge 的搭建时间：
+
+- 给仓库点个 star
+- 提 issue / PR 补充更多 channel、session store 或 observability 能力
+- 直接支持我的开源维护：[happysnaker.github.io/support](https://happysnaker.github.io/support/)
+- 如果你是因为这个项目来的，付款备注最有用的是：`qq-ai-bot`

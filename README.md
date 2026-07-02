@@ -204,6 +204,8 @@ ws://127.0.0.1:16700/onebot/v11/ws
 - 给仓库点个 star
 - 提 issue / PR 补充更多 channel、session store 或 observability 能力
 - 直接支持我的开源维护：[happysnaker.github.io/support](https://happysnaker.github.io/support/#from-qq-ai-bot)
+- 如果你愿意顺手帮我传播，最好直接转这句：`OneBot 11 + ACP + persistent sessions + progress streaming + Docker demo`
+- 如果你想把它发到群里 / 论坛 / 朋友那，最短链接组合是：仓库首页 + 项目页 + Docker 快速演示
 - 如果你是因为这个项目来的，付款备注最有用的是：`qq-ai-bot`
 - 如果你想让我先 blunt 地看一眼你自己的 bot / agent / infra 仓库，可直接发这个模板：[¥29.9 Quick read | repo link](mailto:happysnaker@foxmail.com?subject=Quick%20read%20%7C%20bot%20repo%20link&body=Repo%20link%3A%0AWhat%20feels%20weak%3A%20README%20/%20positioning%20/%20landing%20page%0APayment%20screenshot%3A%20attached)
 - 如果你想要更完整的 GitHub / README / landing-page 包装 pass，可直接发这个模板：[¥99 Async review | repo link](mailto:happysnaker@foxmail.com?subject=Async%20review%20%7C%20bot%20repo%20link&body=Repo%20link(s)%3A%0ATarget%20role%20or%20use%20case%3A%0AWhat%20feels%20weak%3A%20README%20/%20positioning%20/%20landing%20page%20/%20GitHub%20profile%0APayment%20screenshot%3A%20attached)

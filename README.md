@@ -163,6 +163,12 @@ ws://127.0.0.1:16700/onebot/v11/ws
 - 多实例部署与更多外部存储路径
 - 更多 channel / transport 演进
 
+当前已经挂出的可认领入口：
+
+- [#6 docs: publish tested deployment matrix for NapCat / LLOneBot and forward / reverse WS modes](https://github.com/happysnaker/qq-ai-bot/issues/6)
+- [#7 enhancement: add stable correlation IDs across OneBot receive, ACP prompt, and progress updates](https://github.com/happysnaker/qq-ai-bot/issues/7)
+- [#8 feature: document and stage richer media handling roadmap (file / voice / video)](https://github.com/happysnaker/qq-ai-bot/issues/8)
+
 如果你准备提 PR，建议先看 [CONTRIBUTING.md](./CONTRIBUTING.md)。
 
 ## Community

@@ -16,7 +16,7 @@ describe('RuntimeMetrics', () => {
     const output = metrics.render({
       build: {
         appName: 'qq-ai-bot',
-        version: '0.1.1',
+        version: '0.1.3',
         gitCommit: 'abc123',
         buildRef: 'main',
         startedAt: '2026-07-02T00:00:00.000Z',
@@ -28,7 +28,7 @@ describe('RuntimeMetrics', () => {
     });
 
     expect(output).toContain('# HELP qq_ai_bot_build_info');
-    expect(output).toContain('qq_ai_bot_build_info{build_ref="main",git_commit="abc123",version="0.1.1"} 1');
+    expect(output).toContain('qq_ai_bot_build_info{build_ref="main",git_commit="abc123",version="0.1.3"} 1');
     expect(output).toContain('qq_ai_bot_onebot_connected 1');
     expect(output).toContain('qq_ai_bot_onebot_reconnect_attempts 2');
     expect(output).toContain('qq_ai_bot_active_conversations 3');
@@ -48,7 +48,7 @@ describe('RuntimeMetrics', () => {
     const output = metrics.render({
       build: {
         appName: 'qq-ai-bot',
-        version: '0.1.1',
+        version: '0.1.3',
         startedAt: '2026-07-02T00:00:00.000Z',
       },
       onebotConnected: false,

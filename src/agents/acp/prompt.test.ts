@@ -56,4 +56,30 @@ describe('buildPromptBlocks', () => {
     expect(text).toContain('当前无法直接读取图片');
     expect(text).toContain('[附加说明]');
   });
+
+  it('adds unsupported media note for non-image attachments', () => {
+    const blocks = buildPromptBlocks({
+      text: '请处理我发的文件',
+      unsupportedMedia: [
+        {
+          kind: 'file',
+          segmentType: 'file',
+          name: 'report.pdf',
+          url: 'https://example.com/report.pdf',
+        },
+        {
+          kind: 'audio',
+          segmentType: 'record',
+          url: 'https://example.com/voice.silk',
+        },
+      ],
+    });
+
+    expect(blocks).toHaveLength(1);
+    const text = (blocks[0] as { type: 'text'; text: string }).text;
+    expect(text).toContain('当前 bot 还不会自动转给 agent 的媒体片段');
+    expect(text).toContain('report.pdf');
+    expect(text).toContain('语音 / 音频');
+    expect(text).toContain('[未直传媒体]');
+  });
 });

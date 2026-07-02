@@ -178,6 +178,7 @@ export class BotApplication {
         wasMentioned: event.wasMentioned,
         commandPreview: event.commandText.length > 120 ? `${event.commandText.slice(0, 120)}...` : event.commandText,
         mediaCount: event.mediaUrls.length,
+        unsupportedMediaCount: event.unsupportedMedia.length,
       },
       'received inbound onebot event',
     );
@@ -366,6 +367,11 @@ export class BotApplication {
       {
         conversationKey,
         reusedSessionHint: this.config.ai.reuseSession ? persisted?.remoteSessionId : undefined,
+        unsupportedMedia: event.unsupportedMedia.map((item) => ({
+          kind: item.kind,
+          segmentType: item.segmentType,
+          name: item.name,
+        })),
       },
       'processing user message',
     );
@@ -384,6 +390,7 @@ export class BotApplication {
         sessionIdHint: this.config.ai.reuseSession ? persisted?.remoteSessionId : undefined,
         systemPrompt: policy.systemPrompt,
         contextLines: this.buildPromptContext(event, policy),
+        unsupportedMedia: event.unsupportedMedia,
         correlationId,
         onProgress: (state) => {
           progressReporter.update(state);

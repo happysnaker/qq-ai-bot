@@ -59,4 +59,36 @@ describe('normalizeOneBotEvent', () => {
     expect(event?.cleanedText).toBe('/help');
     expect(event?.commandText).toBe('/help');
   });
+
+  it('captures unsupported media segments instead of silently dropping them', () => {
+    const event = normalizeOneBotEvent({
+      post_type: 'message',
+      message_type: 'private',
+      user_id: 123,
+      self_id: 999,
+      message_id: 4,
+      message: [
+        { type: 'text', data: { text: '帮我总结这个附件' } },
+        { type: 'file', data: { name: 'report.pdf', url: 'https://example.com/report.pdf' } },
+        { type: 'record', data: { file: 'https://example.com/voice.silk' } },
+      ],
+    });
+
+    expect(event).not.toBeNull();
+    expect(event?.cleanedText).toBe('帮我总结这个附件');
+    expect(event?.unsupportedMedia).toEqual([
+      {
+        kind: 'file',
+        segmentType: 'file',
+        name: 'report.pdf',
+        url: 'https://example.com/report.pdf',
+      },
+      {
+        kind: 'audio',
+        segmentType: 'record',
+        name: undefined,
+        url: 'https://example.com/voice.silk',
+      },
+    ]);
+  });
 });

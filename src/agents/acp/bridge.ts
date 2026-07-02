@@ -14,6 +14,7 @@ import type {
   PermissionStrategy,
   ToolCallEntry,
 } from '../../types/agent.js';
+import type { UnsupportedInboundMedia } from '../../types/onebot.js';
 import { buildPromptBlocks } from './prompt.js';
 
 function summarizeText(value: unknown, maxLength = 200): string | undefined {
@@ -154,6 +155,7 @@ export class ACPAgentBridge {
   async sendPrompt(params: {
     text: string;
     images?: AgentImageInput[];
+    unsupportedMedia?: UnsupportedInboundMedia[];
     sessionIdHint?: string;
     systemPrompt?: string;
     contextLines?: string[];
@@ -166,6 +168,7 @@ export class ACPAgentBridge {
   private async sendPromptInternal(params: {
     text: string;
     images?: AgentImageInput[];
+    unsupportedMedia?: UnsupportedInboundMedia[];
     sessionIdHint?: string;
     systemPrompt?: string;
     contextLines?: string[];
@@ -192,6 +195,7 @@ export class ACPAgentBridge {
     const prompt = buildPromptBlocks({
       text: params.text,
       images: params.images,
+      unsupportedMedia: params.unsupportedMedia,
       promptCapabilities: this.capabilities.promptCapabilities,
       systemPrompt: params.systemPrompt,
       contextLines: params.contextLines,
@@ -204,6 +208,7 @@ export class ACPAgentBridge {
         sessionId,
         reusedSession: Boolean(params.sessionIdHint),
         imageCount: params.images?.length ?? 0,
+        unsupportedMediaCount: params.unsupportedMedia?.length ?? 0,
       },
       'dispatching ACP prompt',
     );
@@ -349,7 +354,7 @@ export class ACPAgentBridge {
       protocolVersion: acp.PROTOCOL_VERSION,
       clientInfo: {
         name: this.config.ai.clientName,
-        version: '0.1.1',
+        version: '0.1.3',
       },
       clientCapabilities: {},
     });

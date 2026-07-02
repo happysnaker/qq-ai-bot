@@ -24,7 +24,7 @@ class MockAgent {
       },
       agentInfo: {
         name: 'mock-qq-agent',
-        version: '0.1.1',
+        version: '0.1.3',
       },
     };
   }

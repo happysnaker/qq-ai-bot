@@ -1,6 +1,7 @@
 import type * as acp from '@agentclientprotocol/sdk';
 import type * as schema from '@agentclientprotocol/sdk';
 import type { AgentImageInput } from '../../types/agent.js';
+import type { UnsupportedInboundMedia } from '../../types/onebot.js';
 
 const EMPTY_MESSAGE_FALLBACK = '用户本次消息未包含可处理的文本内容。请提示用户补充信息后重试。';
 
@@ -13,6 +14,38 @@ function buildImageAnalysisPrompt(imageCount: number): string {
 function buildImageUnavailableNote(imageCount: number): string {
   const imageLabel = imageCount > 1 ? `${imageCount}张图片` : '1张图片';
   return `用户还发送了${imageLabel}，但当前 agent 不支持图片输入。不要假装看到了图片内容；请明确说明当前无法直接读取图片，并引导用户补充文字描述。`;
+}
+
+function mediaKindLabel(kind: UnsupportedInboundMedia['kind']): string {
+  switch (kind) {
+    case 'audio':
+      return '语音 / 音频';
+    case 'video':
+      return '视频';
+    case 'file':
+      return '文件';
+    default:
+      return '其他媒体';
+  }
+}
+
+function buildUnsupportedMediaNote(media: UnsupportedInboundMedia[]): string {
+  const entries = media.map((item) => {
+    const details = [
+      mediaKindLabel(item.kind),
+      item.name ? `name=${item.name}` : undefined,
+      item.url ? `source=${item.url}` : undefined,
+      `segment=${item.segmentType}`,
+    ].filter(Boolean);
+    return `- ${details.join(' | ')}`;
+  });
+
+  return [
+    `用户还发送了 ${media.length} 个当前 bot 还不会自动转给 agent 的媒体片段。`,
+    '不要假装你已经读取了这些媒体内容；如果用户的问题依赖这些附件，请明确说明当前只稳定支持文本与图片，并请用户补充文字描述、摘要，或把关键内容转成图片 / 文本后重试。',
+    '[未直传媒体]',
+    ...entries,
+  ].join('\n');
 }
 
 function composeTextPrompt(params: {
@@ -45,13 +78,16 @@ export function supportsImagePrompt(promptCapabilities: schema.PromptCapabilitie
 export function buildPromptBlocks(params: {
   text: string;
   images?: AgentImageInput[];
+  unsupportedMedia?: UnsupportedInboundMedia[];
   promptCapabilities?: schema.PromptCapabilities;
   systemPrompt?: string;
   contextLines?: string[];
 }): acp.ContentBlock[] {
   const trimmedText = params.text.trim();
   const hasImages = Boolean(params.images && params.images.length > 0);
+  const hasUnsupportedMedia = Boolean(params.unsupportedMedia && params.unsupportedMedia.length > 0);
   const imageSupported = supportsImagePrompt(params.promptCapabilities);
+  const unsupportedMediaNote = hasUnsupportedMedia ? buildUnsupportedMediaNote(params.unsupportedMedia!) : undefined;
 
   if (hasImages && imageSupported) {
     const prompt: acp.ContentBlock[] = [
@@ -61,6 +97,7 @@ export function buildPromptBlocks(params: {
           userText: trimmedText || buildImageAnalysisPrompt(params.images!.length),
           systemPrompt: params.systemPrompt,
           contextLines: params.contextLines,
+          extraNote: unsupportedMediaNote,
         }),
       },
     ];
@@ -82,7 +119,9 @@ export function buildPromptBlocks(params: {
           userText: trimmedText,
           systemPrompt: params.systemPrompt,
           contextLines: params.contextLines,
-          extraNote: buildImageUnavailableNote(params.images!.length),
+          extraNote: [buildImageUnavailableNote(params.images!.length), unsupportedMediaNote]
+            .filter(Boolean)
+            .join('\n\n'),
         }),
       },
     ];
@@ -95,6 +134,7 @@ export function buildPromptBlocks(params: {
         userText: trimmedText,
         systemPrompt: params.systemPrompt,
         contextLines: params.contextLines,
+        extraNote: unsupportedMediaNote,
       }),
     },
   ];

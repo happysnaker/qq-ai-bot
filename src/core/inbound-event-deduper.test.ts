@@ -18,6 +18,7 @@ function makeEvent(overrides: Partial<NormalizedOneBotEvent> = {}): NormalizedOn
     commandText: 'hello',
     replyToId: undefined,
     mediaUrls: [],
+    unsupportedMedia: [],
     mentionedUserIds: ['bot'],
     wasMentioned: true,
     explicitMention: true,

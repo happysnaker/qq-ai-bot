@@ -36,6 +36,13 @@ agent 进程启动后，bot 通过 stdin / stdout 上的 ACP 流和它通信。
 - `closeSession`：这样 bot 在退出时可以更干净地关闭会话
 - `promptCapabilities.image`：这样 bot 才能把入站图片转给 agent
 
+补充说明：
+
+- 当前 richer media 还在分阶段演进
+- **文本 + 图片** 是现在的稳定主链路
+- 如果用户发来 **语音 / 文件 / 视频** 等当前 bot 还不会自动直传给 agent 的媒体，bot 会在 prompt 里显式附带一段“未直传媒体”说明，要求 agent 不要假装已经读取了附件内容
+- 这能避免“附件其实没传过去，但 agent 还像看过了一样回答”的错误观感
+
 如果 agent 会持续发送下面这些增量更新，bot 就能把处理进度回发到 QQ：
 
 - `plan`

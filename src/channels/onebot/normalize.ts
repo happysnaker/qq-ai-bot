@@ -1,4 +1,9 @@
-import type { NormalizedOneBotEvent, OneBotMessageEvent, OneBotMessageSegment } from '../../types/onebot.js';
+import type {
+  NormalizedOneBotEvent,
+  OneBotMessageEvent,
+  OneBotMessageSegment,
+  UnsupportedInboundMedia,
+} from '../../types/onebot.js';
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -23,6 +28,27 @@ function asText(value: unknown): string | undefined {
     return String(value);
   }
   return undefined;
+}
+
+function classifyUnsupportedMedia(segmentType: string): UnsupportedInboundMedia['kind'] {
+  if (segmentType === 'record' || segmentType === 'audio' || segmentType === 'voice') {
+    return 'audio';
+  }
+  if (segmentType === 'video' || segmentType === 'short_video') {
+    return 'video';
+  }
+  if (segmentType === 'file') {
+    return 'file';
+  }
+  return 'unknown';
+}
+
+function inferUnsupportedMediaName(data: Record<string, unknown>): string | undefined {
+  return asString(data.name) ?? asString(data.file_name) ?? asString(data.filename);
+}
+
+function inferUnsupportedMediaUrl(data: Record<string, unknown>): string | undefined {
+  return asString(data.url) ?? asString(data.file) ?? asString(data.path);
 }
 
 function normalizeSegments(message: OneBotMessageEvent['message'], rawMessage?: string): OneBotMessageSegment[] {
@@ -80,6 +106,7 @@ export function normalizeOneBotEvent(raw: unknown): NormalizedOneBotEvent | null
   const segments = normalizeSegments(event.message, event.raw_message);
   const textParts: string[] = [];
   const mediaUrls: string[] = [];
+  const unsupportedMedia: UnsupportedInboundMedia[] = [];
   const mentionedUserIds: string[] = [];
   let replyToId: string | undefined;
 
@@ -109,6 +136,16 @@ export function normalizeOneBotEvent(raw: unknown): NormalizedOneBotEvent | null
     }
     if (segment.type === 'reply') {
       replyToId = asString(data.id) ?? replyToId;
+      continue;
+    }
+
+    if (segment.type === 'record' || segment.type === 'audio' || segment.type === 'voice' || segment.type === 'video' || segment.type === 'short_video' || segment.type === 'file') {
+      unsupportedMedia.push({
+        kind: classifyUnsupportedMedia(segment.type),
+        segmentType: segment.type,
+        name: inferUnsupportedMediaName(data),
+        url: inferUnsupportedMediaUrl(data),
+      });
       continue;
     }
 
@@ -147,6 +184,7 @@ export function normalizeOneBotEvent(raw: unknown): NormalizedOneBotEvent | null
     commandText: cleanedText,
     replyToId,
     mediaUrls,
+    unsupportedMedia,
     mentionedUserIds,
     wasMentioned: event.message_type === 'private' ? true : explicitMention,
     explicitMention,

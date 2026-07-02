@@ -46,6 +46,7 @@
 - ACP 会话复用与持久化
 - 处理中进度回传到 QQ
 - 入站图片下载后转给 agent
+- 对暂未自动直传的语音 / 文件 / 视频等 richer media，显式告诉 agent“当前未读到附件”，避免静默丢失
 - Prometheus 风格 `/metrics` 与 runtime counters
 - `/readyz` / `/status` 中暴露 build / version 信息
 - 可插拔 session store（默认 file，支持 Redis）
@@ -195,6 +196,7 @@ ws://127.0.0.1:16700/onebot/v11/ws
 - 当前是单实例内存级 replay guard，目标是先减少明显重复触发，而不是承诺严格 exactly-once
 - 单轮交互现在会派生一个 **correlation ID**，并贯穿到 receive / dedupe / ACP dispatch / progress / final reply 相关日志里，便于排查“这一次到底发生了什么”
 - 建议 grep `correlationId=`（或 JSON 日志里的 `correlationId` 字段）把一次消息相关的接收、去重、进度和回复串起来看
+- richer media 当前仍然是**分阶段演进**：文本和图片是稳定主链路；语音 / 文件 / 视频等媒体现在会被显式标记为“未直传媒体”，并通过 prompt 附加说明告知 agent 不要假装已经读取附件
 - 相关配置与说明见 [配置说明](docs/configuration.md)
 
 ## Support

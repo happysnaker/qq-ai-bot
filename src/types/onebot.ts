@@ -5,6 +5,15 @@ export interface OneBotMessageSegment {
   data?: Record<string, unknown>;
 }
 
+export type UnsupportedInboundMediaKind = 'audio' | 'video' | 'file' | 'unknown';
+
+export interface UnsupportedInboundMedia {
+  kind: UnsupportedInboundMediaKind;
+  segmentType: string;
+  name?: string;
+  url?: string;
+}
+
 export interface OneBotActionResponse {
   status?: string;
   retcode?: number;
@@ -47,6 +56,7 @@ export interface NormalizedOneBotEvent {
   commandText: string;
   replyToId?: string;
   mediaUrls: string[];
+  unsupportedMedia: UnsupportedInboundMedia[];
   mentionedUserIds: string[];
   wasMentioned: boolean;
   explicitMention: boolean;

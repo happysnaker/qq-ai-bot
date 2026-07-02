@@ -190,6 +190,40 @@ ws://127.0.0.1:16700/onebot/v11/ws
 - **具体可认领任务**：看 [`help wanted` issues](https://github.com/happysnaker/qq-ai-bot/issues?q=is%3Aopen+label%3A%22help+wanted%22)
 - **直接支持仓库**：看 [SUPPORT.md](./SUPPORT.md)
 
+## Promo kit / 转发文案
+
+如果你想把这个项目转到群里、论坛、周刊、awesome list 或发给朋友，直接复制下面这些就够了。
+
+**最短一句话：**
+
+```text
+OneBot 11 + ACP + persistent sessions + progress streaming + Docker demo
+```
+
+**中文一段版：**
+
+```text
+qq-ai-bot 是一个面向 OneBot 11 / NapCat / LLOneBot 的 QQ ↔ AI 自托管脚手架。它把 QQ 消息入口、ACP agent bridge、会话持久化、进度回传和 Docker demo 整理成了一个更像 bot 基础设施的仓库，而不是只会聊天的玩具 demo。
+```
+
+**English one-paragraph version:**
+
+```text
+qq-ai-bot is a self-hosted QQ ↔ AI bot scaffold for OneBot 11 / NapCat / LLOneBot and ACP-compatible agents, with persistent sessions, progress streaming, and a Docker demo. It is positioned as bot infrastructure / integration glue rather than another toy chat UI.
+```
+
+**最有用的 3 个链接：**
+
+- 仓库首页：<https://github.com/happysnaker/qq-ai-bot>
+- 项目页：<https://happysnaker.github.io/qq-ai-bot/>
+- Docker 快速演示：<https://github.com/happysnaker/qq-ai-bot/blob/main/docs/docker-quickstart.md>
+
+**如果对方是周刊 / awesome list / 维护者：**
+
+- 最好突出：`OneBot 11`、`NapCat / LLOneBot`、`ACP-compatible agents`
+- 最好强调：`persistent sessions`、`progress streaming`、`Docker demo`
+- 最好避免只写成“又一个 QQ 聊天机器人”，因为这个项目更偏 **bridge / scaffold / bot infrastructure**
+
 ## Operational notes
 
 - 对 OneBot 重连 / 重放导致的重复入站事件，仓库现在会做一层**轻量入站去重**，尽量避免重复命令处理和重复 ACP prompt

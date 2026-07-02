@@ -274,7 +274,7 @@ async function downloadLatestShell(paths: DerivedPaths): Promise<void> {
     log('downloading latest NapCat shell');
     const response = await fetch(NAPCAT_SHELL_URL, {
       headers: {
-        'user-agent': 'qq-ai-bot/0.1.0',
+        'user-agent': 'qq-ai-bot/0.1.1',
       },
     });
 

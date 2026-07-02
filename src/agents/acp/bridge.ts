@@ -311,7 +311,7 @@ export class ACPAgentBridge {
       protocolVersion: acp.PROTOCOL_VERSION,
       clientInfo: {
         name: this.config.ai.clientName,
-        version: '0.1.0',
+        version: '0.1.1',
       },
       clientCapabilities: {},
     });

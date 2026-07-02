@@ -9,7 +9,7 @@ describe('getBuildInfo', () => {
     } as NodeJS.ProcessEnv);
 
     expect(info.appName).toBe('qq-ai-bot');
-    expect(info.version).toBe('0.1.0');
+    expect(info.version).toBe('0.1.1');
     expect(info.gitCommit).toBe('abc123');
     expect(info.buildRef).toBe('release-2026-07-02');
     expect(typeof info.startedAt).toBe('string');

@@ -2,28 +2,70 @@
 
 这份文档只讲一件事：把 bot 跑起来，并确认 QQ → bot → 本地 agent 这条链路是通的。
 
-## 运行要求
+## 前置条件
 
-- Node.js 22+
-- 一个 OneBot 11 实现（推荐 NapCat 或 LLOneBot）
-- 一个支持 ACP 的本地 agent（比如 `traecli`）
+开始之前，先确认你已经准备好下面几样东西：
 
-## 1. 安装依赖
+- **Node.js 22+**
+- 一个 **OneBot 11** 实现（推荐 [NapCatQQ](https://github.com/NapNeko/NapCatQQ) 或 [LLOneBot](https://github.com/LLOneBot/LuckyLilliaBot)）
+- 一个支持 **ACP** 的本地 agent
+
+本文默认你使用 `traecli` 作为本地 agent。
+
+## 0. 先确认 `traecli` 已安装
+
+先在终端里确认命令存在：
+
+```bash
+traecli --help
+```
+
+如果命令不存在，或者执行报错，先把 `traecli` 安装好，再继续下面步骤。
+
+## 1. 拉代码并进入项目目录
+
+```bash
+git clone https://github.com/happysnaker/qq-ai-bot.git
+cd qq-ai-bot
+```
+
+后面提到的“项目根目录”，指的就是你执行完 `cd qq-ai-bot` 之后所在的位置。
+
+## 2. 安装项目依赖
 
 ```bash
 npm install
 ```
 
-## 2. 准备本地配置
+这一步安装的是当前仓库自己的 Node.js 依赖，不会帮你安装 `traecli`、QQ 或 NapCat。
+
+安装内容来自项目根目录下的 `package.json`，主要包括：
+
+- 运行依赖：`@agentclientprotocol/sdk`、`ws`、`zod`、`pino`
+- 开发依赖：`tsx`、`typescript`、`eslint`、`vitest`
+
+## 3. 准备配置文件
+
+项目根目录下已经有示例配置：
+
+- `.env.example`
+- `examples/group-rules.example.json`
+
+复制成本地配置：
 
 ```bash
 cp .env.example .env
 cp examples/group-rules.example.json examples/group-rules.local.json
 ```
 
+你后面真正要修改的是：
+
+- 项目根目录下的 `.env`
+- 项目根目录下的 `examples/group-rules.local.json`
+
 如果你不需要分群配置，可以把 `.env` 里的 `ONEBOT_GROUP_CONFIG_FILE` 留空。
 
-## 3. 配置 `.env`
+## 4. 先改 `.env`
 
 最小示例：
 
@@ -50,27 +92,42 @@ ACP_VERBOSE_MODE=verbose
 ACP_PERMISSION_STRATEGY=allow_once
 ```
 
-## 4. 验证本地 agent
+几个关键项：
+
+- `ACP_AGENT_COMMAND=traecli`：bot 会直接执行这个命令
+- `ACP_AGENT_ARGS_JSON=["acp","serve"]`：等价于执行 `traecli acp serve`
+- `ACP_AGENT_WORKDIR=/path/to/your/workdir`：改成你的真实工作目录
+- `ONEBOT_ACCESS_TOKEN=test-token`：和你的 OneBot 11 配置保持一致
+
+## 5. 单独验证本地 agent
+
+先验证 bot 能不能正常拉起本地 agent：
 
 ```bash
 npm run smoke:traecli
 ```
 
-看到 `TRAE_ACP_OK` 再继续。这个步骤过不了，后面接 QQ 也没意义。
+如果输出中出现 `TRAE_ACP_OK`，说明 bot → `traecli` 这段已经通了。
 
-## 5. 启动 bot
+如果这里都没过，先不要继续接 QQ，先把 agent 这段问题解决掉。
+
+## 6. 启动 bot
+
+开发模式：
 
 ```bash
 npm run dev
 ```
 
-如果你跑的是构建产物：
+如果你要跑构建产物：
 
 ```bash
 npm run start
 ```
 
-## 6. 配置 OneBot 11
+## 7. 配置 OneBot 11
+
+推荐先使用 reverse WebSocket。
 
 把 OneBot 11 的 reverse WebSocket 指到：
 
@@ -78,9 +135,9 @@ npm run start
 ws://127.0.0.1:16700/onebot/v11/ws
 ```
 
-如果设置了 access token，QQ 侧和 bot 侧要一致。
+如果你设置了 access token，QQ 侧和 bot 侧要一致。
 
-## 7. 实测
+## 8. 实测
 
 建议按下面顺序测：
 

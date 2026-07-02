@@ -34,22 +34,68 @@
 - [Windows 接入说明（未验证）](docs/windows-untested.md)
 - [架构说明](ARCHITECTURE.md)
 
-## 5 分钟跑起来
+## 快速开始
 
-### 1. 安装依赖
+### 0. 先准备好这些东西
+
+在仓库根目录执行下面步骤：
+
+- 安装 **Node.js 22+**
+- 安装一个 **OneBot 11** 实现（推荐 [NapCatQQ](https://github.com/NapNeko/NapCatQQ) 或 [LLOneBot](https://github.com/LLOneBot/LuckyLilliaBot)）
+- 安装一个支持 **ACP** 的本地 agent。下面示例默认使用 `traecli`
+
+如果你准备用 `traecli`，先确认命令可用：
+
+```bash
+traecli --help
+```
+
+如果这一步都过不了，不要继续配 bot，先把本地 agent 装好。
+
+### 1. 拉代码并进入仓库目录
+
+```bash
+git clone https://github.com/happysnaker/qq-ai-bot.git
+cd qq-ai-bot
+```
+
+### 2. 安装项目依赖
 
 ```bash
 npm install
 ```
 
-### 2. 准备配置文件
+这一步会安装当前项目自己的 Node.js 依赖，也就是 `package.json` 里声明的运行库和开发工具，例如：
+
+- `@agentclientprotocol/sdk`
+- `ws`
+- `zod`
+- `tsx`
+- `typescript`
+- `vitest`
+
+### 3. 生成本地配置文件
+
+项目根目录下已经带了示例配置文件：
+
+- `.env.example`
+- `examples/group-rules.example.json`
+
+复制一份给你自己用：
 
 ```bash
 cp .env.example .env
 cp examples/group-rules.example.json examples/group-rules.local.json
 ```
 
-### 3. 填最小配置
+也就是说，你真正要改的是：
+
+- 根目录下的 `.env`
+- 根目录下的 `examples/group-rules.local.json`
+
+### 4. 先改 `.env`
+
+最小可用示例：
 
 ```env
 BOT_PORT=18080
@@ -74,15 +120,24 @@ ACP_VERBOSE_MODE=verbose
 ACP_PERMISSION_STRATEGY=allow_once
 ```
 
-### 4. 验证本地 agent 能不能通
+至少要注意这几项：
+
+- `ACP_AGENT_COMMAND=traecli`：表示 bot 会直接启动本机 `traecli`
+- `ACP_AGENT_ARGS_JSON=["acp","serve"]`：表示 bot 会以 `traecli acp serve` 的方式起 agent
+- `ACP_AGENT_WORKDIR=/path/to/your/workdir`：这里要改成你希望 agent 实际工作的目录
+- `ONEBOT_ACCESS_TOKEN`：要和你的 OneBot 11 实现保持一致
+
+### 5. 单独验证本地 agent
+
+先别急着连 QQ，先确认 bot 能拉起本地 agent：
 
 ```bash
 npm run smoke:traecli
 ```
 
-输出里看到 `TRAE_ACP_OK`，说明 bot 到本地 agent 的 ACP 链路已经通了。
+看到输出里有 `TRAE_ACP_OK`，再继续下一步。
 
-### 5. 启动 bot
+### 6. 启动 bot
 
 开发模式：
 
@@ -96,17 +151,28 @@ npm run dev
 npm run start
 ```
 
-### 6. 接上 QQ / OneBot 11
+### 7. 配置 QQ / OneBot 11
 
-把你的 OneBot 11 实现指到：
+把你的 OneBot 11 reverse WebSocket 指到：
 
 ```text
 ws://127.0.0.1:16700/onebot/v11/ws
 ```
 
-如果你在 macOS 上直接接 QQ，可以看这份文档：[macOS 接入 NapCat](docs/macos-napcat.md)。
+如果你配置了 access token，QQ 侧和 bot 侧要一致。
 
-Windows 方案也整理了一份，但我这边没做实机验证：[Windows 接入说明（未验证）](docs/windows-untested.md)。
+- macOS 直接接 QQ：看 [macOS 接入 NapCat](docs/macos-napcat.md)
+- Windows：看 [Windows 接入说明（未验证）](docs/windows-untested.md)
+
+### 8. 实测
+
+建议按下面顺序测：
+
+1. 私聊机器人发一句普通文本
+2. 群聊里 `@机器人` 再发一句文本
+3. 发送 `/status`
+4. 发送 `/prompt`
+5. 发送 `/reset`
 
 ## 命令
 

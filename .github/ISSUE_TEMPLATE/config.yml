@@ -6,6 +6,9 @@ contact_links:
   - name: Questions / usage help
     url: https://github.com/happysnaker/qq-ai-bot/discussions/categories/q-a
     about: Ask for setup help, deployment debugging, or ACP / OneBot integration guidance.
+  - name: Paid deploy / packaging read
+    url: https://happysnaker.github.io/review/
+    about: If you want a blunt paid first pass on your own bot repo, README, landing page, or deployment story, start here.
   - name: Ideas / roadmap discussion
     url: https://github.com/happysnaker/qq-ai-bot/discussions/categories/ideas
     about: Propose features like Redis session store, metrics, richer media, or new operational tooling.

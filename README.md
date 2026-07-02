@@ -165,6 +165,7 @@ ws://127.0.0.1:16700/onebot/v11/ws
 
 当前优先方向：
 
+- inbound dedupe / replay guard
 - richer media / 附件处理
 - tracing / 更细的 observability 信号
 - 多实例部署与更多外部存储路径
@@ -175,6 +176,7 @@ ws://127.0.0.1:16700/onebot/v11/ws
 - [#6 docs: publish tested deployment matrix for NapCat / LLOneBot and forward / reverse WS modes](https://github.com/happysnaker/qq-ai-bot/issues/6)
 - [#7 enhancement: add stable correlation IDs across OneBot receive, ACP prompt, and progress updates](https://github.com/happysnaker/qq-ai-bot/issues/7)
 - [#8 feature: document and stage richer media handling roadmap (file / voice / video)](https://github.com/happysnaker/qq-ai-bot/issues/8)
+- [#12 enhancement: add lightweight inbound message dedupe before ACP dispatch](https://github.com/happysnaker/qq-ai-bot/issues/12)
 
 如果你准备提 PR，建议先看 [CONTRIBUTING.md](./CONTRIBUTING.md)。
 

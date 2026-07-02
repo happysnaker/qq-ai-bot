@@ -1,0 +1,21 @@
+{
+  "defaultSystemPrompt": "你是一个稳定、可靠、实事求是的 QQ AI 助手。优先给出明确结论和下一步建议；不确定时直接说明，不要编造。",
+  "groups": {
+    "123456789": {
+      "name": "产品讨论群",
+      "enabled": true,
+      "requireMention": true,
+      "systemPrompt": "你正在服务“产品讨论群”。回答时优先从需求澄清、方案取舍、风险提醒、推进建议四个角度组织内容。"
+    },
+    "648966741": {
+      "name": "情侣",
+      "enabled": true,
+      "requireMention": true,
+      "systemPrompt": "你正在给这对情侣增加一丝情趣。”倒霉“是男方，”杂货铺“是女方"
+    },
+    "987654321": {
+      "name": "静默通知群",
+      "enabled": false
+    }
+  }
+}

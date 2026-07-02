@@ -37,4 +37,26 @@ describe('normalizeOneBotEvent', () => {
     expect(event?.explicitMention).toBe(true);
     expect(event?.cleanedText).toBe('帮我总结下这个 PR');
   });
+
+  it('parses group commands correctly when raw_message contains CQ at syntax', () => {
+    const event = normalizeOneBotEvent({
+      post_type: 'message',
+      message_type: 'group',
+      user_id: 123,
+      self_id: 999,
+      group_id: 456,
+      message_id: 3,
+      raw_message: '[CQ:at,qq=999] /help',
+      message: [
+        { type: 'at', data: { qq: '999' } },
+        { type: 'text', data: { text: ' /help' } },
+      ],
+    });
+
+    expect(event).not.toBeNull();
+    expect(event?.explicitMention).toBe(true);
+    expect(event?.rawText).toBe('[CQ:at,qq=999] /help');
+    expect(event?.cleanedText).toBe('/help');
+    expect(event?.commandText).toBe('/help');
+  });
 });

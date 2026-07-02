@@ -34,6 +34,12 @@ export function parseJsonStringArray(value: string | undefined, fallback: string
     }
     return parsed.filter((item): item is string => typeof item === 'string');
   } catch {
-    return fallback;
+    const trimmed = value.trim();
+    const bracketMatch = trimmed.match(/^\[(.*)\]$/s);
+    const rawItems = bracketMatch ? bracketMatch[1].split(',') : trimmed.split(',');
+    const parsed = rawItems
+      .map((item) => item.trim().replace(/^['"]|['"]$/g, ''))
+      .filter(Boolean);
+    return parsed.length > 0 ? parsed : fallback;
   }
 }

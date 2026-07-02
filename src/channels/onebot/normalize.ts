@@ -43,6 +43,8 @@ function stripLeadingMention(text: string, selfId?: string): string {
   const patterns = [
     /^\s*@[\w-]+[,:，：]?\s*/u,
     escapedSelfId ? new RegExp(`^\\s*@${escapedSelfId}[,:，：]?\\s*`, 'u') : null,
+    /^\s*\[CQ:at,[^\]]+\][,:，：]?\s*/u,
+    escapedSelfId ? new RegExp(`^\\s*\\[CQ:at,qq=${escapedSelfId}(?:,[^\\]]+)?\\][,:，：]?\\s*`, 'u') : null,
   ].filter((value): value is RegExp => value instanceof RegExp);
 
   let current = text;
@@ -117,15 +119,19 @@ export function normalizeOneBotEvent(raw: unknown): NormalizedOneBotEvent | null
   }
 
   const senderName = asString(event.sender?.card) ?? asString(event.sender?.nickname);
+  const segmentText = textParts.join('').trim();
   const rawText =
     (typeof event.raw_message === 'string' && event.raw_message.trim().length > 0
       ? event.raw_message.trim()
-      : textParts.join('').trim()) ||
+      : segmentText) ||
     (mediaUrls.length > 0 ? mediaUrls.map(() => '[image]').join(' ') : '');
+  const normalizedText = segmentText || rawText;
 
   const explicitMention = Boolean(selfId && mentionedUserIds.includes(selfId));
   const cleanedText =
-    event.message_type === 'group' && explicitMention ? stripLeadingMention(rawText, selfId) : rawText;
+    event.message_type === 'group' && explicitMention
+      ? stripLeadingMention(normalizedText, selfId)
+      : normalizedText;
 
   return {
     id: `${conversationId}:${asString(event.message_id) ?? 'unknown'}`,

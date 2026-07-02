@@ -81,6 +81,8 @@ function pickPermissionOption(
 export class ACPAgentBridge {
   private process: ChildProcess | null = null;
   private connection: acp.ClientSideConnection | null = null;
+  private promptChain: Promise<void> = Promise.resolve();
+  private queuedPromptCount = 0;
   private state: ACPBridgeState;
   private capabilities: ACPAgentCapabilities = {
     canLoadSession: false,
@@ -135,6 +137,19 @@ export class ACPAgentBridge {
     text: string;
     images?: AgentImageInput[];
     sessionIdHint?: string;
+    systemPrompt?: string;
+    contextLines?: string[];
+    onProgress?: (state: ACPBridgeState) => void;
+  }): Promise<AgentResponse> {
+    return this.enqueuePrompt(async () => this.sendPromptInternal(params));
+  }
+
+  private async sendPromptInternal(params: {
+    text: string;
+    images?: AgentImageInput[];
+    sessionIdHint?: string;
+    systemPrompt?: string;
+    contextLines?: string[];
     onProgress?: (state: ACPBridgeState) => void;
   }): Promise<AgentResponse> {
     await this.ensureStarted(params.sessionIdHint);
@@ -152,24 +167,51 @@ export class ACPAgentBridge {
       currentRunId: randomUUID(),
     };
 
-    const prompt = buildPromptBlocks(
-      params.text,
-      params.images,
-      this.capabilities.promptCapabilities,
-    );
-    const response = await this.connection.prompt({
-      sessionId: this.remoteSessionId,
-      prompt,
+    const prompt = buildPromptBlocks({
+      text: params.text,
+      images: params.images,
+      promptCapabilities: this.capabilities.promptCapabilities,
+      systemPrompt: params.systemPrompt,
+      contextLines: params.contextLines,
     });
+    const sessionId = this.remoteSessionId;
 
-    await new Promise((resolve) => setTimeout(resolve, 120));
+    try {
+      const response = await this.connection.prompt({
+        sessionId,
+        prompt,
+      });
 
-    return {
-      text: this.state.accumulatedText,
-      stopReason: response.stopReason,
-      usage: response.usage,
-      sessionId: this.remoteSessionId,
-    };
+      await new Promise((resolve) => setTimeout(resolve, 120));
+
+      return {
+        text: this.state.accumulatedText,
+        stopReason: response.stopReason,
+        usage: response.usage,
+        sessionId: this.remoteSessionId ?? sessionId,
+      };
+    } catch (error) {
+      if (this.isRecoverableConnectionError(error)) {
+        this.logger.warn(
+          {
+            sessionId,
+            error: error instanceof Error ? error.message : String(error),
+          },
+          'ACP connection dropped during prompt; resetting bridge state',
+        );
+        try {
+          await this.stop();
+        } catch (stopError) {
+          this.logger.warn(
+            { error: stopError instanceof Error ? stopError.message : String(stopError) },
+            'failed to stop ACP bridge after connection drop',
+          );
+        }
+      }
+      throw error;
+    } finally {
+      this.progressCallback = undefined;
+    }
   }
 
   async stop(): Promise<void> {
@@ -298,6 +340,38 @@ export class ACPAgentBridge {
     });
     this.remoteSessionId = newSession.sessionId;
     this.logger.info({ sessionId: this.remoteSessionId }, 'created new ACP session');
+  }
+
+  private enqueuePrompt<T>(task: () => Promise<T>): Promise<T> {
+    const queuedAhead = this.queuedPromptCount;
+    this.queuedPromptCount += 1;
+
+    const run = this.promptChain.catch(() => undefined).then(async () => {
+      if (queuedAhead > 0) {
+        this.logger.warn({ queuedAhead }, 'serialized concurrent ACP prompt on the same conversation');
+      }
+      try {
+        return await task();
+      } finally {
+        this.queuedPromptCount = Math.max(0, this.queuedPromptCount - 1);
+      }
+    });
+
+    this.promptChain = run.then(
+      () => undefined,
+      () => undefined,
+    );
+
+    return run;
+  }
+
+  private isRecoverableConnectionError(error: unknown): boolean {
+    const message = error instanceof Error ? error.message : String(error);
+    return (
+      message.includes('ACP connection closed') ||
+      message.includes('ACP connection is not initialized') ||
+      message.includes('ACP session is not ready')
+    );
   }
 
   private createClientHandlers(): acp.Client {

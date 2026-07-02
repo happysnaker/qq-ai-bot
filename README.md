@@ -13,6 +13,9 @@
 - 技术栈：Node.js 22+、TypeScript、Docker、GitHub Actions
 - 适用场景：自托管 QQ bot、NapCat / LLOneBot 集成、ACP agent 接线层
 
+![qq-ai-bot architecture overview](./assets/architecture-overview.svg)
+
+
 > 如果这个仓库帮你省掉了 OneBot 接线、会话管理或 ACP bridge 的搭建时间，欢迎给个 star，或者直接支持我的开源维护：[happysnaker.github.io/support](https://happysnaker.github.io/support/)
 
 ## 核心能力

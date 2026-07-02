@@ -1,0 +1,92 @@
+<svg width="1200" height="680" viewBox="0 0 1200 680" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="680" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0B1020"/>
+      <stop offset="1" stop-color="#162447"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#1D2746"/>
+      <stop offset="1" stop-color="#11182D"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#7AA2FF"/>
+      <stop offset="1" stop-color="#62D2A2"/>
+    </linearGradient>
+    <filter id="shadow" x="-50" y="-50" width="1300" height="780" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#000000" flood-opacity="0.28"/>
+    </filter>
+    <marker id="arrow" markerWidth="14" markerHeight="14" refX="7" refY="7" orient="auto">
+      <path d="M1 1L13 7L1 13V1Z" fill="#89AFFF"/>
+    </marker>
+    <style>
+      .title { font: 700 34px -apple-system,BlinkMacSystemFont,'Segoe UI',Inter,sans-serif; fill: #EEF2FF; }
+      .subtitle { font: 500 18px -apple-system,BlinkMacSystemFont,'Segoe UI',Inter,sans-serif; fill: #A9B6D8; }
+      .label { font: 700 20px -apple-system,BlinkMacSystemFont,'Segoe UI',Inter,sans-serif; fill: #EEF2FF; }
+      .body { font: 500 15px -apple-system,BlinkMacSystemFont,'Segoe UI',Inter,sans-serif; fill: #B8C3E5; }
+      .pill { font: 700 14px -apple-system,BlinkMacSystemFont,'Segoe UI',Inter,sans-serif; fill: #DDE7FF; }
+      .tiny { font: 600 13px -apple-system,BlinkMacSystemFont,'Segoe UI',Inter,sans-serif; fill: #DDE7FF; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="680" rx="32" fill="url(#bg)"/>
+  <g filter="url(#shadow)">
+    <rect x="36" y="36" width="1128" height="608" rx="28" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.09)"/>
+  </g>
+
+  <text x="68" y="92" class="title">qq-ai-bot architecture overview</text>
+  <text x="68" y="124" class="subtitle">OneBot 11 transport + ACP agent bridge for self-hosted QQ ↔ AI workflows</text>
+
+  <rect x="68" y="164" width="212" height="122" rx="24" fill="url(#panel)" stroke="#2F406F"/>
+  <text x="92" y="208" class="label">QQ / OneBot side</text>
+  <text x="92" y="236" class="body">NapCat / LLOneBot</text>
+  <text x="92" y="260" class="body">private chats · groups · @bot</text>
+
+  <rect x="330" y="164" width="228" height="122" rx="24" fill="url(#panel)" stroke="#2F406F"/>
+  <text x="354" y="208" class="label">Transport layer</text>
+  <text x="354" y="236" class="body">OneBot 11 forward / reverse WS</text>
+  <text x="354" y="260" class="body">message parsing · reply sending</text>
+
+  <rect x="608" y="144" width="274" height="174" rx="24" fill="url(#panel)" stroke="#3A528F"/>
+  <rect x="608" y="144" width="274" height="8" rx="4" fill="url(#accent)"/>
+  <text x="632" y="190" class="label">Application orchestration</text>
+  <text x="632" y="220" class="body">Conversation manager</text>
+  <text x="632" y="246" class="body">Persistent session store</text>
+  <text x="632" y="272" class="body">Progress reporter</text>
+  <text x="632" y="298" class="body">Image downloader</text>
+
+  <rect x="932" y="164" width="200" height="122" rx="24" fill="url(#panel)" stroke="#2F406F"/>
+  <text x="956" y="208" class="label">ACP bridge</text>
+  <text x="956" y="236" class="body">session/new · load</text>
+  <text x="956" y="260" class="body">plan / tool progress</text>
+
+  <rect x="826" y="396" width="306" height="142" rx="24" fill="url(#panel)" stroke="#2F406F"/>
+  <text x="850" y="440" class="label">Local ACP-compatible agent</text>
+  <text x="850" y="468" class="body">traecli / custom ACP server</text>
+  <text x="850" y="494" class="body">prompt execution · streamed updates</text>
+  <text x="850" y="520" class="body">tool calls · final answer</text>
+
+  <rect x="68" y="386" width="704" height="164" rx="24" fill="url(#panel)" stroke="#2F406F"/>
+  <text x="92" y="430" class="label">Production-minded properties</text>
+  <text x="92" y="460" class="body">• transport / agent split keeps the codebase extensible</text>
+  <text x="92" y="488" class="body">• per-chat session persistence supports group/private continuity</text>
+  <text x="92" y="516" class="body">• progress events become QQ updates without custom protocol glue</text>
+  <text x="92" y="544" class="body">• clean next steps: Redis/Postgres store, richer media, tracing, moderation</text>
+
+  <path d="M280 225H330" stroke="#89AFFF" stroke-width="6" stroke-linecap="round" marker-end="url(#arrow)"/>
+  <path d="M558 225H608" stroke="#89AFFF" stroke-width="6" stroke-linecap="round" marker-end="url(#arrow)"/>
+  <path d="M882 225H932" stroke="#89AFFF" stroke-width="6" stroke-linecap="round" marker-end="url(#arrow)"/>
+  <path d="M1032 286V396" stroke="#89AFFF" stroke-width="6" stroke-linecap="round" marker-end="url(#arrow)"/>
+
+  <rect x="68" y="590" width="116" height="30" rx="15" fill="#213055" stroke="#38518B"/>
+  <text x="89" y="610" class="tiny">Node.js 22+</text>
+  <rect x="194" y="590" width="126" height="30" rx="15" fill="#213055" stroke="#38518B"/>
+  <text x="219" y="610" class="tiny">TypeScript</text>
+  <rect x="330" y="590" width="114" height="30" rx="15" fill="#213055" stroke="#38518B"/>
+  <text x="357" y="610" class="tiny">Docker</text>
+  <rect x="454" y="590" width="154" height="30" rx="15" fill="#213055" stroke="#38518B"/>
+  <text x="480" y="610" class="tiny">Self-hosted</text>
+  <rect x="618" y="590" width="160" height="30" rx="15" fill="#213055" stroke="#38518B"/>
+  <text x="649" y="610" class="tiny">OneBot 11</text>
+  <rect x="788" y="590" width="90" height="30" rx="15" fill="#213055" stroke="#38518B"/>
+  <text x="818" y="610" class="tiny">ACP</text>
+</svg>

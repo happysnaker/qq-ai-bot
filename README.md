@@ -148,6 +148,7 @@ ws://127.0.0.1:16700/onebot/v11/ws
 如果你想看这个仓库下一步会往哪走，或者想直接认领一个更偏工程化的贡献方向，先看：
 
 - [ROADMAP.md](./ROADMAP.md)
+- [Discussions](https://github.com/happysnaker/qq-ai-bot/discussions)
 - [`help wanted` issues](https://github.com/happysnaker/qq-ai-bot/issues?q=is%3Aopen+label%3A%22help+wanted%22)
 
 当前优先方向：
@@ -158,6 +159,13 @@ ws://127.0.0.1:16700/onebot/v11/ws
 - richer media / 附件处理
 
 如果你准备提 PR，建议先看 [CONTRIBUTING.md](./CONTRIBUTING.md)。
+
+## Community
+
+- **Questions / usage help**：用 [Q&A discussions](https://github.com/happysnaker/qq-ai-bot/discussions/categories/q-a)
+- **Feature / roadmap ideas**：用 [Ideas discussions](https://github.com/happysnaker/qq-ai-bot/discussions/categories/ideas)
+- **具体可认领任务**：看 [`help wanted` issues](https://github.com/happysnaker/qq-ai-bot/issues?q=is%3Aopen+label%3A%22help+wanted%22)
+- **直接支持仓库**：看 [SUPPORT.md](./SUPPORT.md)
 
 ## Support
 

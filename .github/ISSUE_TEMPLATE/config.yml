@@ -1,5 +1,11 @@
 blank_issues_enabled: true
 contact_links:
+  - name: Questions / usage help
+    url: https://github.com/happysnaker/qq-ai-bot/discussions/categories/q-a
+    about: Ask for setup help, deployment debugging, or ACP / OneBot integration guidance.
+  - name: Ideas / roadmap discussion
+    url: https://github.com/happysnaker/qq-ai-bot/discussions/categories/ideas
+    about: Propose features like Redis session store, metrics, richer media, or new operational tooling.
   - name: Support / direct feedback
     url: https://happysnaker.github.io/support/#from-qq-ai-bot
     about: Support qq-ai-bot or ask for async bot / README / packaging feedback.

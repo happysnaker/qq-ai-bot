@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Support / direct feedback
+    url: https://happysnaker.github.io/support/
+    about: Support the project or ask for async review / packaging feedback.

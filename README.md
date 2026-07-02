@@ -125,6 +125,7 @@ ws://127.0.0.1:16700/onebot/v11/ws
 - [Docker 快速演示](docs/docker-quickstart.md)
 - [快速开始](docs/getting-started.md)
 - [FAQ / 常见问题](docs/faq.md)
+- [Deployment patterns / 部署形态](docs/deployment-patterns.md)
 - [ACP Agent 接入](docs/agent-integration.md)
 - [配置说明](docs/configuration.md)
 - [macOS 接入 NapCat](docs/macos-napcat.md)

@@ -1,5 +1,7 @@
 # qq-ai-bot
 
+[![CI](https://github.com/happysnaker/qq-ai-bot/actions/workflows/ci.yml/badge.svg)](https://github.com/happysnaker/qq-ai-bot/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/happysnaker/qq-ai-bot)](https://github.com/happysnaker/qq-ai-bot/releases)
 [![Stars](https://img.shields.io/github/stars/happysnaker/qq-ai-bot?style=social)](https://github.com/happysnaker/qq-ai-bot/stargazers)
 [![Project Page](https://img.shields.io/badge/project-page-7aa2ff)](https://happysnaker.github.io/qq-ai-bot/)
 [![Support](https://img.shields.io/badge/support-WeChat%20%26%20Alipay-9b87f5)](https://happysnaker.github.io/support/)
@@ -13,7 +15,7 @@
 - 技术栈：Node.js 22+、TypeScript、Docker、GitHub Actions
 - 适用场景：自托管 QQ bot、NapCat / LLOneBot 集成、ACP agent 接线层
 
-![qq-ai-bot architecture overview](./assets/architecture-overview.svg)
+![qq-ai-bot architecture overview](./assets/architecture-overview.png)
 
 
 > 如果这个仓库帮你省掉了 OneBot 接线、会话管理或 ACP bridge 的搭建时间，欢迎给个 star，或者直接支持我的开源维护：[happysnaker.github.io/support](https://happysnaker.github.io/support/)
@@ -123,3 +125,4 @@ ws://127.0.0.1:16700/onebot/v11/ws
 - 提 issue / PR 补充更多 channel、session store 或 observability 能力
 - 直接支持我的开源维护：[happysnaker.github.io/support](https://happysnaker.github.io/support/)
 - 如果你是因为这个项目来的，付款备注最有用的是：`qq-ai-bot`
+- 如果你想把自己的 bot / agent / infra 仓库也整理成这种更像成品的状态，可看轻量付费反馈：[happysnaker.github.io/review](https://happysnaker.github.io/review/)

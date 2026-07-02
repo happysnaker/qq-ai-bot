@@ -1,10 +1,14 @@
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { loadConfig } from '../config/index.js';
 import { logger } from '../infra/logger.js';
 import { ACPAgentBridge } from '../agents/acp/bridge.js';
 
-process.env.ACP_AGENT_COMMAND = '/Users/bytedance/GolandProjects/DevPlan/qq-ai-bot/node_modules/.bin/tsx';
-process.env.ACP_AGENT_ARGS_JSON = '["src/examples/mock-acp-agent.ts"]';
-process.env.ACP_AGENT_WORKDIR = '/Users/bytedance/GolandProjects/DevPlan/qq-ai-bot';
+const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+
+process.env.ACP_AGENT_COMMAND = process.execPath;
+process.env.ACP_AGENT_ARGS_JSON = JSON.stringify(['--import', 'tsx', 'src/examples/mock-acp-agent.ts']);
+process.env.ACP_AGENT_WORKDIR = repoRoot;
 process.env.ACP_VERBOSE_MODE = 'verbose';
 
 async function main() {

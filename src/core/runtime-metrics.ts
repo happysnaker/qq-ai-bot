@@ -36,6 +36,7 @@ function metricLines(params: {
 
 type CounterSnapshot = {
   inboundMessagesTotal: number;
+  inboundDuplicatesTotal: number;
   processedMessagesTotal: number;
   outboundMessagesTotal: number;
   acpPromptCallsTotal: number;
@@ -49,6 +50,7 @@ type CounterSnapshot = {
 export class RuntimeMetrics {
   private readonly counters: CounterSnapshot = {
     inboundMessagesTotal: 0,
+    inboundDuplicatesTotal: 0,
     processedMessagesTotal: 0,
     outboundMessagesTotal: 0,
     acpPromptCallsTotal: 0,
@@ -61,6 +63,10 @@ export class RuntimeMetrics {
 
   recordInboundMessage(): void {
     this.counters.inboundMessagesTotal += 1;
+  }
+
+  recordInboundDuplicate(): void {
+    this.counters.inboundDuplicatesTotal += 1;
   }
 
   recordProcessedMessage(kind: 'command' | 'user_message'): void {
@@ -158,6 +164,14 @@ export class RuntimeMetrics {
         help: 'Total inbound OneBot messages processed by the bridge.',
         type: 'counter',
         values: [{ value: this.counters.inboundMessagesTotal }],
+      }),
+    );
+    lines.push(
+      ...metricLines({
+        name: 'qq_ai_bot_inbound_duplicates_total',
+        help: 'Total inbound OneBot messages dropped by lightweight replay dedupe.',
+        type: 'counter',
+        values: [{ value: this.counters.inboundDuplicatesTotal }],
       }),
     );
     lines.push(

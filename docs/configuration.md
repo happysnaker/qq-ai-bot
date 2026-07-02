@@ -42,6 +42,8 @@
 | `ONEBOT_GROUP_CONFIG_FILE` | 分群配置文件 |
 | `ONEBOT_PROGRESS_MODE` | `off` 或 `message` |
 | `ONEBOT_OUTBOUND_MAX_TEXT_LENGTH` | 单条消息最大文本长度 |
+| `ONEBOT_INBOUND_DEDUPE_WINDOW_MS` | 轻量入站去重窗口，默认 120000 ms |
+| `ONEBOT_INBOUND_DEDUPE_MAX_ENTRIES` | 入站去重缓存上限，默认 2048 |
 
 ### ACP / Agent
 
@@ -165,8 +167,9 @@ group.systemPrompt > ACP_DEFAULT_SYSTEM_PROMPT > 无
 
 - HTTP `/readyz` 和 `/status` 会返回 `build` 字段
 - HTTP `/readyz` 和 `/status` 也会返回当前 `sessionStore`
+- HTTP `/readyz` 和 `/status` 也会返回当前入站去重配置和缓存大小
 - QQ 内的 `/status` 也会显示当前版本与启动时间
-- HTTP `/metrics` 会返回 Prometheus 风格文本指标，当前包含 OneBot 连接状态、重连次数、入站 / 出站消息计数、ACP prompt 调用 / 失败计数、活跃 / 持久化会话数等
+- HTTP `/metrics` 会返回 Prometheus 风格文本指标，当前包含 OneBot 连接状态、重连次数、入站 / 重复入站 / 出站消息计数、ACP prompt 调用 / 失败计数、活跃 / 持久化会话数等
 
 如果你在 Docker / CI / 发布流程里注入了 `APP_GIT_COMMIT` 或 `APP_BUILD_REF`，它们也会一起显示出来，便于排查线上实例到底跑的是哪个版本。
 
@@ -187,3 +190,27 @@ group.systemPrompt > ACP_DEFAULT_SYSTEM_PROMPT > 无
 - `ONEBOT_PROGRESS_MODE`
 - `ACP_PROGRESS_THROTTLE_MS`
 - `ACP_MAX_PROGRESS_UPDATES`
+
+## 轻量入站去重
+
+为了降低 OneBot 重连、重复上报或边界情况下的重复 prompt 触发，bot 现在会在进入命令处理 / ACP dispatch 之前做一层**轻量入站去重**。
+
+默认配置：
+
+```env
+ONEBOT_INBOUND_DEDUPE_WINDOW_MS=120000
+ONEBOT_INBOUND_DEDUPE_MAX_ENTRIES=2048
+```
+
+行为说明：
+
+- 优先使用 `message_id` + 会话维度做去重
+- 如果事件没有可靠的 `message_id`，会退回到会话、发送者、时间桶、文本摘要等组合键
+- 这是 **best-effort replay guard**，不是严格的 exactly-once 保证
+- 当前只做单实例内存级缓存，不做跨实例协调
+
+适合场景：
+
+- 避免短时间内重复触发同一条 `/status`、`/reset` 等命令
+- 避免 OneBot 重放导致同一条用户消息再次打到 ACP agent
+- 降低进度播报和最终回复的重复噪声

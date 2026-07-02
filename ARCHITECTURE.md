@@ -137,6 +137,7 @@ group.systemPrompt > defaultSystemPrompt > 无
 
 ## 容错策略
 
+- 对短时间内重复上报的 OneBot 入站消息做轻量去重，尽量避免重复触发命令或 ACP prompt
 - ACP `loadSession` 失败回退为 `newSession`
 - 图片下载失败不阻塞主流程
 - 进度播报失败不影响最终答复

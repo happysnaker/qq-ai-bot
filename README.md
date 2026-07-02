@@ -49,6 +49,7 @@
 - Prometheus 风格 `/metrics` 与 runtime counters
 - `/readyz` / `/status` 中暴露 build / version 信息
 - 可插拔 session store（默认 file，支持 Redis）
+- 轻量入站消息去重，降低 OneBot 重放导致的重复 ACP 调用
 - macOS 下提供 NapCat 接入辅助脚本
 
 ## 快速开始
@@ -189,6 +190,12 @@ ws://127.0.0.1:16700/onebot/v11/ws
 - **Show and tell / 真实部署展示**：看 [share your qq-ai-bot deployment, stack, or screenshots](https://github.com/happysnaker/qq-ai-bot/discussions/10)
 - **具体可认领任务**：看 [`help wanted` issues](https://github.com/happysnaker/qq-ai-bot/issues?q=is%3Aopen+label%3A%22help+wanted%22)
 - **直接支持仓库**：看 [SUPPORT.md](./SUPPORT.md)
+
+## Operational notes
+
+- 对 OneBot 重连 / 重放导致的重复入站事件，仓库现在会做一层**轻量入站去重**，尽量避免重复命令处理和重复 ACP prompt
+- 当前是单实例内存级 replay guard，目标是先减少明显重复触发，而不是承诺严格 exactly-once
+- 相关配置与说明见 [配置说明](docs/configuration.md)
 
 ## Support
 

@@ -10,6 +10,7 @@ import { AdminServer } from './admin-server.js';
 import { getBuildInfo } from './build-info.js';
 import { RuntimeMetrics } from './runtime-metrics.js';
 import { createSessionStore } from './session-store-factory.js';
+import { InboundEventDeduper } from './inbound-event-deduper.js';
 import type { NormalizedOneBotEvent, OneBotReplyContext } from '../types/onebot.js';
 import type { AgentImageOutput } from '../types/agent.js';
 
@@ -35,6 +36,7 @@ export class BotApplication {
   private readonly conversations: ConversationManager;
   private readonly adminServer: AdminServer;
   private readonly metrics: RuntimeMetrics;
+  private readonly inboundDeduper: InboundEventDeduper;
   private cleanupTimer: NodeJS.Timeout | null = null;
 
   constructor(
@@ -55,6 +57,10 @@ export class BotApplication {
         onAcpPromptStarted: () => this.metrics.recordAcpPromptCall(),
         onAcpPromptFailed: () => this.metrics.recordAcpPromptFailure(),
       },
+    );
+    this.inboundDeduper = new InboundEventDeduper(
+      config.onebot.inboundDedupeWindowMs,
+      config.onebot.inboundDedupeMaxEntries,
     );
     this.adminServer = new AdminServer({
       host: config.server.host,
@@ -108,6 +114,7 @@ export class BotApplication {
       build: getBuildInfo(),
       onebot: this.gateway.getStatus(),
       activeConversations: this.conversations.listActive(),
+      inboundDedupeCacheSize: this.inboundDeduper.size(),
       persistedConversations: persistedConversations.length,
       config: {
         sessionStore: this.config.storage.sessionStore,
@@ -122,6 +129,8 @@ export class BotApplication {
         allowGroupCommandsWithoutMention: this.config.onebot.allowGroupCommandsWithoutMention,
         commandPrefix: this.config.onebot.commandPrefix,
         progressMode: this.config.onebot.progressMode,
+        inboundDedupeWindowMs: this.config.onebot.inboundDedupeWindowMs,
+        inboundDedupeMaxEntries: this.config.onebot.inboundDedupeMaxEntries,
         allowedGroups: this.config.onebot.allowedGroups,
         blockedGroups: this.config.onebot.blockedGroups,
         allowedUsers: this.config.onebot.allowedUsers,
@@ -155,6 +164,21 @@ export class BotApplication {
       return;
     }
     this.metrics.recordInboundMessage();
+
+    if (this.inboundDeduper.isDuplicate(event)) {
+      this.metrics.recordInboundDuplicate();
+      this.logger.info(
+        {
+          eventId: event.id,
+          messageId: event.messageId,
+          conversationId: event.conversationId,
+          senderId: event.senderId,
+        },
+        'skip duplicate inbound onebot event',
+      );
+      return;
+    }
+
     const command = this.parseCommand(event.commandText);
 
     if (event.isSelfMessage) {

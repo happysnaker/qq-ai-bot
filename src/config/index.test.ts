@@ -83,4 +83,14 @@ describe('loadConfig', () => {
     expect(config.storage.redisKeyPrefix).toBe('qq-ai-bot-prod');
     expect(config.storage.sessionTtlMs).toBe(30 * 60 * 1000);
   });
+
+  it('supports inbound dedupe tuning config', () => {
+    const config = loadConfig({
+      ONEBOT_INBOUND_DEDUPE_WINDOW_MS: '45000',
+      ONEBOT_INBOUND_DEDUPE_MAX_ENTRIES: '512',
+    });
+
+    expect(config.onebot.inboundDedupeWindowMs).toBe(45_000);
+    expect(config.onebot.inboundDedupeMaxEntries).toBe(512);
+  });
 });

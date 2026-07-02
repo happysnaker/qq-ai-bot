@@ -59,6 +59,8 @@ export interface AppConfig {
     commandPrefix: string;
     progressMode: 'off' | 'message';
     outboundMaxTextLength: number;
+    inboundDedupeWindowMs: number;
+    inboundDedupeMaxEntries: number;
     defaultSystemPrompt?: string;
     groupConfigFilePath?: string;
     groupPolicies: Record<string, GroupConversationPolicy>;
@@ -183,6 +185,8 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
       commandPrefix,
       progressMode: progressModeSchema.parse(env.ONEBOT_PROGRESS_MODE || 'message'),
       outboundMaxTextLength: parseNumber(env.ONEBOT_OUTBOUND_MAX_TEXT_LENGTH, 1400),
+      inboundDedupeWindowMs: parseNumber(env.ONEBOT_INBOUND_DEDUPE_WINDOW_MS, 120_000),
+      inboundDedupeMaxEntries: parseNumber(env.ONEBOT_INBOUND_DEDUPE_MAX_ENTRIES, 2048),
       defaultSystemPrompt,
       groupConfigFilePath: groupPolicyFile.groupConfigFilePath,
       groupPolicies: groupPolicyFile.groupPolicies,

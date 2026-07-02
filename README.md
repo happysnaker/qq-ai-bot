@@ -3,6 +3,7 @@
 [![CI](https://github.com/happysnaker/qq-ai-bot/actions/workflows/ci.yml/badge.svg)](https://github.com/happysnaker/qq-ai-bot/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/happysnaker/qq-ai-bot)](https://github.com/happysnaker/qq-ai-bot/releases)
 [![Stars](https://img.shields.io/github/stars/happysnaker/qq-ai-bot?style=social)](https://github.com/happysnaker/qq-ai-bot/stargazers)
+[![OneBot 11](https://img.shields.io/badge/OneBot-11-black)](https://onebot.dev/ecosystem)
 [![Use this template](https://img.shields.io/badge/use%20this-template-62d2a2)](https://github.com/happysnaker/qq-ai-bot/generate)
 [![Project Page](https://img.shields.io/badge/project-page-7aa2ff)](https://happysnaker.github.io/qq-ai-bot/)
 [![Support](https://img.shields.io/badge/support-WeChat%20%26%20Alipay-9b87f5)](https://happysnaker.github.io/support/#from-qq-ai-bot)
@@ -21,6 +22,8 @@
 - 路线图：[ROADMAP.md](./ROADMAP.md)
 - 参与贡献：[CONTRIBUTING.md](./CONTRIBUTING.md)
 - 安全反馈：[SECURITY.md](./SECURITY.md)
+- 生态收录：已进入 [OneBot 生态 / 应用案例](https://onebot.dev/ecosystem)
+- 社区入口：[Show and tell](https://github.com/happysnaker/qq-ai-bot/discussions/10) · [Deployment matrix Q&A](https://github.com/happysnaker/qq-ai-bot/discussions/11)
 - 想直接拿来改成你自己的 bot 脚手架：点 GitHub 上方的 **Use this template**
 - 技术栈：Node.js 22+、TypeScript、Docker、GitHub Actions
 - 适用场景：自托管 QQ bot、NapCat / LLOneBot 集成、ACP agent 接线层、DeepSeek / 其他本地 agent 的 QQ 接入层
@@ -179,7 +182,9 @@ ws://127.0.0.1:16700/onebot/v11/ws
 
 - **先看常见问题**：用 [FAQ / 常见问题](docs/faq.md) 先排一次最常见的 WS / token / agent 配置错误
 - **Questions / usage help**：用 [Q&A discussions](https://github.com/happysnaker/qq-ai-bot/discussions/categories/q-a)
+- **Deployment matrix / 已验证组合**：看 [Q&A: which NapCat / LLOneBot + WS + ACP combinations have you actually run?](https://github.com/happysnaker/qq-ai-bot/discussions/11)
 - **Feature / roadmap ideas**：用 [Ideas discussions](https://github.com/happysnaker/qq-ai-bot/discussions/categories/ideas)
+- **Show and tell / 真实部署展示**：看 [share your qq-ai-bot deployment, stack, or screenshots](https://github.com/happysnaker/qq-ai-bot/discussions/10)
 - **具体可认领任务**：看 [`help wanted` issues](https://github.com/happysnaker/qq-ai-bot/issues?q=is%3Aopen+label%3A%22help+wanted%22)
 - **直接支持仓库**：看 [SUPPORT.md](./SUPPORT.md)
 

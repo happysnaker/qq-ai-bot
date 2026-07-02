@@ -12,6 +12,8 @@
 
 如果你还没有现成 agent，先看 [ACP Agent 接入](agent-integration.md)。里面有仓库自带 mock agent 和 `traecli` 的完整示例。
 
+如果你只想先看最容易踩坑的地方，直接跳到 [FAQ / 常见问题](faq.md)。
+
 ## 1. 拉代码并进入项目目录
 
 ```bash
@@ -159,6 +161,12 @@ ws://127.0.0.1:16700/onebot/v11/ws
 3. 发送 `/status`
 4. 发送 `/prompt`
 5. 发送 `/reset`
+
+如果这一步卡住，优先检查：
+
+- [FAQ / 常见问题](faq.md)
+- [配置说明](configuration.md)
+- [Q&A Discussions](https://github.com/happysnaker/qq-ai-bot/discussions/categories/q-a)
 
 ## 健康检查
 

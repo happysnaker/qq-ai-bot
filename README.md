@@ -122,6 +122,7 @@ ws://127.0.0.1:16700/onebot/v11/ws
 
 - [Docker 快速演示](docs/docker-quickstart.md)
 - [快速开始](docs/getting-started.md)
+- [FAQ / 常见问题](docs/faq.md)
 - [ACP Agent 接入](docs/agent-integration.md)
 - [配置说明](docs/configuration.md)
 - [macOS 接入 NapCat](docs/macos-napcat.md)
@@ -173,6 +174,7 @@ ws://127.0.0.1:16700/onebot/v11/ws
 
 ## Community
 
+- **先看常见问题**：用 [FAQ / 常见问题](docs/faq.md) 先排一次最常见的 WS / token / agent 配置错误
 - **Questions / usage help**：用 [Q&A discussions](https://github.com/happysnaker/qq-ai-bot/discussions/categories/q-a)
 - **Feature / roadmap ideas**：用 [Ideas discussions](https://github.com/happysnaker/qq-ai-bot/discussions/categories/ideas)
 - **具体可认领任务**：看 [`help wanted` issues](https://github.com/happysnaker/qq-ai-bot/issues?q=is%3Aopen+label%3A%22help+wanted%22)

@@ -1,5 +1,8 @@
-blank_issues_enabled: true
+blank_issues_enabled: false
 contact_links:
+  - name: Fastest start / FAQ
+    url: https://github.com/happysnaker/qq-ai-bot/blob/main/docs/faq.md
+    about: Check the quickest path, common WS/token mistakes, and agent wiring pitfalls before opening an issue.
   - name: Questions / usage help
     url: https://github.com/happysnaker/qq-ai-bot/discussions/categories/q-a
     about: Ask for setup help, deployment debugging, or ACP / OneBot integration guidance.

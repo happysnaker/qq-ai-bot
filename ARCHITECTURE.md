@@ -12,7 +12,7 @@ QQ / NapCat / LLOneBot
  BotApplication
         │
         ├── ConversationManager
-        ├── PersistentSessionStore
+        ├── SessionStore
         ├── ProgressReporter
         └── ImageDownloader
         │
@@ -61,6 +61,8 @@ QQ / NapCat / LLOneBot
 - 管理会话重置
 - 持久化远端 ACP sessionId
 - 定期清理过期会话
+
+当前通过统一的 `SessionStore` 抽象对接持久化层，默认实现是 `FileSessionStore`，也支持 `RedisSessionStore`。
 
 会话键规则：
 
@@ -143,10 +145,9 @@ group.systemPrompt > defaultSystemPrompt > 无
 
 ## 可继续扩展
 
-- Redis / Postgres 会话存储
+- Postgres 会话存储
 - 更强的消息去重与幂等
 - 审计日志
 - 限流 / 配额
 - 管理后台
 - 多实例部署
-

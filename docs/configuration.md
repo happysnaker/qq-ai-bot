@@ -12,8 +12,11 @@
 | `BOT_PORT` | HTTP 服务端口 |
 | `LOG_LEVEL` | 日志级别 |
 | `DATA_DIR` | 数据目录 |
+| `SESSION_STORE` | `file` 或 `redis` |
 | `SESSION_FILE_PATH` | 会话持久化文件路径 |
 | `SESSION_TTL_MINUTES` | 会话过期时间 |
+| `REDIS_URL` | `SESSION_STORE=redis` 时的 Redis 连接串 |
+| `REDIS_KEY_PREFIX` | Redis key 前缀 |
 | `APP_GIT_COMMIT` | 可选，当前运行版本对应的 git commit |
 | `APP_BUILD_REF` | 可选，构建标识、镜像 tag 或部署版本号 |
 
@@ -58,6 +61,43 @@
 | `ACP_MAX_INBOUND_IMAGE_BYTES` | 单张图片大小上限 |
 
 如果你需要可直接复制的 agent 配置示例，看 [ACP Agent 接入](agent-integration.md)。
+
+## Session Store
+
+现在支持两种 session store：
+
+- `SESSION_STORE=file`：默认值，适合单机 / 单容器路径
+- `SESSION_STORE=redis`：适合多实例、长运行容器和外部存储
+
+### File store
+
+默认行为，不需要额外依赖：
+
+```env
+SESSION_STORE=file
+SESSION_FILE_PATH=./data/sessions.json
+SESSION_TTL_MINUTES=120
+```
+
+### Redis store
+
+最小配置：
+
+```env
+SESSION_STORE=redis
+REDIS_URL=redis://127.0.0.1:6379/0
+REDIS_KEY_PREFIX=qq-ai-bot
+SESSION_TTL_MINUTES=120
+```
+
+说明：
+
+- bot 会为每个 QQ 会话写一个 Redis key
+- 同时维护一个 session key 集合，方便列出当前持久化会话
+- TTL 与 `SESSION_TTL_MINUTES` 对齐
+- `REDIS_KEY_PREFIX` 用来隔离不同环境，例如 `qq-ai-bot-prod` / `qq-ai-bot-dev`
+
+如果你已经准备做多实例部署，Redis store 会比本地 JSON 文件更像生产形态。
 
 ## 分群配置文件
 
@@ -124,6 +164,7 @@ group.systemPrompt > ACP_DEFAULT_SYSTEM_PROMPT > 无
 另外：
 
 - HTTP `/readyz` 和 `/status` 会返回 `build` 字段
+- HTTP `/readyz` 和 `/status` 也会返回当前 `sessionStore`
 - QQ 内的 `/status` 也会显示当前版本与启动时间
 - HTTP `/metrics` 会返回 Prometheus 风格文本指标，当前包含 OneBot 连接状态、重连次数、入站 / 出站消息计数、ACP prompt 调用 / 失败计数、活跃 / 持久化会话数等
 

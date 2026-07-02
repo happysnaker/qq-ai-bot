@@ -55,6 +55,7 @@
     "@agentclientprotocol/sdk": "^1.1.0",
     "pino": "^10.3.1",
     "pino-pretty": "^13.1.2",
+    "redis": "^6.1.0",
     "ws": "^8.21.0",
     "zod": "^4.4.3"
   },

@@ -41,6 +41,7 @@
 - 入站图片下载后转给 agent
 - Prometheus 风格 `/metrics` 与 runtime counters
 - `/readyz` / `/status` 中暴露 build / version 信息
+- 可插拔 session store（默认 file，支持 Redis）
 - macOS 下提供 NapCat 接入辅助脚本
 
 ## 快速开始
@@ -155,10 +156,9 @@ ws://127.0.0.1:16700/onebot/v11/ws
 
 当前优先方向：
 
-- 可插拔 session store（优先 Redis）
 - richer media / 附件处理
 - tracing / 更细的 observability 信号
-- 多实例部署与外部存储路径
+- 多实例部署与更多外部存储路径
 - 更多 channel / transport 演进
 
 如果你准备提 PR，建议先看 [CONTRIBUTING.md](./CONTRIBUTING.md)。

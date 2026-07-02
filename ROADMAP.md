@@ -30,6 +30,13 @@
 - 多实例部署需要共享会话
 - 更适合长期运行与容器化部署
 
+当前状态：
+
+- 已完成 `SessionStore` 抽象
+- 已保留默认 `file` store
+- 已增加 `redis` store 与配置入口
+- 下一步可继续补 Postgres / managed store 之类的外部实现
+
 ### 2. 基础 observability
 
 当前已有 `/healthz` 和 `/readyz`，下一步希望补齐最基础的运行指标。
@@ -85,9 +92,9 @@
 
 如果你想提贡献，当前最有价值的方向是：
 
-1. session store 抽象与 Redis 实现
-2. `/metrics` 与基础 runtime counters
-3. 版本 / build 信息透出
-4. richer media / 附件处理
+1. richer media / 附件处理
+2. tracing / deeper observability
+3. Postgres 或更多外部 session store
+4. 多实例部署经验和运维文档
 
 如果你准备提 PR，建议先开 issue 或直接认领已有的 `help wanted` issue。

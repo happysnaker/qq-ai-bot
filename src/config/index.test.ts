@@ -69,4 +69,18 @@ describe('loadConfig', () => {
       systemPrompt: undefined,
     });
   });
+
+  it('supports redis session store config', () => {
+    const config = loadConfig({
+      SESSION_STORE: 'redis',
+      REDIS_URL: 'redis://127.0.0.1:6379/0',
+      REDIS_KEY_PREFIX: 'qq-ai-bot-prod',
+      SESSION_TTL_MINUTES: '30',
+    });
+
+    expect(config.storage.sessionStore).toBe('redis');
+    expect(config.storage.redisUrl).toBe('redis://127.0.0.1:6379/0');
+    expect(config.storage.redisKeyPrefix).toBe('qq-ai-bot-prod');
+    expect(config.storage.sessionTtlMs).toBe(30 * 60 * 1000);
+  });
 });

@@ -89,6 +89,21 @@ ACP_PERMISSION_STRATEGY=allow_once
 - `ACP_AGENT_WORKDIR`：agent 实际工作的目录
 - `ONEBOT_ACCESS_TOKEN`：要和你的 OneBot 11 配置保持一致
 
+如果你先走默认的单机路径，不需要再改 session store，直接保留：
+
+```env
+SESSION_STORE=file
+SESSION_FILE_PATH=./data/sessions.json
+```
+
+如果你准备做多实例 / 外部存储，再切到 Redis：
+
+```env
+SESSION_STORE=redis
+REDIS_URL=redis://127.0.0.1:6379/0
+REDIS_KEY_PREFIX=qq-ai-bot
+```
+
 如果你需要可直接复制的 agent 配置示例，看 [ACP Agent 接入](agent-integration.md)。
 
 ## 5. 单独验证 ACP agent

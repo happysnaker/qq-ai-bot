@@ -1,17 +1,16 @@
 import process from 'node:process';
 import type { Logger } from 'pino';
-import type { AppConfig } from '../config/index.js';
+import type { AppConfig, GroupConversationPolicy } from '../config/index.js';
 import { OneBotGateway } from '../channels/onebot/client.js';
 import { normalizeOneBotEvent } from '../channels/onebot/normalize.js';
 import { downloadInboundImages } from './image-downloader.js';
 import { ProgressReporter } from './progress-reporter.js';
-import { PersistentSessionStore } from './persistent-session-store.js';
 import { ConversationManager } from './conversation-manager.js';
 import { AdminServer } from './admin-server.js';
 import { getBuildInfo } from './build-info.js';
 import { RuntimeMetrics } from './runtime-metrics.js';
+import { createSessionStore } from './session-store-factory.js';
 import type { NormalizedOneBotEvent, OneBotReplyContext } from '../types/onebot.js';
-import type { GroupConversationPolicy } from '../config/index.js';
 import type { AgentImageOutput } from '../types/agent.js';
 
 function conversationKeyOf(event: NormalizedOneBotEvent): string {
@@ -33,7 +32,6 @@ type ResolvedConversationPolicy = {
 
 export class BotApplication {
   private readonly gateway: OneBotGateway;
-  private readonly store: PersistentSessionStore;
   private readonly conversations: ConversationManager;
   private readonly adminServer: AdminServer;
   private readonly metrics: RuntimeMetrics;
@@ -49,14 +47,10 @@ export class BotApplication {
       logger.child({ component: 'onebot' }),
       (chatType) => this.metrics.recordOutboundMessage(chatType),
     );
-    this.store = new PersistentSessionStore(
-      config.storage.sessionFilePath,
-      logger.child({ component: 'session-store' }),
-    );
     this.conversations = new ConversationManager(
       config,
       logger.child({ component: 'conversation-manager' }),
-      this.store,
+      createSessionStore(config, logger.child({ component: 'session-store' })),
       {
         onAcpPromptStarted: () => this.metrics.recordAcpPromptCall(),
         onAcpPromptFailed: () => this.metrics.recordAcpPromptFailure(),
@@ -108,13 +102,19 @@ export class BotApplication {
   }
 
   getStatus(): Record<string, unknown> {
+    const persistedConversations = this.conversations.listPersisted();
     return {
       ok: true,
       build: getBuildInfo(),
       onebot: this.gateway.getStatus(),
       activeConversations: this.conversations.listActive(),
-      persistedConversations: this.conversations.listPersisted().length,
+      persistedConversations: persistedConversations.length,
       config: {
+        sessionStore: this.config.storage.sessionStore,
+        sessionFilePath:
+          this.config.storage.sessionStore === 'file' ? this.config.storage.sessionFilePath : undefined,
+        redisKeyPrefix:
+          this.config.storage.sessionStore === 'redis' ? this.config.storage.redisKeyPrefix : undefined,
         onebotMode: this.config.onebot.mode,
         allowGroup: this.config.onebot.allowGroup,
         requireMentionInGroup: this.config.onebot.requireMentionInGroup,
@@ -139,12 +139,13 @@ export class BotApplication {
 
   getMetrics(): string {
     const onebotStatus = this.gateway.getStatus();
+    const persistedConversations = this.conversations.listPersisted();
     return this.metrics.render({
       build: getBuildInfo(),
       onebotConnected: Boolean(onebotStatus.connected),
       onebotReconnectAttempts: onebotStatus.reconnectAttempts ?? 0,
       activeConversations: this.conversations.listActive().length,
-      persistedConversations: this.conversations.listPersisted().length,
+      persistedConversations: persistedConversations.length,
     });
   }
 
@@ -247,6 +248,7 @@ export class BotApplication {
           `- 通道：${event.mode === 'group' ? '群聊' : '私聊'}`,
           `- 会话键：${conversationKey}`,
           `- 已连接：${this.gateway.isReady() ? '是' : '否'}`,
+          `- Session Store：${this.config.storage.sessionStore}`,
           `- 远端 ACP Session：${persisted?.remoteSessionId || '暂无'}`,
           `- 命令前缀：${prefix}`,
           `- 群聊触发：${event.mode === 'group' ? (policy.requireMention ? '仅 @ 机器人' : '无需 @') : '私聊直达'}`,

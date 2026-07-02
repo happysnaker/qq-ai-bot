@@ -34,9 +34,12 @@ export interface AppConfig {
     port: number;
   };
   storage: {
+    sessionStore: 'file' | 'redis';
     dataDir: string;
     sessionFilePath: string;
     sessionTtlMs: number;
+    redisUrl?: string;
+    redisKeyPrefix: string;
   };
   onebot: {
     mode: 'forward' | 'reverse';
@@ -147,6 +150,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
   const defaultSystemPrompt =
     normalizeOptionalText(env.ACP_DEFAULT_SYSTEM_PROMPT) ?? groupPolicyFile.defaultSystemPrompt;
   const commandPrefix = normalizeOptionalText(env.ONEBOT_COMMAND_PREFIX) || '/';
+  const sessionStore = z.enum(['file', 'redis']).parse(env.SESSION_STORE || 'file');
 
   return {
     server: {
@@ -154,9 +158,12 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
       port: parseNumber(env.BOT_PORT, 8080),
     },
     storage: {
+      sessionStore,
       dataDir,
       sessionFilePath: env.SESSION_FILE_PATH || `${dataDir}/sessions.json`,
       sessionTtlMs: parseNumber(env.SESSION_TTL_MINUTES, 120) * 60 * 1000,
+      redisUrl: normalizeOptionalText(env.REDIS_URL),
+      redisKeyPrefix: normalizeOptionalText(env.REDIS_KEY_PREFIX) || 'qq-ai-bot',
     },
     onebot: {
       mode: oneBotModeSchema.parse(env.ONEBOT_MODE || 'reverse'),

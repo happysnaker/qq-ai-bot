@@ -8,6 +8,7 @@ import { ProgressReporter } from './progress-reporter.js';
 import { PersistentSessionStore } from './persistent-session-store.js';
 import { ConversationManager } from './conversation-manager.js';
 import { AdminServer } from './admin-server.js';
+import { getBuildInfo } from './build-info.js';
 import type { NormalizedOneBotEvent, OneBotReplyContext } from '../types/onebot.js';
 import type { GroupConversationPolicy } from '../config/index.js';
 
@@ -96,6 +97,7 @@ export class BotApplication {
   getStatus(): Record<string, unknown> {
     return {
       ok: true,
+      build: getBuildInfo(),
       onebot: this.gateway.getStatus(),
       activeConversations: this.conversations.listActive(),
       persistedConversations: this.conversations.listPersisted().length,
@@ -213,6 +215,8 @@ export class BotApplication {
         const persisted = this.conversations.getPersisted(conversationKey);
         const statusText = [
           '🤖 qq-ai-bot 状态',
+          `- 版本：${getBuildInfo().version}`,
+          `- 启动时间：${getBuildInfo().startedAt}`,
           `- 通道：${event.mode === 'group' ? '群聊' : '私聊'}`,
           `- 会话键：${conversationKey}`,
           `- 已连接：${this.gateway.isReady() ? '是' : '否'}`,

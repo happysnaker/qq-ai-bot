@@ -47,6 +47,11 @@
 - 在 `/readyz` 和 `/status` 中返回版本或 commit 信息
 - 让线上排障时更容易确认当前运行实例
 
+当前状态：
+
+- 已完成基础版本 / build 信息透出
+- 下一步可继续在 Docker / release 流程里自动注入 `APP_GIT_COMMIT` / `APP_BUILD_REF`
+
 ## v0.3.0
 
 ### 1. richer media

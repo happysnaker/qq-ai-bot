@@ -14,6 +14,8 @@
 | `DATA_DIR` | 数据目录 |
 | `SESSION_FILE_PATH` | 会话持久化文件路径 |
 | `SESSION_TTL_MINUTES` | 会话过期时间 |
+| `APP_GIT_COMMIT` | 可选，当前运行版本对应的 git commit |
+| `APP_BUILD_REF` | 可选，构建标识、镜像 tag 或部署版本号 |
 
 ### QQ / OneBot 11
 
@@ -118,6 +120,13 @@ group.systemPrompt > ACP_DEFAULT_SYSTEM_PROMPT > 无
 | `/prompt` | 查看当前生效的 system prompt |
 | `/reset` | 清空当前会话并重建 |
 | `/ping` | 存活检查 |
+
+另外：
+
+- HTTP `/readyz` 和 `/status` 会返回 `build` 字段
+- QQ 内的 `/status` 也会显示当前版本与启动时间
+
+如果你在 Docker / CI / 发布流程里注入了 `APP_GIT_COMMIT` 或 `APP_BUILD_REF`，它们也会一起显示出来，便于排查线上实例到底跑的是哪个版本。
 
 ## 进度播报是怎么工作的
 

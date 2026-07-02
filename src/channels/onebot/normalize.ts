@@ -1,0 +1,151 @@
+import type { NormalizedOneBotEvent, OneBotMessageEvent, OneBotMessageSegment } from '../../types/onebot.js';
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function asString(value: unknown): string | undefined {
+  if (typeof value === 'string') {
+    const trimmed = value.trim();
+    return trimmed.length > 0 ? trimmed : undefined;
+  }
+  if (typeof value === 'number' && Number.isFinite(value)) {
+    return String(value);
+  }
+  return undefined;
+}
+
+function asText(value: unknown): string | undefined {
+  if (typeof value === 'string') {
+    return value.length > 0 ? value : undefined;
+  }
+  if (typeof value === 'number' && Number.isFinite(value)) {
+    return String(value);
+  }
+  return undefined;
+}
+
+function normalizeSegments(message: OneBotMessageEvent['message'], rawMessage?: string): OneBotMessageSegment[] {
+  if (Array.isArray(message)) {
+    return message;
+  }
+  if (typeof message === 'string') {
+    return [{ type: 'text', data: { text: message } }];
+  }
+  if (typeof rawMessage === 'string' && rawMessage.length > 0) {
+    return [{ type: 'text', data: { text: rawMessage } }];
+  }
+  return [];
+}
+
+function stripLeadingMention(text: string, selfId?: string): string {
+  const escapedSelfId = selfId ? selfId.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') : undefined;
+  const patterns = [
+    /^\s*@[\w-]+[,:，：]?\s*/u,
+    escapedSelfId ? new RegExp(`^\\s*@${escapedSelfId}[,:，：]?\\s*`, 'u') : null,
+  ].filter((value): value is RegExp => value instanceof RegExp);
+
+  let current = text;
+  for (const pattern of patterns) {
+    current = current.replace(pattern, '');
+  }
+  return current.trim();
+}
+
+export function normalizeOneBotEvent(raw: unknown): NormalizedOneBotEvent | null {
+  if (!isRecord(raw)) {
+    return null;
+  }
+
+  const event = raw as OneBotMessageEvent;
+  if (event.post_type !== 'message') {
+    return null;
+  }
+  if (event.message_type !== 'private' && event.message_type !== 'group') {
+    return null;
+  }
+
+  const senderId = asString(event.user_id ?? event.sender?.user_id);
+  if (!senderId) {
+    return null;
+  }
+  const selfId = asString(event.self_id);
+  const conversationId = event.message_type === 'group' ? asString(event.group_id) : senderId;
+  if (!conversationId) {
+    return null;
+  }
+
+  const segments = normalizeSegments(event.message, event.raw_message);
+  const textParts: string[] = [];
+  const mediaUrls: string[] = [];
+  const mentionedUserIds: string[] = [];
+  let replyToId: string | undefined;
+
+  for (const segment of segments) {
+    const data = isRecord(segment.data) ? segment.data : {};
+    if (segment.type === 'text') {
+      const text = asText(data.text);
+      if (text) {
+        textParts.push(text);
+      }
+      continue;
+    }
+    if (segment.type === 'at') {
+      const qq = asString(data.qq);
+      if (qq) {
+        mentionedUserIds.push(qq);
+        textParts.push(`@${qq}`);
+      }
+      continue;
+    }
+    if (segment.type === 'image') {
+      const url = asString(data.url) ?? asString(data.file);
+      if (url) {
+        mediaUrls.push(url);
+      }
+      continue;
+    }
+    if (segment.type === 'reply') {
+      replyToId = asString(data.id) ?? replyToId;
+      continue;
+    }
+
+    const fallbackText = asText(data.text);
+    if (fallbackText) {
+      textParts.push(fallbackText);
+    }
+  }
+
+  const senderName = asString(event.sender?.card) ?? asString(event.sender?.nickname);
+  const rawText =
+    (typeof event.raw_message === 'string' && event.raw_message.trim().length > 0
+      ? event.raw_message.trim()
+      : textParts.join('').trim()) ||
+    (mediaUrls.length > 0 ? mediaUrls.map(() => '[image]').join(' ') : '');
+
+  const explicitMention = Boolean(selfId && mentionedUserIds.includes(selfId));
+  const cleanedText =
+    event.message_type === 'group' && explicitMention ? stripLeadingMention(rawText, selfId) : rawText;
+
+  return {
+    id: `${conversationId}:${asString(event.message_id) ?? 'unknown'}`,
+    mode: event.message_type === 'group' ? 'group' : 'direct',
+    conversationId,
+    replyTarget: conversationId,
+    senderId,
+    senderName,
+    messageId: asString(event.message_id),
+    selfId,
+    rawText,
+    cleanedText,
+    commandText: cleanedText,
+    replyToId,
+    mediaUrls,
+    mentionedUserIds,
+    wasMentioned: event.message_type === 'private' ? true : explicitMention,
+    explicitMention,
+    isSelfMessage: Boolean(selfId && senderId === selfId),
+    timestamp: typeof event.time === 'number' ? event.time * 1000 : undefined,
+    raw: event,
+  };
+}

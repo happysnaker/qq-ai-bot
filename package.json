@@ -1,0 +1,58 @@
+{
+  "name": "qq-ai-bot",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Production-grade open-source QQ AI bot using OneBot 11 and ACP-based AI agent bridging.",
+  "type": "module",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "ARCHITECTURE.md",
+    "LICENSE",
+    ".env.example"
+  ],
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.js",
+    "build": "tsc -p tsconfig.json",
+    "mock-agent": "tsx src/examples/mock-acp-agent.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "check": "npm run lint && npm run typecheck && npm run test"
+  },
+  "keywords": [
+    "qq",
+    "onebot",
+    "napcat",
+    "ai",
+    "agent",
+    "acp",
+    "bot",
+    "typescript"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@agentclientprotocol/sdk": "^1.1.0",
+    "pino": "^10.3.1",
+    "pino-pretty": "^13.1.2",
+    "ws": "^8.21.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.0",
+    "@types/node": "^24.10.1",
+    "@types/ws": "^8.18.1",
+    "eslint": "^10.0.0",
+    "globals": "^16.5.0",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.46.2",
+    "vitest": "^4.1.9"
+  }
+}

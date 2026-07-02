@@ -128,6 +128,7 @@ ws://127.0.0.1:16700/onebot/v11/ws
 
 - [Docker 快速演示](docs/docker-quickstart.md)
 - [快速开始](docs/getting-started.md)
+- [Deployment matrix / 部署组合矩阵](docs/deployment-matrix.md)
 - [FAQ / 常见问题](docs/faq.md)
 - [Deployment patterns / 部署形态](docs/deployment-patterns.md)
 - [ACP Agent 接入](docs/agent-integration.md)
@@ -166,7 +167,6 @@ ws://127.0.0.1:16700/onebot/v11/ws
 
 当前优先方向：
 
-- correlation IDs / 单轮链路追踪
 - richer media / 附件处理
 - tracing / 更细的 observability 信号
 - 多实例部署与更多外部存储路径
@@ -174,15 +174,14 @@ ws://127.0.0.1:16700/onebot/v11/ws
 
 当前已经挂出的可认领入口：
 
-- [#6 docs: publish tested deployment matrix for NapCat / LLOneBot and forward / reverse WS modes](https://github.com/happysnaker/qq-ai-bot/issues/6)
 - [#8 feature: document and stage richer media handling roadmap (file / voice / video)](https://github.com/happysnaker/qq-ai-bot/issues/8)
-- [#13 enhancement: add per-interaction correlation IDs across receive, dedupe, progress, and reply](https://github.com/happysnaker/qq-ai-bot/issues/13)
 
 如果你准备提 PR，建议先看 [CONTRIBUTING.md](./CONTRIBUTING.md)。
 
 ## Community
 
 - **先看常见问题**：用 [FAQ / 常见问题](docs/faq.md) 先排一次最常见的 WS / token / agent 配置错误
+- **先看部署组合矩阵**：用 [Deployment matrix / 部署组合矩阵](docs/deployment-matrix.md) 先判断你现在走的是“仓库强路径”还是“文档化支持路径”
 - **Questions / usage help**：用 [Q&A discussions](https://github.com/happysnaker/qq-ai-bot/discussions/categories/q-a)
 - **Deployment matrix / 已验证组合**：看 [Q&A: which NapCat / LLOneBot + WS + ACP combinations have you actually run?](https://github.com/happysnaker/qq-ai-bot/discussions/11)
 - **Feature / roadmap ideas**：用 [Ideas discussions](https://github.com/happysnaker/qq-ai-bot/discussions/categories/ideas)

@@ -176,6 +176,7 @@ QQ / OneBot 11
 
 ## 7. 相关入口
 
+- [Deployment matrix / 部署组合矩阵](deployment-matrix.md)
 - [快速开始](getting-started.md)
 - [FAQ / 常见问题](faq.md)
 - [ACP Agent 接入](agent-integration.md)

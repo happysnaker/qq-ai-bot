@@ -211,6 +211,7 @@ ws://127.0.0.1:16700/onebot/v11/ws
 - 如果你是因为这个项目来的，付款备注最有用的是：`qq-ai-bot`
 - 如果你卡在部署、README 定位、项目页包装这类问题，最快的付费入口其实是 **¥29.9 quick read**：我会先 blunt 地告诉你最该改的 3 件事，而不是让你继续在仓库里瞎试
 - 如果你更像是卡在 **NapCat / LLOneBot / token / reverse WS / Docker / landing page** 这一整条 deploy story 上，可直接用这个标题发邮件：[Deploy read | qq-ai-bot inbound | repo link](mailto:happysnaker@foxmail.com?subject=Deploy%20read%20%7C%20qq-ai-bot%20inbound%20%7C%20repo%20link&body=Repo%20link%3A%0ADeployment%20shape%3A%20NapCat%20/%20LLOneBot%20/%20Docker%20/%20other%0AWhat%20feels%20stuck%3A%20token%20/%20WS%20/%20README%20/%20landing%20page%0APayment%20screenshot%3A%20attached)
+- 如果你想先看一下这种 deploy read 到底会长什么样，可先看公开样例：[Deploy read sample](https://happysnaker.github.io/review/deploy-read-sample/)
 - 如果你想让我先 blunt 地看一眼你自己的 bot / agent / infra 仓库，可直接发这个模板：[¥29.9 Quick read | repo link](mailto:happysnaker@foxmail.com?subject=Quick%20read%20%7C%20bot%20repo%20link&body=Repo%20link%3A%0AWhat%20feels%20weak%3A%20README%20/%20positioning%20/%20landing%20page%0APayment%20screenshot%3A%20attached)
 - 如果你想要更完整的 GitHub / README / landing-page 包装 pass，可直接发这个模板：[¥99 Async review | repo link](mailto:happysnaker@foxmail.com?subject=Async%20review%20%7C%20bot%20repo%20link&body=Repo%20link(s)%3A%0ATarget%20role%20or%20use%20case%3A%0AWhat%20feels%20weak%3A%20README%20/%20positioning%20/%20landing%20page%20/%20GitHub%20profile%0APayment%20screenshot%3A%20attached)
 - 如果你就是从 `qq-ai-bot` 进来的，邮件标题直接写：`Quick read | qq-ai-bot inbound | repo link` 或 `Async review | qq-ai-bot inbound | repo link`，我能更快识别上下文

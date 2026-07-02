@@ -9,6 +9,7 @@ If `qq-ai-bot` saved you OneBot + ACP wiring time, the fastest way to support on
 - **Fastest paid help:** `¥29.9` for one blunt deploy / README / landing-page first pass on your own bot / agent repo
 - **Deploy/debug read template:** `Deploy read | qq-ai-bot inbound | repo link`
 - **Best fit for deploy read:** your repo basically works, but the token / WS / Docker / README / landing-page story still feels muddy or toy-like
+- **Public sample deliverable:** https://happysnaker.github.io/review/deploy-read-sample/
 - **Paid feedback:** `¥29.9` quick blunt read or `¥99` async GitHub / README / landing-page packaging review
 - **Good inbound email subject:** `Quick read | qq-ai-bot inbound | repo link`
 - **Typical async-review turnaround:** usually within `72 hours` for the `¥99` path

@@ -15,6 +15,9 @@
 - 项目页：[happysnaker.github.io/qq-ai-bot](https://happysnaker.github.io/qq-ai-bot/)
 - 5 分钟演示：[Docker 快速演示](docs/docker-quickstart.md)
 - 架构说明：[ARCHITECTURE.md](./ARCHITECTURE.md)
+- 路线图：[ROADMAP.md](./ROADMAP.md)
+- 参与贡献：[CONTRIBUTING.md](./CONTRIBUTING.md)
+- 安全反馈：[SECURITY.md](./SECURITY.md)
 - 技术栈：Node.js 22+、TypeScript、Docker、GitHub Actions
 - 适用场景：自托管 QQ bot、NapCat / LLOneBot 集成、ACP agent 接线层
 
@@ -139,6 +142,22 @@ ws://127.0.0.1:16700/onebot/v11/ws
 - **macOS**：仓库内置了 NapCat 辅助脚本。
 - **Windows**：提供接入说明，但当前标记为 **未验证**。
 - **Linux**：bot 侧本身没有特殊限制。
+
+## Roadmap / Help wanted
+
+如果你想看这个仓库下一步会往哪走，或者想直接认领一个更偏工程化的贡献方向，先看：
+
+- [ROADMAP.md](./ROADMAP.md)
+- [`help wanted` issues](https://github.com/happysnaker/qq-ai-bot/issues?q=is%3Aopen+label%3A%22help+wanted%22)
+
+当前优先方向：
+
+- 可插拔 session store（优先 Redis）
+- `/metrics` 与基础 observability
+- 在 `/readyz` / `/status` 中暴露 build / version 信息
+- richer media / 附件处理
+
+如果你准备提 PR，建议先看 [CONTRIBUTING.md](./CONTRIBUTING.md)。
 
 ## Support
 

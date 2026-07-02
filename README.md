@@ -3,7 +3,7 @@
 生产级、开源化的 **QQ ↔ AI Bot** 项目骨架：
 
 - **QQ 侧**：基于 **OneBot 11** 协议，兼容 **NapCat / LLOneBot** 一类实现
-- **AI 侧**：参考 **larklink**，通过 **ACP（Agent Client Protocol）** 与本地 AI agent 交互
+- **AI 侧**：通过 **ACP（Agent Client Protocol）** 与本地 AI agent 交互
 - **部署形态**：Node.js 22+ / TypeScript / Docker / GitHub Actions
 - **会话能力**：按 QQ 会话维持独立 ACP session，可持久化恢复
 - **进度回传**：把 ACP 的 `plan` / `tool_call` / `tool_call_update` 增量事件转成 QQ 进度消息
@@ -19,7 +19,6 @@
 
 - 不把项目绑死到某个特定 QQ 实现
 - 不把项目绑死到某个特定大模型供应商
-- 可以复用 larklink 的“本地 agent + ACP session + 增量进度”模式
 - 后续可以平滑接入更多 channel（微信、Telegram、飞书等）
 
 ## 当前能力
@@ -170,7 +169,3 @@ src/
 6. Prometheus metrics 与 tracing
 7. Docker Compose 示例（NapCat + bot）
 
-## 参考设计来源
-
-- AI bridge 参考：`larklink` 的 ACP 子进程 / session / progress 模式
-- QQ transport 参考：OneBot 11、NapCat、OpenClaw NapCat channel、NapLink 的 transport 实现思路

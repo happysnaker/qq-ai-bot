@@ -23,6 +23,7 @@
 - 参与贡献：[CONTRIBUTING.md](./CONTRIBUTING.md)
 - 安全反馈：[SECURITY.md](./SECURITY.md)
 - 生态收录：已进入 [OneBot 生态 / 应用案例](https://onebot.dev/ecosystem)
+- 官方社区展示：已发到 [OneBot 官方 Discussions / 应用 / SDK](https://github.com/orgs/botuniverse/discussions/264)
 - 社区入口：[Show and tell](https://github.com/happysnaker/qq-ai-bot/discussions/10) · [Deployment matrix Q&A](https://github.com/happysnaker/qq-ai-bot/discussions/11)
 - 想直接拿来改成你自己的 bot 脚手架：点 GitHub 上方的 **Use this template**
 - 技术栈：Node.js 22+、TypeScript、Docker、GitHub Actions
@@ -187,6 +188,7 @@ ws://127.0.0.1:16700/onebot/v11/ws
 - **Deployment matrix / 已验证组合**：看 [Q&A: which NapCat / LLOneBot + WS + ACP combinations have you actually run?](https://github.com/happysnaker/qq-ai-bot/discussions/11)
 - **Feature / roadmap ideas**：用 [Ideas discussions](https://github.com/happysnaker/qq-ai-bot/discussions/categories/ideas)
 - **Show and tell / 真实部署展示**：看 [share your qq-ai-bot deployment, stack, or screenshots](https://github.com/happysnaker/qq-ai-bot/discussions/10)
+- **OneBot 官方社区展示贴**：看 [OneBot / 应用 / SDK：分享一个基于 OneBot 11 / NapCat / LLOneBot 的 QQ ↔ AI 自托管脚手架](https://github.com/orgs/botuniverse/discussions/264)
 - **NapCat 社区展示贴**：看 [NapCatQQ Show and tell: 做了个基于 NapCat / OneBot 11 的 QQ ↔ AI 自托管脚手架](https://github.com/NapNeko/NapCatQQ/discussions/1942)
 - **LLOneBot 社区展示贴**：看 [LLOneBot Show and tell: 做了个基于 LLOneBot / OneBot 11 的 QQ ↔ AI 自托管脚手架](https://github.com/LLOneBot/LuckyLilliaBot/discussions/796)
 - **LLOneBot 官方文档收录 PR**：看 [LLOneBot/LuckyLilliaDoc#20](https://github.com/LLOneBot/LuckyLilliaDoc/pull/20)

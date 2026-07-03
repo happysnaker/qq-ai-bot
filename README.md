@@ -187,6 +187,8 @@ ws://127.0.0.1:16700/onebot/v11/ws
 - **Deployment matrix / 已验证组合**：看 [Q&A: which NapCat / LLOneBot + WS + ACP combinations have you actually run?](https://github.com/happysnaker/qq-ai-bot/discussions/11)
 - **Feature / roadmap ideas**：用 [Ideas discussions](https://github.com/happysnaker/qq-ai-bot/discussions/categories/ideas)
 - **Show and tell / 真实部署展示**：看 [share your qq-ai-bot deployment, stack, or screenshots](https://github.com/happysnaker/qq-ai-bot/discussions/10)
+- **NapCat 社区展示贴**：看 [NapCatQQ Show and tell: 做了个基于 NapCat / OneBot 11 的 QQ ↔ AI 自托管脚手架](https://github.com/NapNeko/NapCatQQ/discussions/1942)
+- **LLOneBot 社区展示贴**：看 [LLOneBot Show and tell: 做了个基于 LLOneBot / OneBot 11 的 QQ ↔ AI 自托管脚手架](https://github.com/LLOneBot/LuckyLilliaBot/discussions/796)
 - **具体可认领任务**：看 [`help wanted` issues](https://github.com/happysnaker/qq-ai-bot/issues?q=is%3Aopen+label%3A%22help+wanted%22)
 - **直接支持仓库**：看 [SUPPORT.md](./SUPPORT.md)
 

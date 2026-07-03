@@ -190,6 +190,7 @@ ws://127.0.0.1:16700/onebot/v11/ws
 - **NapCat 社区展示贴**：看 [NapCatQQ Show and tell: 做了个基于 NapCat / OneBot 11 的 QQ ↔ AI 自托管脚手架](https://github.com/NapNeko/NapCatQQ/discussions/1942)
 - **LLOneBot 社区展示贴**：看 [LLOneBot Show and tell: 做了个基于 LLOneBot / OneBot 11 的 QQ ↔ AI 自托管脚手架](https://github.com/LLOneBot/LuckyLilliaBot/discussions/796)
 - **ACP 协议社区技术讨论**：看 [ACP question from a OneBot/QQ client: recommended richer-media boundary for channel clients?](https://github.com/orgs/agentclientprotocol/discussions/1591)
+- **ACP 官方 clients 文档收录 PR**：看 [agentclientprotocol/agent-client-protocol#1592](https://github.com/agentclientprotocol/agent-client-protocol/pull/1592)
 - **具体可认领任务**：看 [`help wanted` issues](https://github.com/happysnaker/qq-ai-bot/issues?q=is%3Aopen+label%3A%22help+wanted%22)
 - **直接支持仓库**：看 [SUPPORT.md](./SUPPORT.md)
 

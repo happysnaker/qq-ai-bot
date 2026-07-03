@@ -63,6 +63,31 @@
 
 [→ 更多支持方式](https://happysnaker.github.io/support/#from-qq-ai-bot)
 
+---
+
+## 🎯 赞助众筹 / Sponsorware
+
+以下是计划中的功能。每个功能标了开发成本——**凑够赞助就开工**。
+
+| 功能 | 目标金额 | 进度 | 状态 |
+|------|---------|------|------|
+| [Redis 会话持久化](https://github.com/happysnaker/qq-ai-bot/issues/24) | ¥50 | 0% | 🚧 等待赞助 |
+| [多实例部署指南](https://github.com/happysnaker/qq-ai-bot/issues/25) | ¥30 | 0% | 🚧 等待赞助 |
+| [端到端延迟监控面板](https://github.com/happysnaker/qq-ai-bot/issues/23) | ¥80 | 0% | 🚧 等待赞助 |
+| [微信通知集成](https://github.com/happysnaker/qq-ai-bot/issues/new?title=feat:%20WeChat%20notification%20integration) | ¥100 | 0% | 🚧 等待赞助 |
+| [Web Dashboard (管理面板)](https://github.com/happysnaker/qq-ai-bot/issues/new?title=feat:%20Web%20admin%20dashboard) | ¥150 | 0% | 🚧 等待赞助 |
+
+**怎么赞助？** 扫码支付后在该功能 Issue 下留言，附上截图即可。
+
+<div align="center">
+  <img src="./assets/wechat-pay.jpg" width="180" alt="微信支付" />
+  <img src="./assets/alipay-pay.jpg" width="180" alt="支付宝" />
+  <br/>
+  <sub>扫码请备注功能名，比如 <code>Redis</code> 或 <code>Dashboard</code></sub>
+</div>
+
+> 💡 **为什么用 Sponsorware？** 开源不意味着免费劳动。赞助众筹让你用一杯咖啡的钱换来你需要的功能，也让我有动力持续维护。
+
 ## 核心能力
 
 ![qq-ai-bot progress streaming demo](./assets/progress-demo.png)

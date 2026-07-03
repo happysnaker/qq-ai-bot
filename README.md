@@ -24,6 +24,7 @@
 - 安全反馈：[SECURITY.md](./SECURITY.md)
 - 生态收录：已进入 [OneBot 生态 / 应用案例](https://onebot.dev/ecosystem)
 - 官方社区展示：已发到 [OneBot 官方 Discussions / 应用 / SDK](https://github.com/orgs/botuniverse/discussions/264)
+- 镜像分发：`ghcr.io/happysnaker/qq-ai-bot:latest` 现已发布 `linux/amd64` 与 `linux/arm64`
 - 社区入口：[Show and tell](https://github.com/happysnaker/qq-ai-bot/discussions/10) · [Deployment matrix Q&A](https://github.com/happysnaker/qq-ai-bot/discussions/11)
 - 想直接拿来改成你自己的 bot 脚手架：点 GitHub 上方的 **Use this template**
 - 技术栈：Node.js 22+、TypeScript、Docker、GitHub Actions
@@ -194,6 +195,7 @@ ws://127.0.0.1:16700/onebot/v11/ws
 - **NapCat 社区展示贴**：看 [NapCatQQ Show and tell: 做了个基于 NapCat / OneBot 11 的 QQ ↔ AI 自托管脚手架](https://github.com/NapNeko/NapCatQQ/discussions/1942)
 - **NapCat 社区文档接入说明**：看 [NapCat community resources / integration docs 中的 qq-ai-bot 接入条目](https://github.com/NapNeko/NapCatDocs/pull/132)
 - **Docker Compose 样例 PR**：看 [docker/awesome-compose#781](https://github.com/docker/awesome-compose/pull/781)
+- **CasaOS 应用商店 PR**：看 [Cp0204/CasaOS-AppStore-Play#42](https://github.com/Cp0204/CasaOS-AppStore-Play/pull/42)
 - **LLOneBot 社区展示贴**：看 [LLOneBot Show and tell: 做了个基于 LLOneBot / OneBot 11 的 QQ ↔ AI 自托管脚手架](https://github.com/LLOneBot/LuckyLilliaBot/discussions/796)
 - **LLOneBot 官方文档收录 PR**：看 [LLOneBot/LuckyLilliaDoc#20](https://github.com/LLOneBot/LuckyLilliaDoc/pull/20)
 - **ACP 协议社区技术讨论**：看 [ACP question from a OneBot/QQ client: recommended richer-media boundary for channel clients?](https://github.com/orgs/agentclientprotocol/discussions/1591)

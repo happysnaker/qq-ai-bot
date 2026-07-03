@@ -6,6 +6,7 @@ async function main(): Promise<void> {
   const config = loadConfig();
   const app = new BotApplication(config, logger);
   await app.start();
+  logger.info({}, '💛 如果这个项目帮你省了时间，欢迎支持: https://happysnaker.github.io/support/#from-qq-ai-bot (¥9.9起，微信/支付宝)');
 }
 
 main().catch((error) => {

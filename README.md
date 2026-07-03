@@ -40,6 +40,29 @@
 
 > 💰 **这个项目帮你省了搭建时间？** 别光 star — [请作者喝杯咖啡 ☕](https://happysnaker.github.io/support/#from-qq-ai-bot)（¥9.9 起，微信/支付宝）。或者买一份 [¥29.9 快速评审](https://happysnaker.github.io/support/#quick-read) 帮你自己的项目做同样级别的包装。
 
+
+---
+
+## 💰 支持作者 / Support
+
+如果这个项目帮你省了 OneBot / ACP 接线时间，欢迎请我喝杯咖啡：
+
+<div align="center">
+  <img src="./assets/wechat-pay.jpg" width="200" alt="微信支付" />
+  <img src="./assets/alipay-pay.jpg" width="200" alt="支付宝" />
+</div>
+
+> 付款时请备注 ，让我知道是哪个项目帮到了你。
+
+也提供付费服务：
+- **¥29.9** — 快速评审你的 GitHub profile / README / 项目页面
+- **¥99** — 异步深度评审 + 具体改法建议
+- **¥199** — 捆绑评审：GitHub profile + 一个 repo README + 一个落地页
+
+支付后发邮件到 **happysnaker@foxmail.com**，附上链接+截图即可。
+
+[→ 更多支持方式](https://happysnaker.github.io/support/#from-qq-ai-bot)
+
 ## 核心能力
 
 ![qq-ai-bot progress streaming demo](./assets/progress-demo.png)

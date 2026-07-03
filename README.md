@@ -176,7 +176,9 @@ ws://127.0.0.1:16700/onebot/v11/ws
 
 当前已经挂出的可认领入口：
 
-- [#8 feature: document and stage richer media handling roadmap (file / voice / video)](https://github.com/happysnaker/qq-ai-bot/issues/8)
+- [#23 enhancement: add end-to-end turn latency histograms for receive → agent → reply](https://github.com/happysnaker/qq-ai-bot/issues/23) — 对应 tracing / deeper observability
+- [#24 enhancement: add Postgres session store as another external persistence option](https://github.com/happysnaker/qq-ai-bot/issues/24) — 对应更多外部 session store
+- [#25 documentation: add multi-instance deployment notes and operator caveats](https://github.com/happysnaker/qq-ai-bot/issues/25) — 对应多实例部署经验和运维文档
 
 如果你准备提 PR，建议先看 [CONTRIBUTING.md](./CONTRIBUTING.md)。
 

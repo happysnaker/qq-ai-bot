@@ -293,6 +293,7 @@ export class BotApplication {
             `${prefix}prompt - 查看当前会话生效的 system prompt`,
             `${prefix}reset - 重置当前会话`,
             `${prefix}ping - 检查机器人是否在线`,
+            `${prefix}donate - 支持作者`,
           ].join('\n'),
         );
         return true;
@@ -327,6 +328,14 @@ export class BotApplication {
         return true;
       case 'ping':
         await this.gateway.sendText(replyContext, 'pong');
+        return true;
+      case 'donate':
+        await this.gateway.sendText(
+          replyContext,
+          '💛 感谢支持！\n\n' +
+          '如果这个 bot 帮你省了 OneBot / ACP 接线时间，欢迎请我喝杯咖啡：\n' +
+          'https://happysnaker.github.io/support/#from-qq-ai-bot',
+        );
         return true;
       default:
         await this.gateway.sendText(

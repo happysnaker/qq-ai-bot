@@ -7,6 +7,11 @@
 [![Use this template](https://img.shields.io/badge/use%20this-template-62d2a2)](https://github.com/happysnaker/qq-ai-bot/generate)
 [![Project Page](https://img.shields.io/badge/project-page-7aa2ff)](https://happysnaker.github.io/qq-ai-bot/)
 [![Support](https://img.shields.io/badge/support-WeChat%20%26%20Alipay-9b87f5)](https://happysnaker.github.io/support/#from-qq-ai-bot)
+[![Umbrel App Store](https://img.shields.io/badge/Umbrel-App%20Store-7b39ed)](https://github.com/getumbrel/umbrel-apps/pull/5834)
+
+
+
+> 💛 **这个项目完全免费开源。如果它帮你省了时间，请考虑 [请我喝杯咖啡](https://happysnaker.github.io/support/#from-qq-ai-bot)（¥9.9 起，微信/支付宝）。**
 
 一个面向实际部署的 **QQ ↔ AI** 机器人项目。
 
@@ -33,7 +38,7 @@
 ![qq-ai-bot architecture overview](./assets/architecture-overview.png)
 
 
-> 如果这个仓库帮你省掉了 OneBot 接线、会话管理或 ACP bridge 的搭建时间，欢迎给个 star，或者直接支持我的开源维护：[happysnaker.github.io/support](https://happysnaker.github.io/support/#from-qq-ai-bot)
+> 💰 **这个项目帮你省了搭建时间？** 别光 star — [请作者喝杯咖啡 ☕](https://happysnaker.github.io/support/#from-qq-ai-bot)（¥9.9 起，微信/支付宝）。或者买一份 [¥29.9 快速评审](https://happysnaker.github.io/support/#quick-read) 帮你自己的项目做同样级别的包装。
 
 ## 核心能力
 

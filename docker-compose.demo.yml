@@ -19,7 +19,7 @@ services:
   qq-ai-bot:
     build:
       context: .
-    image: ghcr.io/happysnaker/qq-ai-bot:latest
+    image: ghcr.io/happysnaker/qq-ai-bot:v0.1.4
     container_name: qq-ai-bot
     restart: unless-stopped
     env_file:

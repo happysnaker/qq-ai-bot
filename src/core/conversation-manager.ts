@@ -97,7 +97,7 @@ export class ConversationManager {
     conversationKey: string,
     patch: Partial<PersistedConversationState> & Pick<PersistedConversationState, 'chatType' | 'targetId'>,
   ): Promise<PersistedConversationState> {
-    const current = this.store.get(conversationKey);
+    const current = await this.store.get(conversationKey);
     const next: PersistedConversationState = {
       conversationKey,
       chatType: patch.chatType ?? current?.chatType ?? 'direct',
@@ -108,6 +108,7 @@ export class ConversationManager {
       lastActivityAt: patch.lastActivityAt ?? current?.lastActivityAt ?? new Date().toISOString(),
     };
     await this.store.upsert(next);
+    this.persistedRecords.set(next.conversationKey, next);
     return next;
   }
 

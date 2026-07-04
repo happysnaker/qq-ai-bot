@@ -8,6 +8,7 @@ import type {
   TransportStatusPatch,
 } from '../../types/onebot.js';
 import { planOutboundPayload } from './outbound.js';
+import { resolveLocalOutboundImage } from './local-image.js';
 import {
   type ActionTransport,
   startForwardWsTransport,
@@ -155,11 +156,12 @@ export class OneBotGateway {
         }
       }
       if (action.kind === 'image' && action.image) {
+        const image = await resolveLocalOutboundImage(action.image);
         const messageId = await this.sendConversationMessage({
           ...context,
           replyToId: first ? context.replyToId : undefined,
           message: this.buildMessageSegments({
-            image: action.image,
+            image,
             replyToId: first ? context.replyToId : undefined,
           }),
         });
@@ -204,6 +206,9 @@ export class OneBotGateway {
 
   private toOneBotImageFile(image: OneBotOutboundImage): string {
     if (image.kind === 'url') {
+      return image.value;
+    }
+    if (image.kind === 'file') {
       return image.value;
     }
     return `base64://${image.value}`;

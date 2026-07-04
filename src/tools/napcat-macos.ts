@@ -12,8 +12,8 @@ import {
 } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import { pathToFileURL } from 'node:url';
 import { promisify } from 'node:util';
+import { buildNapcatLoader } from './napcat-loader.js';
 
 const execFile = promisify(execFileCallback);
 
@@ -166,28 +166,11 @@ async function readJson(target: string): Promise<Record<string, unknown>> {
 }
 
 function buildLoader(paths: DerivedPaths): string {
-  const shellEntryUrl = pathToFileURL(path.join(paths.napcatShellDir, 'napcat.mjs')).href;
-  const qqPackagePath = JSON.stringify(paths.qqPackagePath);
-  const qqLauncherPath = JSON.stringify(path.join(paths.qqResourcesDir, 'app_launcher', 'index.js'));
-
-  return `const hasNapcatParam = process.argv.includes('--no-sandbox');
-const packageInfo = require(${qqPackagePath});
-
-if (hasNapcatParam) {
-  (async () => {
-    await import(${JSON.stringify(shellEntryUrl)});
-  })();
-} else {
-  require(${qqLauncherPath});
-  setImmediate(() => {
-    global.launcher.installPathPkgJson.main = ((version) => {
-      if (version >= 29271) return "./application.asar/app_launcher/index.js";
-      if (version >= 28060) return "./application/app_launcher/index.js";
-      return "./app_launcher/index.js";
-    })(packageInfo.buildVersion);
+  return buildNapcatLoader({
+    qqPackagePath: paths.qqPackagePath,
+    qqResourcesDir: paths.qqResourcesDir,
+    napcatShellDir: paths.napcatShellDir,
   });
-}
-`;
 }
 
 function buildWebUiConfig(token: string): Record<string, unknown> {
@@ -385,7 +368,7 @@ async function launch(options: CliOptions): Promise<void> {
     await stopQQ();
   }
 
-  const child = spawn('open', ['-na', options.qqApp, '--args', '--no-sandbox'], {
+  const child = spawn('open', ['-na', options.qqApp, '--args', '--napcat-shell'], {
     detached: true,
     stdio: 'ignore',
   });

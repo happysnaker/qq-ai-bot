@@ -85,6 +85,11 @@ export type OneBotOutboundImage =
       kind: 'base64';
       value: string;
       mimeType?: string;
+    }
+  | {
+      kind: 'file';
+      value: string;
+      mimeType?: string;
     };
 
 export interface PlannedOutboundAction {

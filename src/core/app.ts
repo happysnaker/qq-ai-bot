@@ -12,6 +12,7 @@ import { RuntimeMetrics } from './runtime-metrics.js';
 import { createSessionStore } from './session-store-factory.js';
 import { InboundEventDeduper } from './inbound-event-deduper.js';
 import { deriveInboundCorrelationId } from './interaction-correlation.js';
+import { handleConversationControlCommand, resolveConversationModes } from './conversation-controls.js';
 import type { NormalizedOneBotEvent, OneBotReplyContext } from '../types/onebot.js';
 import type { AgentImageOutput } from '../types/agent.js';
 
@@ -291,6 +292,9 @@ export class BotApplication {
             `${prefix}help - 查看帮助`,
             `${prefix}status - 查看当前机器人状态和当前会话策略`,
             `${prefix}prompt - 查看当前会话生效的 system prompt`,
+            `${prefix}verbose [normal|verbose|debug|default] - 查看或设置当前会话详细模式`,
+            `${prefix}progress [off|message|default] - 查看或设置当前会话处理中汇报`,
+            `${prefix}quiet - 关闭当前会话的处理中汇报并切到 normal 模式`,
             `${prefix}reset - 重置当前会话`,
             `${prefix}ping - 检查机器人是否在线`,
             `${prefix}donate - 支持作者`,
@@ -299,6 +303,13 @@ export class BotApplication {
         return true;
       case 'status': {
         const persisted = this.conversations.getPersisted(conversationKey);
+        const modes = resolveConversationModes(
+          {
+            defaultProgressMode: this.config.onebot.progressMode,
+            defaultVerboseMode: this.config.ai.verboseMode,
+          },
+          persisted,
+        );
         const statusText = [
           '🤖 qq-ai-bot 状态',
           `- 版本：${getBuildInfo().version}`,
@@ -311,6 +322,8 @@ export class BotApplication {
           `- 命令前缀：${prefix}`,
           `- 群聊触发：${event.mode === 'group' ? (policy.requireMention ? '仅 @ 机器人' : '无需 @') : '私聊直达'}`,
           `- 当前 system prompt：${this.describeSystemPrompt(policy)}`,
+          `- 处理中汇报：${modes.progressMode}（${modes.progressSource === 'conversation' ? '会话覆盖' : '全局默认'}）`,
+          `- 详细模式：${modes.verboseMode}（${modes.verboseSource === 'conversation' ? '会话覆盖' : '全局默认'}）`,
         ].join('\n');
         await this.gateway.sendText(replyContext, statusText);
         return true;
@@ -320,6 +333,31 @@ export class BotApplication {
           replyContext,
           this.renderPromptPreview(event, policy),
         );
+        return true;
+      }
+      case 'verbose':
+      case 'progress':
+      case 'quiet': {
+        const persisted = this.conversations.getPersisted(conversationKey);
+        const result = handleConversationControlCommand({
+          prefix,
+          commandName: command.name,
+          args: command.args,
+          persisted,
+          defaultProgressMode: this.config.onebot.progressMode,
+          defaultVerboseMode: this.config.ai.verboseMode,
+        });
+        if (!result) {
+          return false;
+        }
+        if (result.patch) {
+          await this.conversations.patchPersisted(conversationKey, {
+            chatType: event.mode,
+            targetId: event.replyTarget,
+            ...result.patch,
+          });
+        }
+        await this.gateway.sendText(replyContext, result.message);
         return true;
       }
       case 'reset':
@@ -362,13 +400,20 @@ export class BotApplication {
     runtime.lastActivityAt = Date.now();
 
     const persisted = this.conversations.getPersisted(conversationKey);
+    const modes = resolveConversationModes(
+      {
+        defaultProgressMode: this.config.onebot.progressMode,
+        defaultVerboseMode: this.config.ai.verboseMode,
+      },
+      persisted,
+    );
     const replyContext = this.buildReplyContext(event, correlationId, 'reply');
     const progressReporter = new ProgressReporter(
       this.gateway,
       replyContext,
       this.logger.child({ component: 'progress', conversationKey, correlationId }),
-      this.config.onebot.progressMode,
-      this.config.ai.verboseMode,
+      modes.progressMode,
+      modes.verboseMode,
       this.config.ai.progressThrottleMs,
       this.config.ai.maxProgressUpdates,
     );
@@ -414,8 +459,8 @@ export class BotApplication {
           purpose: 'reply',
         },
         {
-        text: replyText,
-        mediaImages: response.images.map((image) => this.toOutboundImage(image)),
+          text: replyText,
+          mediaImages: response.images.map((image) => this.toOutboundImage(image)),
         },
       );
       eventLogger.info(

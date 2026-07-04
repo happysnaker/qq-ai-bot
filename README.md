@@ -201,6 +201,28 @@ ws://127.0.0.1:16700/onebot/v11/ws
 - `/reset`
 - `/ping`
 
+### macOS 一键运维
+
+如果你本机就是用 QQ + NapCat 跑机器人，后面最常用的是这一组：
+
+```bash
+npm run bot:macos -- status
+npm run bot:macos -- repair
+npm run bot:macos -- login
+npm run bot:macos -- up
+```
+
+- `status`：检查 bot / NapCat / QQ 当前状态
+- `repair`：修复 QQ patch、OneBot 配置并重启 bot
+- `login`：已登录时显示当前账号；未登录时刷新登录二维码
+- `up`：一键拉起 bot + QQ/NapCat；如果未登录，会直接返回二维码链接
+
+如果你已经有可复用的 NapCat 快速登录账号，也可以直接指定：
+
+```bash
+npm run bot:macos -- up --quick-account 3765026549
+```
+
 ## 外部项目 / 协议
 
 - [NapCatQQ](https://github.com/NapNeko/NapCatQQ)

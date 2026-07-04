@@ -44,15 +44,20 @@ describe('FileSessionStore', () => {
       lastActivityAt: new Date(Date.now() - ttlMs - 5_000).toISOString(),
     });
     await store.upsert({
-      conversationKey: 'direct:new',
-      chatType: 'direct',
-      targetId: 'new',
-      remoteSessionId: 'remote-new',
+      conversationKey: 'group:123',
+      chatType: 'group',
+      targetId: '123',
+      progressModeOverride: 'off',
+      verboseModeOverride: 'normal',
       lastActivityAt: new Date().toISOString(),
     });
 
     const removed = await store.clearExpired(Date.now());
     expect(removed).toEqual(['direct:old']);
-    expect((await store.list()).map((item) => item.conversationKey)).toEqual(['direct:new']);
+    expect((await store.list()).map((item) => item.conversationKey)).toEqual(['group:123']);
+    expect(await store.get('group:123')).toMatchObject({
+      progressModeOverride: 'off',
+      verboseModeOverride: 'normal',
+    });
   });
 });

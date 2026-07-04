@@ -38,6 +38,12 @@ ws://127.0.0.1:16700/onebot/v11/ws
 npm run status:napcat:macos
 ```
 
+一键检查 bot / NapCat / QQ 状态：
+
+```bash
+npm run bot:macos -- status
+```
+
 安装 / patch：
 
 ```bash
@@ -48,6 +54,34 @@ npm run setup:napcat:macos
 
 ```bash
 npm run launch:napcat:macos
+```
+
+一键修复 bot + NapCat 基础配置并重启 bot：
+
+```bash
+npm run bot:macos -- repair
+```
+
+刷新登录二维码：
+
+```bash
+npm run bot:macos -- login
+```
+
+如果当前已经登录，这个命令会直接告诉你当前登录的是哪个 QQ 号。
+
+一键拉起 bot + QQ / NapCat：
+
+```bash
+npm run bot:macos -- up
+```
+
+如果这时还没登录，命令输出里会直接带登录二维码链接。
+
+如果你已经知道自己要让 NapCat 优先接管哪个 QQ 号，也可以直接指定：
+
+```bash
+npm run bot:macos -- up --quick-account 3765026549
 ```
 
 恢复原始 QQ：
@@ -76,5 +110,6 @@ npm run launch:napcat:macos -- --restart
 ## 建议
 
 - 先跑 `npm run status:napcat:macos` 看当前状态
+- 日常自己恢复时，优先用 `npm run bot:macos -- up`
 - patch 前先退出 QQ
 - 真机环境里把 access token 改掉，不要一直用示例值

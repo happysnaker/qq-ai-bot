@@ -93,6 +93,24 @@ export class ConversationManager {
     this.persistedRecords.set(record.conversationKey, record);
   }
 
+  async patchPersisted(
+    conversationKey: string,
+    patch: Partial<PersistedConversationState> & Pick<PersistedConversationState, 'chatType' | 'targetId'>,
+  ): Promise<PersistedConversationState> {
+    const current = this.store.get(conversationKey);
+    const next: PersistedConversationState = {
+      conversationKey,
+      chatType: patch.chatType ?? current?.chatType ?? 'direct',
+      targetId: patch.targetId ?? current?.targetId ?? '',
+      remoteSessionId: patch.remoteSessionId ?? current?.remoteSessionId,
+      progressModeOverride: patch.progressModeOverride ?? current?.progressModeOverride,
+      verboseModeOverride: patch.verboseModeOverride ?? current?.verboseModeOverride,
+      lastActivityAt: patch.lastActivityAt ?? current?.lastActivityAt ?? new Date().toISOString(),
+    };
+    await this.store.upsert(next);
+    return next;
+  }
+
   async reset(conversationKey: string): Promise<void> {
     const runtime = this.runtimes.get(conversationKey);
     if (runtime) {

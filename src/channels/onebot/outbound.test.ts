@@ -18,6 +18,25 @@ describe('planOutboundPayload', () => {
     });
   });
 
+  it('extracts local markdown image references', () => {
+    const plan = planOutboundPayload({
+      text: '图好了：![rank](file:///Users/bytedance/GolandProjects/DevPlan/coc/reports/rank.png)',
+      maxTextLength: 200,
+    });
+
+    expect(plan.cleanedText).toBe('图好了：');
+    expect(plan.actions).toEqual([
+      { kind: 'text', text: '图好了：' },
+      {
+        kind: 'image',
+        image: {
+          kind: 'file',
+          value: '/Users/bytedance/GolandProjects/DevPlan/coc/reports/rank.png',
+        },
+      },
+    ]);
+  });
+
   it('keeps agent generated base64 images and deduplicates url images', () => {
     const plan = planOutboundPayload({
       text: '这是结果\n\n![img](https://example.com/a.png)',

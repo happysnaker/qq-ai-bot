@@ -28,6 +28,7 @@
     "setup:napcat:macos": "tsx src/tools/napcat-macos.ts install",
     "launch:napcat:macos": "tsx src/tools/napcat-macos.ts launch --restart",
     "restore:qq:macos": "tsx src/tools/napcat-macos.ts restore",
+    "bot:macos": "tsx src/tools/qq-bot-macos.ts",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "test": "vitest run",

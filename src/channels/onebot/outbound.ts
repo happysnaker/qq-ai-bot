@@ -4,7 +4,7 @@ import type {
   PlannedOutboundPayload,
 } from '../../types/onebot.js';
 
-const MARKDOWN_IMAGE_PATTERN = /!\[[^\]]*\]\((https?:\/\/[^)\s]+)(?:\s+"[^"]*")?\)/giu;
+const MARKDOWN_IMAGE_PATTERN = /!\[[^\]]*\]\(([^)\s]+)(?:\s+"[^"]*")?\)/giu;
 
 function normalizeWhitespace(value: string): string {
   return value
@@ -17,17 +17,38 @@ function normalizeWhitespace(value: string): string {
 
 export function extractMarkdownImageUrls(text: string): {
   cleanedText: string;
-  imageUrls: string[];
+  imageUrls: OneBotOutboundImage[];
 } {
-  const imageUrls: string[] = [];
-  const cleanedText = text.replace(MARKDOWN_IMAGE_PATTERN, (_match, url: string) => {
-    imageUrls.push(url);
+  const imageUrls: OneBotOutboundImage[] = [];
+  const cleanedText = text.replace(MARKDOWN_IMAGE_PATTERN, (_match, rawUrl: string) => {
+    const image = parseImageReference(rawUrl);
+    if (image) {
+      imageUrls.push(image);
+    }
     return '';
   });
   return {
     cleanedText: normalizeWhitespace(cleanedText),
     imageUrls,
   };
+}
+
+function parseImageReference(value: string): OneBotOutboundImage | null {
+  if (/^https?:\/\//i.test(value)) {
+    return { kind: 'url', value };
+  }
+  if (/^file:\/\//i.test(value)) {
+    try {
+      const url = new URL(value);
+      return { kind: 'file', value: decodeURIComponent(url.pathname) };
+    } catch {
+      return null;
+    }
+  }
+  if (value.startsWith('/')) {
+    return { kind: 'file', value };
+  }
+  return null;
 }
 
 function uniqueHttpUrls(urls: string[]): string[] {
@@ -49,10 +70,11 @@ function uniqueHttpUrls(urls: string[]): string[] {
 function mergeOutboundImages(params: {
   mediaUrls?: string[];
   mediaImages?: OneBotOutboundImage[];
-  markdownImageUrls: string[];
+  markdownImageUrls: OneBotOutboundImage[];
 }): OneBotOutboundImage[] {
   const result: OneBotOutboundImage[] = [];
   const seenUrls = new Set<string>();
+  const seenFiles = new Set<string>();
 
   const pushImage = (image: OneBotOutboundImage): void => {
     if (image.kind === 'url') {
@@ -60,6 +82,12 @@ function mergeOutboundImages(params: {
         return;
       }
       seenUrls.add(image.value);
+    }
+    if (image.kind === 'file') {
+      if (!image.value || seenFiles.has(image.value)) {
+        return;
+      }
+      seenFiles.add(image.value);
     }
     result.push(image);
   };
@@ -72,8 +100,8 @@ function mergeOutboundImages(params: {
     pushImage({ kind: 'url', value: url });
   }
 
-  for (const url of uniqueHttpUrls(params.markdownImageUrls)) {
-    pushImage({ kind: 'url', value: url });
+  for (const image of params.markdownImageUrls) {
+    pushImage(image);
   }
 
   return result;

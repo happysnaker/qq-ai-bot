@@ -3,7 +3,7 @@ import path from 'node:path';
 
 let loaded = false;
 
-function parseDotEnv(content: string): Record<string, string> {
+export function parseDotEnv(content: string): Record<string, string> {
   const entries: Record<string, string> = {};
 
   for (const rawLine of content.split(/\r?\n/)) {
@@ -36,6 +36,27 @@ function parseDotEnv(content: string): Record<string, string> {
   }
 
   return entries;
+}
+
+export function mergeDotEnvFiles(
+  filePaths: string[],
+  baseEnv: NodeJS.ProcessEnv = process.env,
+): NodeJS.ProcessEnv {
+  const merged: NodeJS.ProcessEnv = { ...baseEnv };
+
+  for (const filePath of filePaths) {
+    const resolvedPath = path.resolve(filePath);
+    if (!existsSync(resolvedPath)) {
+      continue;
+    }
+
+    const parsed = parseDotEnv(readFileSync(resolvedPath, 'utf8'));
+    for (const [key, value] of Object.entries(parsed)) {
+      merged[key] = value;
+    }
+  }
+
+  return merged;
 }
 
 export function loadDotEnv(filePath = '.env'): void {

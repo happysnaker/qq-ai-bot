@@ -152,7 +152,8 @@ cp examples/group-rules.example.json examples/group-rules.local.json
 - 项目根目录下的 `.env`
 - 项目根目录下的 `examples/group-rules.local.json`
 
-如果你先想跑通仓库默认链路，`.env.example` 已经给了一个可直接工作的 mock agent 配置。
+如果你先想跑通仓库默认链路，`.env.example` 已经给了一个可直接工作的 mock agent 配置。  
+这种情况下，先不要改 `ACP_AGENT_*`，先把链路跑通。
 
 如果你要接自己的 agent，最重要的 ACP 配置是这三项：
 
@@ -176,6 +177,19 @@ npm run smoke:agent
 npm run dev
 ```
 
+先确认 bot 本体已经起来：
+
+```bash
+curl http://127.0.0.1:8080/status
+```
+
+如果这里已经看到：
+
+- `"ok": true`
+- `"onebot.connected": false`
+
+说明 bot 已经启动成功，只是 QQ / OneBot 还没接上，继续下一步就对了。
+
 如果这时你接的是 `traex`，推荐 `.env` 至少写成：
 
 ```env
@@ -188,24 +202,48 @@ ACP_AGENT_WORKDIR=/path/to/your/workdir
 
 这一步不要只看一句 “把 reverse WebSocket 指到 ...”，按下面做。
 
-如果你在 **macOS + 本机 QQ + NapCat** 上跑，直接用仓库脚本：
+如果你在 **macOS + 本机 QQ + NapCat** 上跑，并且沿用 `.env.example` 的默认 quickstart 值，那对应关系是：
+
+```env
+ONEBOT_ACCESS_TOKEN=change-me
+NAPCAT_WEBUI_TOKEN=change-me
+ONEBOT_REVERSE_WS_PORT=16700
+ONEBOT_REVERSE_WS_PATH=/onebot/v11/ws
+```
+
+先检查当前 NapCat / QQ 状态：
 
 ```bash
 npm run status:napcat:macos
+```
+
+然后安装 / 写配置：
+
+```bash
 npm run setup:napcat:macos -- --token change-me --ws-url ws://127.0.0.1:16700/onebot/v11/ws
 npm run launch:napcat:macos -- --restart
+npm run bot:macos -- login
 ```
 
 然后：
 
 1. 打开 `http://127.0.0.1:6099/webui`
-2. 用你配置的 WebUI token 登录（如果没改，当前 helper 默认是 `change-me`）
+2. WebUI token 填 `change-me`
 3. 登录 QQ
 4. 再看 bot 状态：
 
 ```bash
 curl http://127.0.0.1:8080/status
 ```
+
+如果你走的是**源码模式 quickstart**，bot 就继续用：
+
+```bash
+npm run dev
+```
+
+不要在这一步切去 `npm run bot:macos -- up`。  
+`bot:macos -- up/repair` 更偏本机运维辅助，不是主 quickstart。
 
 如果你不是用 macOS helper，而是自己配置 OneBot 11，也至少要保证 reverse WebSocket 指到：
 

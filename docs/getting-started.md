@@ -11,7 +11,7 @@
 3. 启动 bot
 4. 再接 OneBot / QQ
 
-> `docs/docker-quickstart.md` 是**演示栈**，默认接的是仓库内置 mock agent，不是标准快速开始。
+> `docs/docker-quickstart.md` 只是补充演示，默认接的是仓库内置 mock agent，不是标准快速开始，也不作为已验证生产路径。
 
 ## 前置条件
 
@@ -190,32 +190,8 @@ change-me
 
 ### 如果你在 macOS 上使用本机 QQ + NapCat
 
-推荐顺序：
-
-```bash
-npm run status:napcat:macos
-npm run setup:napcat:macos -- --token change-me --ws-url ws://127.0.0.1:16700/onebot/v11/ws
-npm run launch:napcat:macos -- --restart
-```
-
-然后：
-
-1. 打开 NapCat WebUI
-2. 登录 QQ
-3. 再看 `curl http://127.0.0.1:8080/status`
-
-NapCat WebUI token 默认读取：
-
-- `NAPCAT_WEBUI_TOKEN`
-- 或 `WEBUI_TOKEN`
-
-如果都没配，当前 helper 默认值是：
-
-```text
-change-me
-```
-
-更完整的步骤见 [`docs/macos-napcat.md`](macos-napcat.md)。
+更完整的可选辅助流程见 [`docs/macos-napcat.md`](macos-napcat.md)。  
+这条路不是标准 quickstart 主流程，也暂时不把它当作已验证主运维方式写。
 
 ## 8. 确认 OneBot 已接上
 
@@ -249,30 +225,6 @@ curl http://127.0.0.1:8080/metrics
 `/status` 最适合看当前配置与 OneBot 连接状态。  
 `/readyz` 更适合排查运行面。  
 `/metrics` 暴露的是 Prometheus 风格文本指标。
-
-## 11. 如果你要用 `bot:macos`
-
-`bot:macos` 是**本机运维辅助**，不是标准 quickstart 主入口。
-
-它的定位是：
-
-- patch QQ / NapCat
-- 辅助登录
-- 本机运维
-
-注意两点：
-
-1. 它依赖 `dist/index.js`，先执行：
-
-```bash
-npm run build
-```
-
-2. 如果你只是要验证源码模式，仍然优先：
-
-```bash
-npm run dev
-```
 
 ## 常用命令
 

@@ -184,10 +184,6 @@ group.systemPrompt > ACP_DEFAULT_SYSTEM_PROMPT > 无
 | `/prompt` | 查看当前生效的 system prompt |
 | `/reset` | 清空当前会话并重建 |
 | `/ping` | 存活检查 |
-| `/verbose [normal\|verbose\|debug\|default]` | 查看或设置当前会话详细模式 |
-| `/progress [off\|message\|default]` | 查看或设置当前会话处理中汇报 |
-| `/quiet` | 关闭当前会话处理中汇报并切到 normal 模式 |
-
 另外：
 
 - HTTP `/readyz` 和 `/status` 会返回 `build` 字段

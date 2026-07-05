@@ -19,10 +19,9 @@
 
 常见接法包括：把 **DeepSeek** 或其他本地 / 自托管模型能力，封装在一个 **ACP-compatible agent runtime** 后面，再由 `qq-ai-bot` 负责 QQ / OneBot 接线、会话管理和进度回传。
 
-> **English pitch:** A production-grade, self-hosted **QQ ↔ AI bridge** for **OneBot 11 / NapCat / LLOneBot** and **ACP-compatible agents**, with persistent sessions, progress streaming, and a Docker demo stack.
+> **English pitch:** A production-grade, self-hosted **QQ ↔ AI bridge** for **OneBot 11 / NapCat / LLOneBot** and **ACP-compatible agents**, with persistent sessions and progress streaming.
 
 - 项目页：[happysnaker.github.io/qq-ai-bot](https://happysnaker.github.io/qq-ai-bot/)
-- 5 分钟演示：[Docker 快速演示](docs/docker-quickstart.md)
 - 架构说明：[ARCHITECTURE.md](./ARCHITECTURE.md)
 - 路线图：[ROADMAP.md](./ROADMAP.md)
 - 参与贡献：[CONTRIBUTING.md](./CONTRIBUTING.md)
@@ -110,23 +109,6 @@
 
 ## 快速开始
 
-### 0. 想先 5 分钟跑通？先用 Docker 演示栈
-
-仓库自带了一个 **NapCat + qq-ai-bot + mock ACP agent** 的最小演示栈：
-
-```bash
-cp .env.docker.example .env.docker
-docker compose -f docker-compose.demo.yml up -d --build
-```
-
-然后：
-
-- 打开 `http://127.0.0.1:6099/webui`
-- 默认 WebUI token：`napcat`
-- 给机器人发 `/ping` 或 `/status`
-
-这套演示默认跑的是仓库内置 mock ACP agent，适合先验证 **QQ → OneBot → qq-ai-bot → ACP bridge** 链路是否打通。完整说明见 [Docker 快速演示](docs/docker-quickstart.md)。
-
 ### 1. 准备环境
 
 - Node.js 22+
@@ -152,8 +134,7 @@ cp examples/group-rules.example.json examples/group-rules.local.json
 - 项目根目录下的 `.env`
 - 项目根目录下的 `examples/group-rules.local.json`
 
-如果你先想跑通仓库默认链路，`.env.example` 已经给了一个可直接工作的 mock agent 配置。  
-这种情况下，先不要改 `ACP_AGENT_*`，先把链路跑通。
+如果你先想跑通仓库默认链路，`.env.example` 已经给了一个可直接工作的 mock agent 配置。先不要急着改 `ACP_AGENT_*`，先把链路跑通。
 
 如果你要接自己的 agent，最重要的 ACP 配置是这三项：
 
@@ -177,19 +158,6 @@ npm run smoke:agent
 npm run dev
 ```
 
-先确认 bot 本体已经起来：
-
-```bash
-curl http://127.0.0.1:8080/status
-```
-
-如果这里已经看到：
-
-- `"ok": true`
-- `"onebot.connected": false`
-
-说明 bot 已经启动成功，只是 QQ / OneBot 还没接上，继续下一步就对了。
-
 如果这时你接的是 `traex`，推荐 `.env` 至少写成：
 
 ```env
@@ -200,50 +168,10 @@ ACP_AGENT_WORKDIR=/path/to/your/workdir
 
 ### 4. 再接 QQ / NapCat
 
-这一步不要只看一句 “把 reverse WebSocket 指到 ...”，按下面做。
+这一步不要只看一句 “把 reverse WebSocket 指到 ...”。
 
-如果你在 **macOS + 本机 QQ + NapCat** 上跑，并且沿用 `.env.example` 的默认 quickstart 值，那对应关系是：
-
-```env
-ONEBOT_ACCESS_TOKEN=change-me
-NAPCAT_WEBUI_TOKEN=change-me
-ONEBOT_REVERSE_WS_PORT=16700
-ONEBOT_REVERSE_WS_PATH=/onebot/v11/ws
-```
-
-先检查当前 NapCat / QQ 状态：
-
-```bash
-npm run status:napcat:macos
-```
-
-然后安装 / 写配置：
-
-```bash
-npm run setup:napcat:macos -- --token change-me --ws-url ws://127.0.0.1:16700/onebot/v11/ws
-npm run launch:napcat:macos -- --restart
-npm run bot:macos -- login
-```
-
-然后：
-
-1. 打开 `http://127.0.0.1:6099/webui`
-2. WebUI token 填 `change-me`
-3. 登录 QQ
-4. 再看 bot 状态：
-
-```bash
-curl http://127.0.0.1:8080/status
-```
-
-如果你走的是**源码模式 quickstart**，bot 就继续用：
-
-```bash
-npm run dev
-```
-
-不要在这一步切去 `npm run bot:macos -- up`。  
-`bot:macos -- up/repair` 更偏本机运维辅助，不是主 quickstart。
+如果你在 macOS 上用本机 QQ + NapCat，可以参考 [macOS 接入 NapCat](docs/macos-napcat.md)。  
+那条路是**可选辅助流程**，不是主流程，也暂时不把它当作已验证主运维方式写。
 
 如果你不是用 macOS helper，而是自己配置 OneBot 11，也至少要保证 reverse WebSocket 指到：
 
@@ -264,14 +192,14 @@ ws://127.0.0.1:16700/onebot/v11/ws
 
 ## 文档
 
-- [Docker 快速演示](docs/docker-quickstart.md)
 - [快速开始](docs/getting-started.md)
 - [Deployment matrix / 部署组合矩阵](docs/deployment-matrix.md)
 - [FAQ / 常见问题](docs/faq.md)
 - [Deployment patterns / 部署形态](docs/deployment-patterns.md)
 - [ACP Agent 接入](docs/agent-integration.md)
 - [配置说明](docs/configuration.md)
-- [macOS 接入 NapCat](docs/macos-napcat.md)
+- [macOS 接入 NapCat（可选辅助流程，非主流程）](docs/macos-napcat.md)
+- [Docker 快速演示（补充演示，未验证生产路径）](docs/docker-quickstart.md)
 - [Windows 接入说明（未验证）](docs/windows-untested.md)
 - [架构说明](ARCHITECTURE.md)
 
@@ -282,28 +210,6 @@ ws://127.0.0.1:16700/onebot/v11/ws
 - `/prompt`
 - `/reset`
 - `/ping`
-
-### macOS 一键运维
-
-如果你本机就是用 QQ + NapCat 跑机器人，后面最常用的是这一组：
-
-```bash
-npm run bot:macos -- status
-npm run bot:macos -- repair
-npm run bot:macos -- login
-npm run bot:macos -- up
-```
-
-- `status`：检查 bot / NapCat / QQ 当前状态
-- `repair`：修复 QQ patch、OneBot 配置并重启 bot
-- `login`：已登录时显示当前账号；未登录时刷新登录二维码
-- `up`：一键拉起 bot + QQ/NapCat；如果未登录，会直接返回二维码链接
-
-如果你已经有可复用的 NapCat 快速登录账号，也可以直接指定：
-
-```bash
-npm run bot:macos -- up --quick-account 3765026549
-```
 
 ## 外部项目 / 协议
 
@@ -373,25 +279,25 @@ OneBot 11 + ACP + persistent sessions + progress streaming + Docker demo
 **中文一段版：**
 
 ```text
-qq-ai-bot 是一个面向 OneBot 11 / NapCat / LLOneBot 的 QQ ↔ AI 自托管脚手架。它把 QQ 消息入口、ACP agent bridge、会话持久化、进度回传和 Docker demo 整理成了一个更像 bot 基础设施的仓库，而不是只会聊天的玩具 demo。
+qq-ai-bot 是一个面向 OneBot 11 / NapCat / LLOneBot 的 QQ ↔ AI 自托管脚手架。它把 QQ 消息入口、ACP agent bridge、会话持久化和进度回传整理成了一个更像 bot 基础设施的仓库，而不是只会聊天的玩具 demo。
 ```
 
 **English one-paragraph version:**
 
 ```text
-qq-ai-bot is a self-hosted QQ ↔ AI bot scaffold for OneBot 11 / NapCat / LLOneBot and ACP-compatible agents, with persistent sessions, progress streaming, and a Docker demo. It is positioned as bot infrastructure / integration glue rather than another toy chat UI.
+qq-ai-bot is a self-hosted QQ ↔ AI bot scaffold for OneBot 11 / NapCat / LLOneBot and ACP-compatible agents, with persistent sessions and progress streaming. It is positioned as bot infrastructure / integration glue rather than another toy chat UI.
 ```
 
 **最有用的 3 个链接：**
 
 - 仓库首页：<https://github.com/happysnaker/qq-ai-bot>
 - 项目页：<https://happysnaker.github.io/qq-ai-bot/>
-- Docker 快速演示：<https://github.com/happysnaker/qq-ai-bot/blob/main/docs/docker-quickstart.md>
+- 文档入口：快速开始 / ACP Agent 接入 / FAQ
 
 **如果对方是周刊 / awesome list / 维护者：**
 
 - 最好突出：`OneBot 11`、`NapCat / LLOneBot`、`ACP-compatible agents`
-- 最好强调：`persistent sessions`、`progress streaming`、`Docker demo`
+- 最好强调：`persistent sessions`、`progress streaming`
 - 最好避免只写成“又一个 QQ 聊天机器人”，因为这个项目更偏 **bridge / scaffold / bot infrastructure**
 
 ## Operational notes
@@ -410,8 +316,8 @@ qq-ai-bot is a self-hosted QQ ↔ AI bot scaffold for OneBot 11 / NapCat / LLOne
 - 给仓库点个 star
 - 提 issue / PR 补充更多 channel、session store 或 observability 能力
 - 直接支持我的开源维护：[happysnaker.github.io/support](https://happysnaker.github.io/support/#from-qq-ai-bot)
-- 如果你愿意顺手帮我传播，最好直接转这句：`OneBot 11 + ACP + persistent sessions + progress streaming + Docker demo`
-- 如果你想把它发到群里 / 论坛 / 朋友那，最短链接组合是：仓库首页 + 项目页 + Docker 快速演示
+- 如果你愿意顺手帮我传播，最好直接转这句：`OneBot 11 + ACP + persistent sessions + progress streaming`
+- 如果你想把它发到群里 / 论坛 / 朋友那，最短链接组合是：仓库首页 + 项目页 + 快速开始
 - 如果你是因为这个项目来的，付款备注最有用的是：`qq-ai-bot`
 - 如果你卡在部署、README 定位、项目页包装这类问题，最快的付费入口其实是 **¥29.9 quick read**：我会先 blunt 地告诉你最该改的 3 件事，而不是让你继续在仓库里瞎试
 - 如果你更像是卡在 **NapCat / LLOneBot / token / reverse WS / Docker / landing page** 这一整条 deploy story 上，可直接用这个标题发邮件：[Deploy read | qq-ai-bot inbound | repo link](mailto:happysnaker@foxmail.com?subject=Deploy%20read%20%7C%20qq-ai-bot%20inbound%20%7C%20repo%20link&body=Repo%20link%3A%0ADeployment%20shape%3A%20NapCat%20/%20LLOneBot%20/%20Docker%20/%20other%0AWhat%20feels%20stuck%3A%20token%20/%20WS%20/%20README%20/%20landing%20page%0APayment%20screenshot%3A%20attached)

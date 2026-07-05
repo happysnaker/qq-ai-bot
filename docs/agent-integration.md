@@ -1,15 +1,12 @@
 # ACP Agent 接入
 
-这个项目不会直接调用某个模型平台 SDK。  
-它做的事情是：
+这个项目不会直接调用某个模型平台 SDK，它只做一件事：启动你配置的本地 agent，然后通过 ACP 和它通信。
 
-1. 启动你配置的本地 agent
-2. 通过 ACP 与它通信
-3. 把结果、进度和会话状态接回 QQ
+这意味着它很适合放在 **DeepSeek** 或其他本地 / 自托管模型能力的前面，作为一层 **QQ / OneBot 11 接线 + session orchestration + progress streaming** 基础设施。
 
-## bot 是怎么启动 agent 的
+## bot 是怎么接 agent 的
 
-核心配置只有三项：
+bot 会按下面这三个配置启动 agent 进程：
 
 ```env
 ACP_AGENT_COMMAND=your-acp-agent-command
@@ -23,50 +20,57 @@ ACP_AGENT_WORKDIR=/path/to/your/workdir
 - `ACP_AGENT_ARGS_JSON`：参数数组
 - `ACP_AGENT_WORKDIR`：启动目录，同时也会作为 ACP session 的 `cwd`
 
-bot 会通过 agent 进程的 stdin / stdout 与它建立 ACP 连接。
+agent 进程启动后，bot 通过 stdin / stdout 上的 ACP 流和它通信。
 
-## 最低要求
+## 哪些 ACP 能力会影响 bot 行为
 
-必需能力：
+必需的是：
 
 - `initialize`
 - `newSession`
 - `prompt`
 
-建议支持：
+可选但建议支持的是：
 
-- `loadSession`
-- `closeSession`
-- `promptCapabilities.image`
+- `loadSession`：这样 bot 才能真正复用远端 session
+- `closeSession`：这样 bot 在退出时可以更干净地关闭会话
+- `promptCapabilities.image`：这样 bot 才能把入站图片转给 agent
 
-如果 agent 会持续发送这些增量事件，bot 就能把处理进度回发到 QQ：
+补充说明：
+
+- 当前 richer media 还在分阶段演进
+- **文本 + 图片** 是现在的稳定主链路
+- 如果用户发来 **语音 / 文件 / 视频** 等当前 bot 还不会自动直传给 agent 的媒体，bot 会在 prompt 里显式附带一段“未直传媒体”说明，要求 agent 不要假装已经读取了附件内容
+- 这能避免“附件其实没传过去，但 agent 还像看过了一样回答”的错误观感
+
+如果 agent 会持续发送下面这些增量更新，bot 就能把处理进度回发到 QQ：
 
 - `plan`
 - `tool_call`
 - `tool_call_update`
 - `agent_message_chunk`
 
-## 方案 A：仓库内置 mock agent
+## 最快可跑通的方式：仓库自带 mock agent
 
-如果你只是先验证链路，直接用它最省事：
+如果你现在只想先验证 QQ ↔ bot ↔ ACP 这条链路，不想先装外部 agent，可以直接用仓库自带的 mock agent。
 
 ```env
 ACP_AGENT_COMMAND=node
 ACP_AGENT_ARGS_JSON=["--import","tsx","src/examples/mock-acp-agent.ts"]
-ACP_AGENT_WORKDIR=.
+ACP_AGENT_WORKDIR=/path/to/qq-ai-bot
 ```
 
-验证：
+然后运行：
 
 ```bash
 npm run smoke:agent
 ```
 
-这套配置也是 `.env.example` 的默认值。
+这个 mock agent 会返回固定的计划、工具调用和文本片段，适合联调链路和进度播报。
 
-## 方案 B：`traex`
+## `traex` 示例
 
-如果你使用 `traex`，推荐明确写成：
+如果你使用 `traex`，对应配置通常是：
 
 ```env
 ACP_AGENT_COMMAND=traex
@@ -74,51 +78,25 @@ ACP_AGENT_ARGS_JSON=["acp","serve"]
 ACP_AGENT_WORKDIR=/path/to/your/workdir
 ```
 
-验证方式：
+你可以用通用 smoke 命令：
 
 ```bash
 npm run smoke:agent
 ```
 
-也可以使用仓库里的便捷别名：
-
-```bash
-npm run smoke:traex
-```
-
-兼容旧命名的：
+也可以继续用仓库保留的便捷脚本：
 
 ```bash
 npm run smoke:traecli
 ```
 
-### 关于 `ACP_AGENT_ARGS_JSON`
+如果这里把 `ACP_AGENT_ARGS_JSON` 写成 `[]`，很多安装下拉起的会是交互界面而不是 `acp serve`，最终表现成 `ACP connection closed`。推荐始终显式写成 `["acp","serve"]`。
 
-这是当前最容易踩坑的地方。
+如果你的 `traex` 或其他 ACP runtime 背后接的是 **DeepSeek**，`qq-ai-bot` 这一层通常不需要特殊改动；它只关心 ACP 协议是否能正常拉起、收发消息和复用 session。
 
-如果你把它写成：
+## 自定义 agent 示例
 
-```env
-ACP_AGENT_ARGS_JSON=[]
-```
-
-对很多 `traex` / `traecli` 安装来说，实际拉起的会是交互式界面，而不是 ACP 服务端，最终就会表现成：
-
-```text
-ACP connection closed
-```
-
-所以文档里始终建议写成：
-
-```env
-ACP_AGENT_ARGS_JSON=["acp","serve"]
-```
-
-当前代码对 `traex` / `traecli` 也会把空参数自动补成这个默认值，但**不要把这件事当成文档层面的推荐配置**。
-
-## 方案 C：你自己的 ACP agent
-
-例如：
+如果你已经有自己的 ACP agent，可执行文件叫 `my-agent`，启动参数是 `serve --stdio`，那配置就是：
 
 ```env
 ACP_AGENT_COMMAND=my-agent
@@ -126,7 +104,7 @@ ACP_AGENT_ARGS_JSON=["serve","--stdio"]
 ACP_AGENT_WORKDIR=/path/to/your/workdir
 ```
 
-验证方式还是一样：
+配置完成后，验证方式仍然一样：
 
 ```bash
 npm run smoke:agent
@@ -134,21 +112,10 @@ npm run smoke:agent
 
 ## 切换 agent 时真正要改的只有三项
 
-一般只需要改：
+如果你要把当前 bot 从一个 agent 切到另一个 agent，通常只需要改：
 
 - `ACP_AGENT_COMMAND`
 - `ACP_AGENT_ARGS_JSON`
 - `ACP_AGENT_WORKDIR`
 
-群聊策略、命令体系、OneBot 接入和会话持久化不需要跟着重写。
-
-## richer media 边界
-
-当前稳定主链路是：
-
-- 文本
-- 图片
-
-如果用户发来语音、文件、视频等 richer media，bot 会显式把“未直传媒体”写进 prompt，要求 agent 不要假装已经读取了附件内容。
-
-这能避免“附件其实没传过去，但 agent 还像看过了一样回答”的错误观感。
+群聊策略、命令体系、会话持久化、OneBot 11 接入这些都不用跟着重写。

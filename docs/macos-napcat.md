@@ -2,12 +2,8 @@
 
 这份文档只讲 **macOS + 本机 QQ + NapCat** 这条路。
 
-先说定位：
+先说定位：这是一条**可选辅助流程**，不是标准 quickstart 主入口，也暂时不把它当作已验证主运维方式。
 
-- `status:napcat:macos` / `setup:napcat:macos` / `launch:napcat:macos`：**NapCat 运维辅助**
-- `bot:macos`：**本机 bot 运维辅助**
-
-它们不是标准 quickstart 主入口。  
 标准启动主线仍然是 [`getting-started.md`](getting-started.md) 里的：
 
 ```bash
@@ -151,7 +147,7 @@ npm run launch:napcat:macos -- --restart
 curl http://127.0.0.1:8080/status
 ```
 
-### 流程 B：本机运维辅助模式
+### 流程 B：本机辅助模式
 
 ```bash
 npm install

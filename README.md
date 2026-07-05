@@ -168,10 +168,24 @@ ACP_AGENT_WORKDIR=/path/to/your/workdir
 
 ### 4. 再接 QQ / NapCat
 
-这一步不要只看一句 “把 reverse WebSocket 指到 ...”。
+如果你在 macOS + 本机 QQ + NapCat 上跑，推荐顺序：
 
-如果你在 macOS 上用本机 QQ + NapCat，可以参考 [macOS 接入 NapCat](docs/macos-napcat.md)。  
-那条路是**可选辅助流程**，不是主流程，也暂时不把它当作已验证主运维方式写。
+```bash
+npm run status:napcat:macos
+npm run setup:napcat:macos -- --token change-me --ws-url ws://127.0.0.1:16700/onebot/v11/ws
+npm run launch:napcat:macos -- --restart
+```
+
+然后：
+
+1. 打开 `http://127.0.0.1:6099/webui`
+2. WebUI token 填 `change-me`
+3. 在 WebUI 里登录 QQ
+4. 再执行：
+
+```bash
+curl http://127.0.0.1:8080/status
+```
 
 如果你不是用 macOS helper，而是自己配置 OneBot 11，也至少要保证 reverse WebSocket 指到：
 
@@ -198,7 +212,7 @@ ws://127.0.0.1:16700/onebot/v11/ws
 - [Deployment patterns / 部署形态](docs/deployment-patterns.md)
 - [ACP Agent 接入](docs/agent-integration.md)
 - [配置说明](docs/configuration.md)
-- [macOS 接入 NapCat（可选辅助流程，非主流程）](docs/macos-napcat.md)
+- [macOS 接入 NapCat](docs/macos-napcat.md)
 - [Docker 快速演示（补充演示，未验证生产路径）](docs/docker-quickstart.md)
 - [Windows 接入说明（未验证）](docs/windows-untested.md)
 - [架构说明](ARCHITECTURE.md)
@@ -273,7 +287,7 @@ ws://127.0.0.1:16700/onebot/v11/ws
 **最短一句话：**
 
 ```text
-OneBot 11 + ACP + persistent sessions + progress streaming + Docker demo
+OneBot 11 + ACP + persistent sessions + progress streaming
 ```
 
 **中文一段版：**

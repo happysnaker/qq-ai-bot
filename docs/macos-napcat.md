@@ -2,7 +2,10 @@
 
 这份文档只讲 **macOS + 本机 QQ + NapCat** 这条路。
 
-先说定位：这是一条**可选辅助流程**，不是标准 quickstart 主入口，也暂时不把它当作已验证主运维方式。
+先说定位：
+
+- `status:napcat:macos` / `setup:napcat:macos` / `launch:napcat:macos`：这是 macOS + NapCat 路径里的标准命令
+- `bot:macos`：这是额外的本机辅助命令，单独放在这份文档里维护
 
 标准启动主线仍然是 [`getting-started.md`](getting-started.md) 里的：
 
@@ -84,18 +87,7 @@ NapCat WebUI：
 http://127.0.0.1:6099/webui
 ```
 
-如果还没登录 QQ，可以使用：
-
-```bash
-npm run bot:macos -- login
-```
-
-它会：
-
-- 先尝试让 NapCat WebUI 就绪
-- 如果没登录，刷新二维码
-- 终端输出二维码
-- 同时写出二维码 PNG 到 `run-logs/qq-login-qr.png`
+QQ 登录直接在 WebUI 里完成，不需要 `bot:macos -- login`。
 
 ## `bot:macos` 的定位
 

@@ -190,8 +190,22 @@ change-me
 
 ### 如果你在 macOS 上使用本机 QQ + NapCat
 
-更完整的可选辅助流程见 [`docs/macos-napcat.md`](macos-napcat.md)。  
-这条路不是标准 quickstart 主流程，也暂时不把它当作已验证主运维方式写。
+推荐顺序：
+
+```bash
+npm run status:napcat:macos
+npm run setup:napcat:macos -- --token change-me --ws-url ws://127.0.0.1:16700/onebot/v11/ws
+npm run launch:napcat:macos -- --restart
+```
+
+然后：
+
+1. 打开 NapCat WebUI
+2. WebUI token 填 `change-me`
+3. 在 WebUI 里登录 QQ
+4. 再看 `curl http://127.0.0.1:8080/status`
+
+`bot:macos` 相关命令不属于标准 quickstart，单独放在 [`docs/macos-napcat.md`](macos-napcat.md) 里维护。
 
 ## 8. 确认 OneBot 已接上
 

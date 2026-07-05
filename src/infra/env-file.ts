@@ -65,18 +65,18 @@ export function loadDotEnv(filePath = '.env'): void {
   }
   loaded = true;
 
-  const resolvedPath = path.resolve(filePath);
-  if (!existsSync(resolvedPath)) {
+  const requestedPath = path.resolve(filePath);
+  const filePaths =
+    path.basename(requestedPath) === '.env'
+      ? [requestedPath, path.resolve(path.dirname(requestedPath), '.env.local')]
+      : [requestedPath];
+  const merged = mergeDotEnvFiles(filePaths, {});
+
+  if (Object.keys(merged).length === 0) {
     return;
   }
 
-  if (typeof process.loadEnvFile === 'function') {
-    process.loadEnvFile(resolvedPath);
-    return;
-  }
-
-  const parsed = parseDotEnv(readFileSync(resolvedPath, 'utf8'));
-  for (const [key, value] of Object.entries(parsed)) {
+  for (const [key, value] of Object.entries(merged)) {
     if (process.env[key] === undefined) {
       process.env[key] = value;
     }

@@ -7,18 +7,18 @@ import { promisify } from 'node:util';
 import QRCode from 'qrcode';
 import { buildNapcatLoader } from './napcat-loader.js';
 import { mergeDotEnvFiles } from '../infra/env-file.js';
+import { resolveAcpAgentArgs } from '../utils/acp-agent.js';
 
 const execFile = promisify(execFileCallback);
 
-const DEFAULT_BOT_PORT = 18080;
+const DEFAULT_BOT_PORT = 8080;
 const DEFAULT_ONEBOT_PORT = 16700;
 const DEFAULT_WS_PATH = '/onebot/v11/ws';
-const DEFAULT_ACCESS_TOKEN = 'test-token';
-const DEFAULT_WEBUI_TOKEN = 'qq-ai-bot';
+const DEFAULT_ACCESS_TOKEN = 'change-me';
+const DEFAULT_WEBUI_TOKEN = 'change-me';
 const DEFAULT_GROUP_CONFIG = './examples/group-rules.local.json';
 const DEFAULT_GROUP_CONFIG_FALLBACK = './examples/group-rules.example.json';
 const DEFAULT_AGENT_COMMAND = 'traex';
-const DEFAULT_AGENT_ARGS = ['acp', 'serve'];
 const DEFAULT_QQ_APP = '/Applications/QQ.app';
 const DEFAULT_LOGIN_WAIT_SECONDS = 180;
 const QQ_PROCESS_MATCHERS = [
@@ -135,16 +135,10 @@ function resolveBotMacosConfig(repoRoot: string, options: CliOptions): BotMacosC
     onebotPort: Number(env.ONEBOT_REVERSE_WS_PORT || DEFAULT_ONEBOT_PORT),
     wsPath: env.ONEBOT_REVERSE_WS_PATH || DEFAULT_WS_PATH,
     accessToken: env.ONEBOT_ACCESS_TOKEN || DEFAULT_ACCESS_TOKEN,
-    webuiToken: env.NAPCAT_WEBUI_TOKEN || DEFAULT_WEBUI_TOKEN,
+    webuiToken: env.NAPCAT_WEBUI_TOKEN || env.WEBUI_TOKEN || DEFAULT_WEBUI_TOKEN,
     groupConfigFile,
     agentCommand: env.ACP_AGENT_COMMAND || DEFAULT_AGENT_COMMAND,
-    agentArgs: (() => {
-      try {
-        return env.ACP_AGENT_ARGS_JSON ? (JSON.parse(env.ACP_AGENT_ARGS_JSON) as string[]) : DEFAULT_AGENT_ARGS;
-      } catch {
-        return DEFAULT_AGENT_ARGS;
-      }
-    })(),
+    agentArgs: resolveAcpAgentArgs(env.ACP_AGENT_ARGS_JSON, env.ACP_AGENT_COMMAND || DEFAULT_AGENT_COMMAND),
     agentWorkdir: env.ACP_AGENT_WORKDIR || repoRoot,
   };
 }
@@ -221,6 +215,7 @@ async function ensureNapcatPatched(
   paths: DerivedPaths,
   config: BotMacosConfig,
   quickAccount?: string,
+  forceQrLogin = false,
 ): Promise<void> {
   if (!existsSync(path.join(paths.napcatShellDir, 'napcat.mjs'))) {
     throw new Error(`NapCat shell is missing at ${paths.napcatShellDir}. Run: npm run setup:napcat:macos`);
@@ -256,7 +251,7 @@ async function ensureNapcatPatched(
         qqResourcesDir: paths.qqResourcesDir,
         napcatShellDir: paths.napcatShellDir,
       },
-      { quickAccount },
+      { quickAccount: forceQrLogin ? undefined : quickAccount },
     ),
     'utf8',
   );
@@ -404,6 +399,15 @@ async function stopBot(paths: DerivedPaths): Promise<void> {
 }
 
 async function startBot(paths: DerivedPaths, config: BotMacosConfig): Promise<void> {
+  if (!existsSync(path.join(paths.repoRoot, 'dist', 'index.js'))) {
+    throw new Error(
+      [
+        'dist/index.js is missing.',
+        'Run `npm run build` before using `npm run bot:macos -- up` or `npm run bot:macos -- repair`.',
+        'For the standard source-mode quickstart, use `npm run dev` instead.',
+      ].join('\n'),
+    );
+  }
   await mkdir(path.dirname(paths.botLogPath), { recursive: true });
   const logFd = openSync(paths.botLogPath, 'a');
   const child = spawn('node', ['dist/index.js'], {
@@ -514,6 +518,43 @@ async function fetchNapcatLoginInfo(config: BotMacosConfig): Promise<Record<stri
   } catch {
     return null;
   }
+}
+
+async function waitForNapcatWebUi(seconds: number): Promise<boolean> {
+  const deadline = Date.now() + seconds * 1000;
+  while (Date.now() <= deadline) {
+    try {
+      const response = await fetch('http://127.0.0.1:6099/webui', {
+        signal: AbortSignal.timeout(2000),
+      });
+      if (response.ok) {
+        return true;
+      }
+    } catch {
+      // retry
+    }
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+  }
+  return false;
+}
+
+
+async function ensureNapcatReadyForLogin(paths: DerivedPaths, config: BotMacosConfig): Promise<void> {
+  if (await waitForNapcatWebUi(2)) {
+    return;
+  }
+
+  await stopQQ();
+  await ensureNapcatPatched(paths, config, undefined, true);
+  await launchQQ(config.qqApp);
+  await waitForNapcatWebUi(30);
+}
+
+async function restartNapcatForQrLogin(paths: DerivedPaths, config: BotMacosConfig): Promise<void> {
+  await stopQQ();
+  await ensureNapcatPatched(paths, config, undefined, true);
+  await launchQQ(config.qqApp);
+  await waitForNapcatWebUi(30);
 }
 
 async function refreshQrCode(config: BotMacosConfig): Promise<string | null> {
@@ -647,6 +688,8 @@ async function commandRepair(paths: DerivedPaths, config: BotMacosConfig, option
 }
 
 async function commandLogin(paths: DerivedPaths, config: BotMacosConfig, options: CliOptions): Promise<void> {
+  await ensureNapcatReadyForLogin(paths, config);
+
   const loginStatus = await fetchNapcatStatus(config);
   const loginInfo = await fetchNapcatLoginInfo(config);
   const isLogin = (loginStatus?.data as { isLogin?: boolean } | undefined)?.isLogin === true;
@@ -660,9 +703,13 @@ async function commandLogin(paths: DerivedPaths, config: BotMacosConfig, options
     return;
   }
 
-  const qr = await refreshQrCode(config);
+  let qr = await refreshQrCode(config);
   if (!qr) {
-    throw new Error('failed to get login qrcode');
+    await restartNapcatForQrLogin(paths, config);
+    qr = await refreshQrCode(config);
+  }
+  if (!qr) {
+    throw new Error('failed to get login qrcode after starting NapCat. Try `npm run bot:macos -- up` and rerun login.');
   }
   const qrcodePng = await writeQrPng(paths.repoRoot, qr);
 

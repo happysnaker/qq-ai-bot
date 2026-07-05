@@ -14,15 +14,21 @@ import os from 'node:os';
 import path from 'node:path';
 import { promisify } from 'node:util';
 import { buildNapcatLoader } from './napcat-loader.js';
+import { mergeDotEnvFiles } from '../infra/env-file.js';
 
 const execFile = promisify(execFileCallback);
 
 const DEFAULT_WS_URL = 'ws://127.0.0.1:16700/onebot/v11/ws';
-const DEFAULT_ONEBOT_TOKEN = 'test-token';
-const DEFAULT_WEBUI_TOKEN = 'qq-ai-bot';
+const DEFAULT_ONEBOT_TOKEN = 'change-me';
+const DEFAULT_WEBUI_TOKEN = 'change-me';
 const DEFAULT_QQ_APP = '/Applications/QQ.app';
 const NAPCAT_SHELL_URL = 'https://github.com/NapNeko/NapCatQQ/releases/latest/download/NapCat.Shell.zip';
 const BACKUP_SUFFIX = '.qq-ai-bot.bak';
+const QQ_PROCESS_MATCHERS = [
+  '/Applications/QQ.app/Contents/MacOS/QQ',
+  'QQ Helper',
+  'QQEXDOC',
+];
 
 type Command = 'status' | 'install' | 'launch' | 'restore';
 
@@ -50,6 +56,40 @@ interface DerivedPaths {
   onebotConfigPath: string;
   napcatConfigPath: string;
   patchedMain: string;
+}
+
+function repoRootOf(): string {
+  return path.resolve(path.dirname(new URL(import.meta.url).pathname), '../..');
+}
+
+function buildDefaultWsUrl(env: NodeJS.ProcessEnv): string {
+  const port = env.ONEBOT_REVERSE_WS_PORT || '16700';
+  const wsPath = env.ONEBOT_REVERSE_WS_PATH || '/onebot/v11/ws';
+  return `ws://127.0.0.1:${port}${wsPath}`;
+}
+
+function applyEnvDefaults(options: CliOptions, repoRoot: string): CliOptions {
+  const env = mergeDotEnvFiles(
+    [
+      path.join(repoRoot, '.env'),
+      path.join(repoRoot, '.env.local'),
+    ],
+    process.env,
+  );
+
+  return {
+    ...options,
+    wsUrl: options.wsUrl === DEFAULT_WS_URL ? buildDefaultWsUrl(env) : options.wsUrl,
+    onebotToken: options.onebotToken === DEFAULT_ONEBOT_TOKEN ? env.ONEBOT_ACCESS_TOKEN || DEFAULT_ONEBOT_TOKEN : options.onebotToken,
+    webuiToken:
+      options.webuiToken === DEFAULT_WEBUI_TOKEN
+        ? env.NAPCAT_WEBUI_TOKEN || env.WEBUI_TOKEN || DEFAULT_WEBUI_TOKEN
+        : options.webuiToken,
+    qqApp:
+      options.qqApp === DEFAULT_QQ_APP
+        ? env.QQ_APP_PATH || env.QQ_APP || DEFAULT_QQ_APP
+        : options.qqApp,
+  };
 }
 
 function parseArgs(argv: string[]): CliOptions {
@@ -173,6 +213,14 @@ function buildLoader(paths: DerivedPaths): string {
   });
 }
 
+export function isQQProcessCommand(command: string): boolean {
+  return QQ_PROCESS_MATCHERS.some((matcher) => command.includes(matcher));
+}
+
+export function isQQAlreadyPatched(packageJson: Record<string, unknown>, expectedMain: string): boolean {
+  return packageJson.main === expectedMain;
+}
+
 function buildWebUiConfig(token: string): Record<string, unknown> {
   return {
     host: '127.0.0.1',
@@ -248,6 +296,20 @@ async function writeJson(target: string, data: Record<string, unknown>): Promise
   await writeFile(target, `${JSON.stringify(data, null, 2)}\n`, 'utf8');
 }
 
+async function writeFileWithRetry(target: string, content: string, attempts = 8): Promise<void> {
+  let lastError: unknown;
+  for (let attempt = 0; attempt < attempts; attempt += 1) {
+    try {
+      await writeFile(target, content, 'utf8');
+      return;
+    } catch (error) {
+      lastError = error;
+      await new Promise((resolve) => setTimeout(resolve, 500));
+    }
+  }
+  throw lastError;
+}
+
 async function downloadLatestShell(paths: DerivedPaths): Promise<void> {
   const tempDir = await mkdtemp(path.join(os.tmpdir(), 'napcat-shell-'));
   const zipPath = path.join(tempDir, 'NapCat.Shell.zip');
@@ -290,6 +352,10 @@ async function install(options: CliOptions): Promise<void> {
     throw new Error(`QQ package.json not found: ${paths.qqPackagePath}`);
   }
 
+  if (await isQQRunning()) {
+    await stopQQ();
+  }
+
   await downloadLatestShell(paths);
   await mkdir(paths.qqDocumentsDir, { recursive: true });
   await mkdir(paths.napcatConfigDir, { recursive: true });
@@ -297,8 +363,23 @@ async function install(options: CliOptions): Promise<void> {
   await backupFileIfNeeded(paths.qqPackagePath, paths.qqBackupPath, options.force);
 
   const packageJson = await readJson(paths.qqPackagePath);
-  packageJson.main = paths.patchedMain;
-  await writeFile(paths.qqPackagePath, `${JSON.stringify(packageJson, null, 2)}\n`, 'utf8');
+  if (!isQQAlreadyPatched(packageJson, paths.patchedMain)) {
+    packageJson.main = paths.patchedMain;
+    try {
+      await writeFileWithRetry(paths.qqPackagePath, `${JSON.stringify(packageJson, null, 2)}\n`);
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code === 'EPERM') {
+        throw new Error(
+          [
+            `macOS blocked writing ${paths.qqPackagePath}.`,
+            'Close QQ completely and grant Terminal/Codex Full Disk Access, then rerun setup.',
+          ].join('\n'),
+          { cause: error },
+        );
+      }
+      throw error;
+    }
+  }
   await writeFile(paths.napcatLoaderPath, buildLoader(paths), 'utf8');
 
   if (options.force) {
@@ -322,11 +403,30 @@ async function install(options: CliOptions): Promise<void> {
 }
 
 async function isQQRunning(): Promise<boolean> {
+  return (await listQQProcessIds()).length > 0;
+}
+
+async function listQQProcessIds(): Promise<number[]> {
   try {
-    const { stdout } = await execFile('pgrep', ['-f', '/Applications/QQ.app/Contents/MacOS/QQ']);
-    return stdout.trim().length > 0;
+    const { stdout } = await execFile('ps', ['ax', '-o', 'pid=,command=']);
+    return stdout
+      .split('\n')
+      .map((line) => line.trim())
+      .filter(Boolean)
+      .flatMap((line) => {
+        const match = line.match(/^(\d+)\s+(.+)$/);
+        if (!match) {
+          return [];
+        }
+        const pid = Number(match[1]);
+        const command = match[2];
+        if (!Number.isFinite(pid) || !isQQProcessCommand(command)) {
+          return [];
+        }
+        return [pid];
+      });
   } catch {
-    return false;
+    return [];
   }
 }
 
@@ -341,6 +441,9 @@ async function stopQQ(): Promise<void> {
     if (!(await isQQRunning())) {
       return;
     }
+    await execFile('pkill', ['-f', '/Applications/QQ.app/Contents/MacOS/QQ']).catch(() => undefined);
+    await execFile('pkill', ['-f', 'QQ Helper']).catch(() => undefined);
+    await execFile('pkill', ['-f', 'QQEXDOC']).catch(() => undefined);
     await new Promise((resolve) => setTimeout(resolve, 500));
   }
 
@@ -435,7 +538,8 @@ async function status(options: CliOptions): Promise<void> {
 }
 
 async function main(): Promise<void> {
-  const options = parseArgs(process.argv.slice(2));
+  const repoRoot = repoRootOf();
+  const options = applyEnvDefaults(parseArgs(process.argv.slice(2)), repoRoot);
 
   switch (options.command) {
     case 'status':

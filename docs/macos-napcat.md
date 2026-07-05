@@ -1,103 +1,174 @@
 # macOS 接入 NapCat
 
-如果你在 macOS 上直接用 QQ，这个仓库已经带了 NapCat 辅助脚本，省掉一部分重复操作。
+这份文档只讲 **macOS + 本机 QQ + NapCat** 这条路。
+
+先说定位：
+
+- `status:napcat:macos` / `setup:napcat:macos` / `launch:napcat:macos`：**NapCat 运维辅助**
+- `bot:macos`：**本机 bot 运维辅助**
+
+它们不是标准 quickstart 主入口。  
+标准启动主线仍然是 [`getting-started.md`](getting-started.md) 里的：
+
+```bash
+npm run dev
+```
 
 ## 相关项目
 
 - [NapCatQQ](https://github.com/NapNeko/NapCatQQ)
 - [OneBot 11](https://11.onebot.dev)
 
-## 这些脚本会做什么
-
-仓库里的脚本会帮你处理下面几件事：
+## 这组脚本会做什么
 
 - 下载最新 NapCat Shell
 - patch QQ，注入 NapCat loader
 - 写 OneBot 11 reverse WebSocket 配置
-- 启动或恢复 QQ
+- 拉起 QQ / NapCat
+- 辅助显示登录二维码
 
-## 默认约定
+## 当前默认值
 
-默认 reverse WebSocket 地址：
+这些默认值优先读取项目根目录 `.env` / `.env.local`，没有时才会退回到默认值。
 
-```text
-ws://127.0.0.1:16700/onebot/v11/ws
-```
-
-默认 QQ 路径：
+默认 quickstart 值：
 
 ```text
-/Applications/QQ.app
+reverse ws: ws://127.0.0.1:16700/onebot/v11/ws
+onebot token: change-me
+webui token: change-me
+qq app: /Applications/QQ.app
 ```
 
-## 常用命令
+其中 WebUI token 会按下面顺序读取：
 
-查看当前状态：
+1. `NAPCAT_WEBUI_TOKEN`
+2. `WEBUI_TOKEN`
+3. 默认值 `change-me`
+
+## 推荐使用顺序
+
+### 1. 先看当前状态
 
 ```bash
 npm run status:napcat:macos
 ```
 
-一键检查 bot / NapCat / QQ 状态：
+这一步会告诉你：
+
+- QQ 是否正在运行
+- NapCat shell 是否存在
+- QQ 是否已 patch
+- 当前 reverse WS 配置
+- 当前 WebUI 配置
+
+### 2. 安装 / patch NapCat
 
 ```bash
-npm run bot:macos -- status
+npm run setup:napcat:macos -- --token change-me --ws-url ws://127.0.0.1:16700/onebot/v11/ws
 ```
 
-安装 / patch：
+如果你已经在 `.env` 里写好了 token / port / path，这一步也可以直接执行：
 
 ```bash
 npm run setup:napcat:macos
 ```
 
-启动 QQ（NapCat 模式）：
+## 3. 启动 NapCat 模式 QQ
 
 ```bash
-npm run launch:napcat:macos
+npm run launch:napcat:macos -- --restart
 ```
 
-一键修复 bot + NapCat 基础配置并重启 bot：
+## 4. 打开 WebUI 并登录 QQ
 
-```bash
-npm run bot:macos -- repair
+NapCat WebUI：
+
+```text
+http://127.0.0.1:6099/webui
 ```
 
-刷新登录二维码：
+如果还没登录 QQ，可以使用：
 
 ```bash
 npm run bot:macos -- login
 ```
 
-如果当前已经登录，这个命令会直接告诉你当前登录的是哪个 QQ 号。
+它会：
 
-一键拉起 bot + QQ / NapCat：
+- 先尝试让 NapCat WebUI 就绪
+- 如果没登录，刷新二维码
+- 终端输出二维码
+- 同时写出二维码 PNG 到 `run-logs/qq-login-qr.png`
+
+## `bot:macos` 的定位
+
+常用命令：
 
 ```bash
+npm run bot:macos -- status
+npm run bot:macos -- repair
+npm run bot:macos -- login
 npm run bot:macos -- up
 ```
 
-如果这时还没登录，命令输出里会直接带登录二维码链接。
+含义：
 
-如果你已经知道自己要让 NapCat 优先接管哪个 QQ 号，也可以直接指定：
+- `status`：检查 bot / NapCat / QQ 当前状态
+- `repair`：刷新 NapCat 配置并重启本机 bot
+- `login`：查看登录状态或刷新二维码
+- `up`：一键拉起本机 bot + QQ / NapCat
 
-```bash
-npm run bot:macos -- up --quick-account 3765026549
+### 很重要：`bot:macos` 依赖构建产物
+
+`bot:macos` 启动的是：
+
+```text
+dist/index.js
 ```
 
-恢复原始 QQ：
+所以在第一次使用 `repair` / `up` 之前，先执行：
 
 ```bash
-npm run restore:qq:macos
+npm run build
+```
+
+如果你只是想按源码模式跑 bot，请不要先走 `bot:macos`，而是：
+
+```bash
+npm run dev
+```
+
+## 常见流程示例
+
+### 流程 A：标准源码模式 + NapCat
+
+```bash
+npm run dev
+npm run status:napcat:macos
+npm run setup:napcat:macos -- --token change-me --ws-url ws://127.0.0.1:16700/onebot/v11/ws
+npm run launch:napcat:macos -- --restart
+curl http://127.0.0.1:8080/status
+```
+
+### 流程 B：本机运维辅助模式
+
+```bash
+npm install
+npm run build
+npm run bot:macos -- up
+npm run bot:macos -- login
 ```
 
 ## 自定义参数
 
-如果你需要改 WS 地址、token 或 QQ 路径，可以把参数透传给脚本：
+如果你需要改 WS 地址、token 或 QQ 路径，可以透传参数：
 
 ```bash
 npm run setup:napcat:macos -- \
   --ws-url ws://127.0.0.1:16700/onebot/v11/ws \
-  --token your-token \
+  --token change-me \
+  --webui-token change-me \
   --qq-app /Applications/QQ.app
 ```
 
@@ -107,9 +178,33 @@ npm run setup:napcat:macos -- \
 npm run launch:napcat:macos -- --restart
 ```
 
+## EPERM / patch 失败怎么办
+
+如果你看到类似：
+
+```text
+EPERM: operation not permitted, open '/Applications/QQ.app/.../package.json'
+```
+
+一般是 macOS 阻止写入 app bundle。
+
+优先检查：
+
+1. QQ 是否真的完全退出
+2. 终端是否有 Full Disk Access
+3. 是否先执行过 `npm run setup:napcat:macos`
+
+`setup:napcat:macos` 当前会在 patch 前尽量停掉 QQ 主进程和 helper 进程，但系统权限仍然可能拦截写入。
+
+## 恢复原始 QQ
+
+```bash
+npm run restore:qq:macos
+```
+
 ## 建议
 
-- 先跑 `npm run status:napcat:macos` 看当前状态
-- 日常自己恢复时，优先用 `npm run bot:macos -- up`
-- patch 前先退出 QQ
-- 真机环境里把 access token 改掉，不要一直用示例值
+- 第一步永远先跑 `npm run status:napcat:macos`
+- `.env` 里把 token 改成你自己的值
+- 源码模式优先 `npm run dev`
+- `bot:macos` 只当本机运维辅助，不要当标准 quickstart

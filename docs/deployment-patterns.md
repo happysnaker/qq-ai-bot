@@ -8,7 +8,7 @@
 
 > 它更像一层 **QQ / OneBot 11 接线 + session orchestration + progress streaming** 基础设施，而不是把某个特定模型 SDK 直接写死在 bot 里。
 
-这也是为什么它既能接 mock agent，也能接 `traecli`，也能放在 **DeepSeek-backed local agent runtime** 前面。
+这也是为什么它既能接 mock agent，也能接 `traex`，也能放在 **DeepSeek-backed local agent runtime** 前面。
 
 ---
 

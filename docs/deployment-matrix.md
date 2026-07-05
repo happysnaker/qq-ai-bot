@@ -27,7 +27,7 @@
 
 | 路径 | 当前状态 | 为什么 |
 | --- | --- | --- |
-| fake OneBot client → reverse WS → `qq-ai-bot` → `traecli` ACP | ✅ | 仓库里有 `npm run e2e:fake-onebot:traecli`，这是当前最硬的“真实回复打通”脚本 |
+| fake OneBot client → reverse WS → `qq-ai-bot` → `traex` ACP | ✅ | 仓库里有 `npm run e2e:fake-onebot:traex`（兼容旧别名 `e2e:fake-onebot:traecli`），这是当前最硬的“真实回复打通”脚本 |
 | NapCat → reverse WS → `qq-ai-bot` → mock ACP agent | 🟡 | 仓库自带 `docker-compose.demo.yml`、`.env.docker.example`、`deploy/napcat.onebot11.reverse-ws.json`，这是面向第一次跑通的官方演示路径 |
 | 宿主机 OneBot 11 → reverse WS → `qq-ai-bot` → 自己的 ACP agent | 🟠 | `getting-started.md`、`faq.md`、`configuration.md` 都按这条路写，但仓库没把你的 OneBot 实现和外部 agent 一起自动验证掉 |
 
@@ -59,12 +59,12 @@
 | ACP 侧 | 当前状态 | 入口 | 说明 |
 | --- | --- | --- | --- |
 | 仓库内置 mock ACP agent | 🟡 | `docker-compose.demo.yml` / `npm run mock-agent` | 最适合先验证 transport、session、progress 回传 |
-| `traecli acp serve` | ✅ / 🟠 | `npm run smoke:traecli`、`npm run e2e:fake-onebot:traecli` | ACP 能力有 smoke / e2e 辅助脚本，但这不是 NapCat / LLOneBot 真机矩阵本身 |
+| `traex acp serve` | ✅ / 🟠 | `npm run smoke:traex`、`npm run e2e:fake-onebot:traex` | ACP 能力有 smoke / e2e 辅助脚本，但这不是 NapCat / LLOneBot 真机矩阵本身 |
 | 你自己的 ACP-compatible agent | 🟠 | `docs/agent-integration.md`、`docs/getting-started.md` | 仓库支持这条扩展位，但具体命令、权限、工作目录仍取决于你的 agent |
 
 换句话说：
 
-- **agent 侧最硬的自动化信号** 目前来自 `traecli` / fake OneBot 脚本
+- **agent 侧最硬的自动化信号** 目前来自 `traex` / fake OneBot 脚本
 - **QQ / OneBot 侧最容易复现的演示信号** 目前来自 NapCat reverse Docker demo
 
 ---
@@ -138,7 +138,7 @@ LLOneBot + forward WS + qq-ai-bot + ACP agent
 
 ### 我愿意说“更像已验证”的
 
-- fake OneBot + reverse WS + `traecli` ACP e2e
+- fake OneBot + reverse WS + `traex` ACP e2e
 - ACP smoke 路径
 
 ### 我愿意说“仓库正在维护、适合第一次跑通”的

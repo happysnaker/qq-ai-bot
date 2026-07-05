@@ -20,7 +20,7 @@ describe('planOutboundPayload', () => {
 
   it('extracts local markdown image references', () => {
     const plan = planOutboundPayload({
-      text: '图好了：![rank](file:///Users/bytedance/GolandProjects/DevPlan/coc/reports/rank.png)',
+      text: '图好了：![rank](file:///tmp/qq-ai-bot/rank.png)',
       maxTextLength: 200,
     });
 
@@ -31,7 +31,7 @@ describe('planOutboundPayload', () => {
         kind: 'image',
         image: {
           kind: 'file',
-          value: '/Users/bytedance/GolandProjects/DevPlan/coc/reports/rank.png',
+          value: '/tmp/qq-ai-bot/rank.png',
         },
       },
     ]);

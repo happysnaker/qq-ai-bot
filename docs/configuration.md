@@ -2,6 +2,8 @@
 
 项目启动时会自动读取项目根目录下的 `.env`。
 
+如果同时存在 `.env.local`，同名项会覆盖 `.env`。
+
 ## `.env` 主要配置
 
 ### 服务本身
@@ -44,12 +46,14 @@
 | `ONEBOT_OUTBOUND_MAX_TEXT_LENGTH` | 单条消息最大文本长度 |
 | `ONEBOT_INBOUND_DEDUPE_WINDOW_MS` | 轻量入站去重窗口，默认 120000 ms |
 | `ONEBOT_INBOUND_DEDUPE_MAX_ENTRIES` | 入站去重缓存上限，默认 2048 |
+| `NAPCAT_WEBUI_TOKEN` | macOS NapCat helper 使用的 WebUI token |
+| `QQ_APP_PATH` | macOS helper 使用的 QQ.app 路径 |
 
 ### ACP / Agent
 
 | 配置项 | 说明 |
 | --- | --- |
-| `ACP_AGENT_COMMAND` | agent 可执行文件，例如 `node`、`traecli` 或你的自定义命令 |
+| `ACP_AGENT_COMMAND` | agent 可执行文件，例如 `node`、`traex` 或你的自定义命令 |
 | `ACP_AGENT_ARGS_JSON` | 启动参数，推荐写合法 JSON 数组 |
 | `ACP_AGENT_WORKDIR` | agent 工作目录 |
 | `ACP_CLIENT_NAME` | ACP client name |
@@ -63,6 +67,24 @@
 | `ACP_MAX_INBOUND_IMAGE_BYTES` | 单张图片大小上限 |
 
 如果你需要可直接复制的 agent 配置示例，看 [ACP Agent 接入](agent-integration.md)。
+
+### 关于 `ACP_AGENT_ARGS_JSON`
+
+当前最常见的坑是：
+
+- `ACP_AGENT_COMMAND=traex`
+- 但 `ACP_AGENT_ARGS_JSON=[]`
+
+这会让很多 `traex` / `traecli` 安装启动交互式界面，而不是 `acp serve`，随后表现成 `ACP connection closed`。
+
+对 `traex` / `traecli`，推荐明确写成：
+
+```env
+ACP_AGENT_COMMAND=traex
+ACP_AGENT_ARGS_JSON=["acp","serve"]
+```
+
+当前代码在参数留空时也会对 `traex` / `traecli` 自动补成这个默认值，但文档层面仍然建议显式写出来。
 
 ## Session Store
 
@@ -162,6 +184,9 @@ group.systemPrompt > ACP_DEFAULT_SYSTEM_PROMPT > 无
 | `/prompt` | 查看当前生效的 system prompt |
 | `/reset` | 清空当前会话并重建 |
 | `/ping` | 存活检查 |
+| `/verbose [normal\|verbose\|debug\|default]` | 查看或设置当前会话详细模式 |
+| `/progress [off\|message\|default]` | 查看或设置当前会话处理中汇报 |
+| `/quiet` | 关闭当前会话处理中汇报并切到 normal 模式 |
 
 另外：
 

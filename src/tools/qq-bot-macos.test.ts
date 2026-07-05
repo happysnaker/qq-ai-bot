@@ -3,11 +3,13 @@ import { buildNapcatLoader } from './napcat-loader.js';
 import { isQQAlreadyPatched, isQQProcessCommand } from './qq-bot-macos.js';
 
 describe('qq-bot-macos orchestration assumptions', () => {
+  const sampleNapcatShellDir = '/Users/example/Library/Containers/com.tencent.qq/Data/Documents/napcat';
+
   it('can build a QR-login loader without quick account injection', () => {
     const loader = buildNapcatLoader({
       qqPackagePath: '/Applications/QQ.app/Contents/Resources/app/package.json',
       qqResourcesDir: '/Applications/QQ.app/Contents/Resources/app',
-      napcatShellDir: '/Users/bytedance/Library/Containers/com.tencent.qq/Data/Documents/napcat',
+      napcatShellDir: sampleNapcatShellDir,
     });
 
     expect(loader).not.toContain('NAPCAT_QUICK_ACCOUNT');
@@ -19,7 +21,7 @@ describe('qq-bot-macos orchestration assumptions', () => {
       {
         qqPackagePath: '/Applications/QQ.app/Contents/Resources/app/package.json',
         qqResourcesDir: '/Applications/QQ.app/Contents/Resources/app',
-        napcatShellDir: '/Users/bytedance/Library/Containers/com.tencent.qq/Data/Documents/napcat',
+        napcatShellDir: sampleNapcatShellDir,
       },
       { quickAccount: '3765026549' },
     );
@@ -55,9 +57,9 @@ describe('qq-bot-macos orchestration assumptions', () => {
     expect(
       isQQAlreadyPatched(
         {
-          main: '../../../../../Users/bytedance/Library/Containers/com.tencent.qq/Data/Documents/loadNapCat.js',
+          main: '../../../../../Users/example/Library/Containers/com.tencent.qq/Data/Documents/loadNapCat.js',
         },
-        '../../../../../Users/bytedance/Library/Containers/com.tencent.qq/Data/Documents/loadNapCat.js',
+        '../../../../../Users/example/Library/Containers/com.tencent.qq/Data/Documents/loadNapCat.js',
       ),
     ).toBe(true);
     expect(isQQAlreadyPatched({ main: './app_launcher/index.js' }, 'loadNapCat.js')).toBe(false);
@@ -72,6 +74,8 @@ describe('qq-bot-macos orchestration assumptions', () => {
     expect(source).not.toContain('/Users/bytedance/GolandProjects/DevPlan');
     expect(source).toContain("const DEFAULT_AGENT_COMMAND = 'traex';");
     expect(source).toContain("const DEFAULT_GROUP_CONFIG = './examples/group-rules.local.json';");
+    expect(source).toContain("const DEFAULT_BOT_PORT = 8080;");
+    expect(source).toContain("const DEFAULT_ACCESS_TOKEN = 'change-me';");
   });
 
   it('prints terminal QR code by default and keeps JSON as an explicit mode', async () => {
@@ -81,7 +85,27 @@ describe('qq-bot-macos orchestration assumptions', () => {
 
     expect(source).toContain('Scan this QR code with the QQ account you want the bot to use');
     expect(source).toContain('renderTerminalQr');
-    expect(source).toContain(\"case '--json'\");
-    expect(source).toContain(\"case '--no-wait'\");
+    expect(source).toContain("case '--json'");
+    expect(source).toContain("case '--no-wait'");
+  });
+
+  it('login flow can start or restart NapCat before giving up on QR generation', async () => {
+    const source = await import('node:fs/promises').then((fs) =>
+      fs.readFile(new URL('./qq-bot-macos.ts', import.meta.url), 'utf8'),
+    );
+
+    expect(source).toContain('ensureNapcatReadyForLogin');
+    expect(source).toContain('restartNapcatForQrLogin');
+    expect(source).toContain('failed to get login qrcode after starting NapCat');
+  });
+
+  it('requires a production build before the bot:macos helper tries to launch dist/index.js', async () => {
+    const source = await import('node:fs/promises').then((fs) =>
+      fs.readFile(new URL('./qq-bot-macos.ts', import.meta.url), 'utf8'),
+    );
+
+    expect(source).toContain('dist/index.js is missing.');
+    expect(source).toContain('npm run build');
+    expect(source).toContain('npm run dev');
   });
 });

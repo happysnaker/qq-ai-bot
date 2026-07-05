@@ -2,11 +2,13 @@
 
 这份 FAQ 只回答最常见、最容易卡住的新手问题。
 
-如果你只想先验证链路是否通，最短路径是：
+如果你想接真实本机 agent，最短路径是：
 
-1. 先跑 [Docker 快速演示](docker-quickstart.md)
-2. 再看 [快速开始](getting-started.md)
+1. 先看 [快速开始](getting-started.md)
+2. 再看 [ACP Agent 接入](agent-integration.md)
 3. 如果仍然卡住，再用 [Q&A Discussions](https://github.com/happysnaker/qq-ai-bot/discussions/categories/q-a)
+
+如果你只是想跑一个隔离 demo，再看 [Docker 快速演示](docker-quickstart.md)。
 
 ## 1. 一上来应该用 forward 还是 reverse WebSocket？
 
@@ -81,9 +83,9 @@ npm run smoke:agent
 最直接的检查方式：
 
 ```bash
-curl http://127.0.0.1:18080/healthz
-curl http://127.0.0.1:18080/readyz
-curl http://127.0.0.1:18080/metrics
+curl http://127.0.0.1:8080/healthz
+curl http://127.0.0.1:8080/readyz
+curl http://127.0.0.1:8080/metrics
 ```
 
 再配合 QQ 里发：
@@ -237,3 +239,30 @@ SESSION_STORE=file
 - agent 处理慢
 - progress 发出去了但 final reply 没发出去
 - 还是 reply 发出去了但 QQ 侧没表现正常
+
+## 14. 为什么 `smoke:agent` 会报 `ACP connection closed`？
+
+如果你接的是 `traex` / `traecli`，最常见原因是：
+
+- `ACP_AGENT_ARGS_JSON=[]`
+- 实际启动的是交互式界面，不是 `acp serve`
+
+优先检查 `.env`：
+
+```env
+ACP_AGENT_COMMAND=traex
+ACP_AGENT_ARGS_JSON=["acp","serve"]
+```
+
+## 15. 为什么 `npm run dev` 起得来，但 `/status` 里还是 `onebot.connected=false`？
+
+这通常表示：
+
+- bot 本体已经启动成功
+- 但 QQ / OneBot 还没有回连上来
+
+优先检查：
+
+- reverse WS 地址是不是 `ws://127.0.0.1:16700/onebot/v11/ws`
+- `ONEBOT_ACCESS_TOKEN` 是否和 OneBot 侧一致
+- NapCat / LLOneBot 是否真的已经登录并启用了 OneBot 连接

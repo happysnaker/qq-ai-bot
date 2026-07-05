@@ -1,8 +1,9 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { z } from 'zod';
-import { parseBoolean, parseCsv, parseJsonStringArray, parseNumber } from '../utils/env.js';
+import { parseBoolean, parseCsv, parseNumber } from '../utils/env.js';
 import { loadDotEnv } from '../infra/env-file.js';
+import { resolveAcpAgentArgs } from '../utils/acp-agent.js';
 import type { PermissionStrategy, VerboseMode } from '../types/agent.js';
 
 const oneBotModeSchema = z.enum(['forward', 'reverse']);
@@ -172,7 +173,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
       accessToken: env.ONEBOT_ACCESS_TOKEN || undefined,
       forwardWsUrl: env.ONEBOT_FORWARD_WS_URL || 'ws://127.0.0.1:3001/onebot/v11/ws',
       reverseWsHost: env.ONEBOT_REVERSE_WS_HOST || '0.0.0.0',
-      reverseWsPort: parseNumber(env.ONEBOT_REVERSE_WS_PORT, 6700),
+      reverseWsPort: parseNumber(env.ONEBOT_REVERSE_WS_PORT, 16700),
       reverseWsPath: env.ONEBOT_REVERSE_WS_PATH || '/onebot/v11/ws',
       allowGroup: parseBoolean(env.ONEBOT_ALLOW_GROUP, true),
       requireMentionInGroup: parseBoolean(env.ONEBOT_REQUIRE_MENTION_IN_GROUP, true),
@@ -193,7 +194,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
     },
     ai: {
       agentCommand: env.ACP_AGENT_COMMAND || 'codex',
-      agentArgs: parseJsonStringArray(env.ACP_AGENT_ARGS_JSON, []),
+      agentArgs: resolveAcpAgentArgs(env.ACP_AGENT_ARGS_JSON, env.ACP_AGENT_COMMAND),
       workdir: env.ACP_AGENT_WORKDIR || process.cwd(),
       clientName: env.ACP_CLIENT_NAME || 'qq-ai-bot',
       reuseSession: parseBoolean(env.ACP_REUSE_SESSION, true),

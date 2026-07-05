@@ -1,13 +1,38 @@
 import { spawn } from 'node:child_process';
 import { once } from 'node:events';
+import { createServer } from 'node:net';
 import { setTimeout as delay } from 'node:timers/promises';
 import { WebSocket } from 'ws';
 
-const botPort = 18080;
-const reverseWsPort = 16700;
-const accessToken = 'test-token';
+const accessToken = process.env.E2E_ONEBOT_ACCESS_TOKEN || 'e2e-change-me';
 
-function bootBot(): ReturnType<typeof spawn> {
+async function allocatePort(preferred?: number): Promise<number> {
+  if (Number.isFinite(preferred) && Number(preferred) > 0) {
+    return Number(preferred);
+  }
+
+  return await new Promise<number>((resolve, reject) => {
+    const server = createServer();
+    server.listen(0, '127.0.0.1', () => {
+      const address = server.address();
+      if (!address || typeof address === 'string') {
+        server.close(() => reject(new Error('failed to allocate ephemeral port')));
+        return;
+      }
+      const { port } = address;
+      server.close((error) => {
+        if (error) {
+          reject(error);
+          return;
+        }
+        resolve(port);
+      });
+    });
+    server.once('error', reject);
+  });
+}
+
+function bootBot(botPort: number, reverseWsPort: number): ReturnType<typeof spawn> {
   return spawn(process.execPath, ['node_modules/.bin/tsx', 'src/index.ts'], {
     cwd: process.cwd(),
     env: {
@@ -17,7 +42,7 @@ function bootBot(): ReturnType<typeof spawn> {
       ONEBOT_REVERSE_WS_PORT: String(reverseWsPort),
       ONEBOT_REVERSE_WS_PATH: '/onebot/v11/ws',
       ONEBOT_ACCESS_TOKEN: accessToken,
-      ACP_AGENT_COMMAND: 'traecli',
+      ACP_AGENT_COMMAND: process.env.ACP_AGENT_COMMAND || 'traex',
       ACP_AGENT_ARGS_JSON: '["acp","serve"]',
       ACP_AGENT_WORKDIR: process.cwd(),
       ACP_VERBOSE_MODE: 'verbose',
@@ -29,7 +54,7 @@ function bootBot(): ReturnType<typeof spawn> {
   });
 }
 
-async function waitForBotReady(timeoutMs = 20_000): Promise<void> {
+async function waitForBotReady(botPort: number, timeoutMs = 20_000): Promise<void> {
   const started = Date.now();
 
   while (Date.now() - started < timeoutMs) {
@@ -47,7 +72,7 @@ async function waitForBotReady(timeoutMs = 20_000): Promise<void> {
   throw new Error(`bot did not become healthy within ${timeoutMs}ms`);
 }
 
-async function runClient(): Promise<void> {
+async function runClient(reverseWsPort: number): Promise<void> {
   await new Promise<void>((resolve, reject) => {
     const socket = new WebSocket(`ws://127.0.0.1:${reverseWsPort}/onebot/v11/ws`, {
       headers: {
@@ -119,7 +144,11 @@ async function runClient(): Promise<void> {
 }
 
 async function main(): Promise<void> {
-  const bot = bootBot();
+  const botPort = await allocatePort(process.env.E2E_BOT_PORT ? Number(process.env.E2E_BOT_PORT) : undefined);
+  const reverseWsPort = await allocatePort(
+    process.env.E2E_ONEBOT_PORT ? Number(process.env.E2E_ONEBOT_PORT) : undefined,
+  );
+  const bot = bootBot(botPort, reverseWsPort);
   let stdout = '';
   let stderr = '';
   let cleanupError: Error | null = null;
@@ -136,8 +165,8 @@ async function main(): Promise<void> {
   });
 
   try {
-    await waitForBotReady();
-    await runClient();
+    await waitForBotReady(botPort);
+    await runClient(reverseWsPort);
     console.log('E2E_OK');
   } finally {
     bot.kill('SIGINT');

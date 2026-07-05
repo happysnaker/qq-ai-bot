@@ -7,7 +7,7 @@ import { loadConfig } from './index.js';
 describe('loadConfig', () => {
   it('parses relaxed ACP agent args and basic switches', () => {
     const config = loadConfig({
-      ACP_AGENT_COMMAND: 'traecli',
+      ACP_AGENT_COMMAND: 'traex',
       ACP_AGENT_ARGS_JSON: '[acp,serve]',
       ONEBOT_ALLOW_GROUP: 'false',
       ONEBOT_ALLOW_PRIVATE: 'true',
@@ -20,6 +20,15 @@ describe('loadConfig', () => {
     expect(config.onebot.allowPrivate).toBe(true);
     expect(config.onebot.commandPrefix).toBe('!');
     expect(config.onebot.defaultSystemPrompt).toBe('be precise');
+  });
+
+  it('defaults reverse ws port and traex args to the quickstart values', () => {
+    const config = loadConfig({
+      ACP_AGENT_COMMAND: 'traex',
+    });
+
+    expect(config.onebot.reverseWsPort).toBe(16700);
+    expect(config.ai.agentArgs).toEqual(['acp', 'serve']);
   });
 
   it('loads per-group prompt policies from json file', async () => {

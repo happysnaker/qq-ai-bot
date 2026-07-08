@@ -38,6 +38,7 @@ It is positioned as bot infrastructure / integration glue, not a toy chat UI.
 - Repository: <https://github.com/happysnaker/qq-ai-bot>
 - Project page: <https://happysnaker.github.io/qq-ai-bot/>
 - Public landing / proof ladder: <https://github.com/happysnaker/qq-ai-bot/blob/main/docs/public/landing-page.md>
+- Ecosystem tracker: <https://github.com/happysnaker/qq-ai-bot/blob/main/docs/public/ecosystem-tracker.md>
 - Getting started: <https://github.com/happysnaker/qq-ai-bot/blob/main/docs/getting-started.md>
 - Deployment patterns: <https://github.com/happysnaker/qq-ai-bot/blob/main/docs/deployment-patterns.md>
 - Multi-instance notes: <https://github.com/happysnaker/qq-ai-bot/blob/main/docs/multi-instance-notes.md>

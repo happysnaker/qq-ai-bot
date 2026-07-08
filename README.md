@@ -30,7 +30,7 @@
 - 生态收录：已进入 [OneBot 生态 / 应用案例](https://onebot.dev/ecosystem)
 - 官方社区展示：已发到 [OneBot 官方 Discussions / 应用 / SDK](https://github.com/orgs/botuniverse/discussions/264)
 - 镜像分发：`ghcr.io/happysnaker/qq-ai-bot:v0.1.7` 与 `ghcr.io/happysnaker/qq-ai-bot:latest` 已发布 `linux/amd64` 与 `linux/arm64`；见 [Deployment validation](docs/deployment-validation.md)
-- 社区入口：[Show and tell](https://github.com/happysnaker/qq-ai-bot/discussions/10) · [Deployment matrix Q&A](https://github.com/happysnaker/qq-ai-bot/discussions/11)
+- 社区入口：[Show and tell](https://github.com/happysnaker/qq-ai-bot/discussions/10) · [Deployment matrix Q&A](https://github.com/happysnaker/qq-ai-bot/discussions/11) · [Ecosystem tracker](docs/public/ecosystem-tracker.md)
 - 想直接拿来改成你自己的 bot 脚手架：点 GitHub 上方的 **Use this template**
 - 技术栈：Node.js 22+、TypeScript、Docker、GitHub Actions
 - 适用场景：自托管 QQ bot、NapCat / LLOneBot 集成、ACP agent 接线层、DeepSeek / 其他本地 agent 的 QQ 接入层
@@ -213,6 +213,7 @@ ws://127.0.0.1:16700/onebot/v11/ws
 - [FAQ / 常见问题](docs/faq.md)
 - [Deployment patterns / 部署形态](docs/deployment-patterns.md)
 - [Public landing / proof ladder](docs/public/landing-page.md)
+- [Ecosystem tracker / 生态跟进](docs/public/ecosystem-tracker.md)
 - [Deployment validation / 部署验证](docs/deployment-validation.md)（含 `docker-compose.arm64.yml` override）
 - [Multi-instance notes / 多实例运维说明](docs/multi-instance-notes.md)
 - [ACP Agent 接入](docs/agent-integration.md)

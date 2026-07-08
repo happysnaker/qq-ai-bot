@@ -32,7 +32,7 @@ Open these in order if you only have a few minutes:
 | 4 | [v0.1.7 release](https://github.com/happysnaker/qq-ai-bot/releases/tag/v0.1.7) | latest stable release carries CI, Docker publish, and arm64 smoke evidence |
 | 5 | [Multi-instance notes](../multi-instance-notes.md) | Redis and horizontal deployment limits are documented honestly |
 | 6 | [Sponsorware roadmap](sponsorware.md) | current operator-facing funding target is explicit |
-| 7 | [External ecosystem work](https://github.com/happysnaker/qq-ai-bot/discussions/30) | public OneBot / NapCat / LLOneBot / Docker / CasaOS surfaces are tracked |
+| 7 | [Ecosystem tracker](ecosystem-tracker.md) | public OneBot / NapCat / LLOneBot / Docker / CasaOS / Umbrel surfaces are tracked |
 
 ## Current public evidence
 

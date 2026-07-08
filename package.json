@@ -73,7 +73,7 @@
     "tsx": "^4.22.4",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.46.2",
-    "vitest": "^4.1.9"
+    "vitest": "^4.1.10"
   },
   "homepage": "https://happysnaker.github.io/qq-ai-bot/",
   "repository": {

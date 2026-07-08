@@ -72,6 +72,23 @@ The script pulls the `linux/arm64` image, starts the container, checks `/readyz`
 
 Do not paste raw logs into public issues without redacting tokens, account details, private chat content, or local paths.
 
+
+## GitHub Actions arm64 smoke
+
+For public CI-style evidence, the repository also has an `Arm64 image smoke` workflow.
+
+It runs after `Publish Docker image` succeeds, resolves the matching `sha-xxxxxxx` GHCR tag, sets up QEMU on the GitHub-hosted runner, pulls the `linux/arm64` image, and runs [`scripts/smoke-arm64-image.sh`](../scripts/smoke-arm64-image.sh).
+
+The workflow uploads the same smoke artifacts as the local script:
+
+- `readyz.json`;
+- `status.json`;
+- `metrics.txt`;
+- `inspect.txt`;
+- `container.log`.
+
+This is stronger than a manifest-only check because it boots the arm64 image and hits `/readyz`, `/status`, and `/metrics` under emulation. It still does **not** replace a real CasaOS / arm64 host report.
+
 ## CasaOS / homelab status
 
 Issue [#26](https://github.com/happysnaker/qq-ai-bot/issues/26) tracks the remaining validation work:

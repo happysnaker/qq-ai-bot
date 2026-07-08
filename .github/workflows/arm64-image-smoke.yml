@@ -1,0 +1,65 @@
+name: Arm64 image smoke
+
+on:
+  workflow_run:
+    workflows:
+      - Publish Docker image
+    types:
+      - completed
+  workflow_dispatch:
+    inputs:
+      image:
+        description: GHCR image tag to smoke test
+        required: false
+        default: ghcr.io/happysnaker/qq-ai-bot:latest
+      platform:
+        description: Docker platform to pull and run
+        required: false
+        default: linux/arm64
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout matching source
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Resolve image tag
+        id: image
+        shell: bash
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_run" ]]; then
+            full_sha="${{ github.event.workflow_run.head_sha }}"
+            short_sha="${full_sha:0:7}"
+            echo "image=ghcr.io/${{ github.repository_owner }}/qq-ai-bot:sha-${short_sha}" >> "$GITHUB_OUTPUT"
+            echo "platform=linux/arm64" >> "$GITHUB_OUTPUT"
+          else
+            echo "image=${{ inputs.image }}" >> "$GITHUB_OUTPUT"
+            echo "platform=${{ inputs.platform }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run arm64 image smoke
+        shell: bash
+        env:
+          IMAGE: ${{ steps.image.outputs.image }}
+          PLATFORM: ${{ steps.image.outputs.platform }}
+          OUT_DIR: ./run-logs/arm64-smoke
+          PORT: 18082
+        run: ./scripts/smoke-arm64-image.sh
+
+      - name: Upload smoke artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: arm64-smoke-${{ github.run_id }}
+          path: run-logs/arm64-smoke/
+          if-no-files-found: warn

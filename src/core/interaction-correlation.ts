@@ -13,7 +13,7 @@ function stableTextPart(value: string | undefined): string {
 }
 
 function shortHash(value: string): string {
-  return createHash('sha1').update(value).digest('hex').slice(0, 12);
+  return createHash('sha256').update(value).digest('hex').slice(0, 12);
 }
 
 export function buildInboundDedupeKey(event: NormalizedOneBotEvent): string {

@@ -58,8 +58,14 @@ function readRequestBearer(req: IncomingMessage): string | undefined {
   if (typeof auth !== 'string') {
     return undefined;
   }
-  const match = auth.match(/^Bearer\s+(.+)$/i);
-  return match?.[1]?.trim();
+
+  const [scheme, ...tokenParts] = auth.trim().split(/\s+/u);
+  if (scheme?.toLowerCase() !== 'bearer' || tokenParts.length === 0) {
+    return undefined;
+  }
+
+  const token = tokenParts.join(' ').trim();
+  return token.length > 0 ? token : undefined;
 }
 
 function requestTokenMatches(req: IncomingMessage, accessToken?: string): boolean {
@@ -350,10 +356,10 @@ export async function startHttpIngressServer(
       await params.onEvent(payload);
       res.statusCode = 204;
       res.end();
-    } catch (error) {
+    } catch {
       writeJson(res, 400, {
         ok: false,
-        error: error instanceof Error ? error.message : String(error),
+        error: 'invalid_request',
       });
     }
   });

@@ -30,12 +30,14 @@ It is positioned as bot infrastructure / integration glue, not a toy chat UI.
 - Prometheus-style `/metrics`
 - `/readyz` and `/status`
 - Docker image and demo compose path
+- v0.1.7 tag with CI / Docker publish / arm64 QEMU smoke evidence
 - multi-instance / Redis caveats documented honestly
 
 ## Best links to share
 
 - Repository: <https://github.com/happysnaker/qq-ai-bot>
 - Project page: <https://happysnaker.github.io/qq-ai-bot/>
+- Public landing / proof ladder: <https://github.com/happysnaker/qq-ai-bot/blob/main/docs/public/landing-page.md>
 - Getting started: <https://github.com/happysnaker/qq-ai-bot/blob/main/docs/getting-started.md>
 - Deployment patterns: <https://github.com/happysnaker/qq-ai-bot/blob/main/docs/deployment-patterns.md>
 - Multi-instance notes: <https://github.com/happysnaker/qq-ai-bot/blob/main/docs/multi-instance-notes.md>
@@ -114,7 +116,7 @@ That is the kind of honesty I want in this repo: useful defaults, clear boundari
 ## Sponsor CTA options
 
 - If this saves you OneBot / ACP wiring time, sponsor the maintenance work.
-- Support the next operator-facing features: deployment validation, public demo assets, and richer operations docs.
+- Support the next operator-facing features: physical ARM/CasaOS validation, deployment troubleshooting, public demo assets, and richer operations docs.
 - The project is free; sponsorship funds the boring but useful packaging work that makes it safer to run.
 
 Support page: <https://happysnaker.github.io/support/#from-qq-ai-bot>

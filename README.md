@@ -22,6 +22,7 @@
 > **English pitch:** A production-grade, self-hosted **QQ ↔ AI bridge** for **OneBot 11 / NapCat / LLOneBot** and **ACP-compatible agents**, with persistent sessions and progress streaming.
 
 - 项目页：[happysnaker.github.io/qq-ai-bot](https://happysnaker.github.io/qq-ai-bot/)
+- Public landing / proof ladder：[docs/public/landing-page.md](docs/public/landing-page.md)
 - 架构说明：[ARCHITECTURE.md](./ARCHITECTURE.md)
 - 路线图：[ROADMAP.md](./ROADMAP.md)
 - 参与贡献：[CONTRIBUTING.md](./CONTRIBUTING.md)
@@ -210,6 +211,7 @@ ws://127.0.0.1:16700/onebot/v11/ws
 - [Deployment matrix / 部署组合矩阵](docs/deployment-matrix.md)
 - [FAQ / 常见问题](docs/faq.md)
 - [Deployment patterns / 部署形态](docs/deployment-patterns.md)
+- [Public landing / proof ladder](docs/public/landing-page.md)
 - [Deployment validation / 部署验证](docs/deployment-validation.md)（含 `docker-compose.arm64.yml` override）
 - [Multi-instance notes / 多实例运维说明](docs/multi-instance-notes.md)
 - [ACP Agent 接入](docs/agent-integration.md)

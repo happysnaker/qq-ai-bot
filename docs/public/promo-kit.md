@@ -40,6 +40,7 @@ It is positioned as bot infrastructure / integration glue, not a toy chat UI.
 - Deployment patterns: <https://github.com/happysnaker/qq-ai-bot/blob/main/docs/deployment-patterns.md>
 - Multi-instance notes: <https://github.com/happysnaker/qq-ai-bot/blob/main/docs/multi-instance-notes.md>
 - Support: <https://happysnaker.github.io/support/#from-qq-ai-bot>
+- Sponsorware discussion: <https://github.com/happysnaker/qq-ai-bot/discussions/30>
 
 ## X post drafts
 

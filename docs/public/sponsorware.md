@@ -12,6 +12,8 @@
 
 Support page: <https://happysnaker.github.io/support/#from-qq-ai-bot>
 
+Discussion: <https://github.com/happysnaker/qq-ai-bot/discussions/30>
+
 ## What sponsorship gets prioritized
 
 Sponsorship does not buy closed-source features by default. It prioritizes public work:

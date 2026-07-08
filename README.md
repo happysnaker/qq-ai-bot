@@ -285,6 +285,7 @@ ws://127.0.0.1:16700/onebot/v11/ws
 
 - [Promo kit / 推广素材](docs/public/promo-kit.md)
 - [Sponsorware roadmap / 赞助路线](docs/public/sponsorware.md)
+- [Sponsorware discussion / 赞助讨论](https://github.com/happysnaker/qq-ai-bot/discussions/30)
 
 ## Promo kit / 转发文案
 

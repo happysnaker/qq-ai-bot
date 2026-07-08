@@ -8,7 +8,7 @@
 |---|---|---|---:|
 | [#23 End-to-end latency histograms](https://github.com/happysnaker/qq-ai-bot/issues/23) | **completed**: measure receive → agent → reply latency | helps operators debug slow QQ / OneBot / ACP turns | shipped |
 | [#24 Postgres session store](https://github.com/happysnaker/qq-ai-bot/issues/24) | **completed**: add another external session persistence option | useful for operators already standardizing on Postgres | shipped |
-| [#26 arm64 / CasaOS deployment validation](https://github.com/happysnaker/qq-ai-bot/issues/26) | validate real deployment path beyond x86 local runs | helps homelab / CasaOS users know what is actually tested | ¥50 |
+| [#26 arm64 / CasaOS deployment validation](https://github.com/happysnaker/qq-ai-bot/issues/26) | multi-arch image confirmed; CasaOS/arm64 install report still open | helps homelab / CasaOS users know what is actually tested | ¥50 |
 
 Support page: <https://happysnaker.github.io/support/#from-qq-ai-bot>
 

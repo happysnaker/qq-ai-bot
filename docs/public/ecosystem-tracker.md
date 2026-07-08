@@ -11,10 +11,10 @@
 | ACP clients docs | merged | [agentclientprotocol#1592](https://github.com/agentclientprotocol/agent-client-protocol/pull/1592) | official ACP clients docs now include `qq-ai-bot` | no action |
 | NapCat docs | merged | [NapCatDocs#132](https://github.com/NapNeko/NapCatDocs/pull/132) | NapCat community / integration docs include `qq-ai-bot` | no action |
 | NapCat community discussion | submitted | [NapCatQQ discussion #1942](https://github.com/NapNeko/NapCatQQ/discussions/1942) | NapCat user-facing showcase | monitor comments monthly |
-| LLOneBot docs | open | [LuckyLilliaDoc#20](https://github.com/LLOneBot/LuckyLilliaDoc/pull/20) | Sourcery suggestions addressed; waiting maintainer review | check review weekly |
+| LLOneBot docs | open | [LuckyLilliaDoc#20](https://github.com/LLOneBot/LuckyLilliaDoc/pull/20) | Sourcery suggestions addressed; PR body now links project page; waiting maintainer review | check review weekly |
 | LLOneBot community discussion | submitted | [LuckyLilliaBot discussion #796](https://github.com/LLOneBot/LuckyLilliaBot/discussions/796) | LLOneBot user-facing showcase | monitor comments monthly |
-| Docker Compose sample | open | [docker/awesome-compose#781](https://github.com/docker/awesome-compose/pull/781) | DCO passed; review required; arm64 smoke evidence posted | check review weekly |
-| CasaOS app-store path | open | [CasaOS-AppStore-Play#42](https://github.com/Cp0204/CasaOS-AppStore-Play/pull/42) | app-store PR open; arm64 smoke evidence posted; real CasaOS host report still needed | check review weekly |
+| Docker Compose sample | open | [docker/awesome-compose#781](https://github.com/docker/awesome-compose/pull/781) | DCO passed; review required; arm64 smoke evidence posted; PR body now links project page | check review weekly |
+| CasaOS app-store path | open | [CasaOS-AppStore-Play#42](https://github.com/Cp0204/CasaOS-AppStore-Play/pull/42) | app-store PR open; arm64 smoke evidence posted; PR body now links project page; real CasaOS host report still needed | check review weekly |
 | Umbrel app-store path | open | [umbrel-apps#5834](https://github.com/getumbrel/umbrel-apps/pull/5834) | lint passed; v0.1.7 + arm64 smoke evidence posted | check review weekly |
 | ARM/CasaOS tester call | open | [discussion #43](https://github.com/happysnaker/qq-ai-bot/discussions/43) | asks for physical ARM / CasaOS install reports | check for reports weekly |
 | Sponsorware roadmap | open | [discussion #30](https://github.com/happysnaker/qq-ai-bot/discussions/30) | central sponsorware and promo-kit discussion | update after shipped slices |

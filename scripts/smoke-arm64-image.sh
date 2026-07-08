@@ -53,7 +53,10 @@ done
 
 curl -fsS "http://127.0.0.1:$PORT/status" -o "$STATUS"
 curl -fsS "http://127.0.0.1:$PORT/metrics" -o "$METRICS"
-docker inspect --format 'image={{.Config.Image}} os={{.Os}} arch={{.Architecture}} status={{.State.Status}}' "$CONTAINER_NAME" > "$INSPECT"
+{
+  docker image inspect --format 'image={{.RepoTags}} os={{.Os}} arch={{.Architecture}}' "$IMAGE"
+  docker inspect --format 'container={{.Name}} image={{.Config.Image}} status={{.State.Status}}' "$CONTAINER_NAME"
+} > "$INSPECT"
 docker logs "$CONTAINER_NAME" > "$LOGS" 2>&1 || true
 
 echo "[smoke] inspect: $(cat "$INSPECT")"

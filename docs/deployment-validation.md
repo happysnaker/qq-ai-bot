@@ -84,7 +84,7 @@ The workflow uploads the same smoke artifacts as the local script:
 - `readyz.json`;
 - `status.json`;
 - `metrics.txt`;
-- `inspect.txt`;
+- `inspect.txt` with image os/arch and container status;
 - `container.log`.
 
 This is stronger than a manifest-only check because it boots the arm64 image and hits `/readyz`, `/status`, and `/metrics` under emulation. It still does **not** replace a real CasaOS / arm64 host report.

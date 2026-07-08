@@ -18,3 +18,11 @@ If `qq-ai-bot` saved you OneBot + ACP wiring time, the fastest way to support on
 If you want the same cleanup for your own bot / AI / infra repo, the review details are on:
 
 - https://happysnaker.github.io/review/
+
+
+## Project-specific sponsorship
+
+- Promo kit: [docs/public/promo-kit.md](docs/public/promo-kit.md)
+- Sponsorware roadmap: [docs/public/sponsorware.md](docs/public/sponsorware.md)
+
+If you support a specific `qq-ai-bot` feature, include the issue number in the payment note or email subject.

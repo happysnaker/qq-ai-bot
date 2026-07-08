@@ -281,6 +281,11 @@ ws://127.0.0.1:16700/onebot/v11/ws
 - **具体可认领任务**：看 [`help wanted` issues](https://github.com/happysnaker/qq-ai-bot/issues?q=is%3Aopen+label%3A%22help+wanted%22)
 - **直接支持仓库**：看 [SUPPORT.md](./SUPPORT.md)
 
+## Public promo / sponsor kit
+
+- [Promo kit / 推广素材](docs/public/promo-kit.md)
+- [Sponsorware roadmap / 赞助路线](docs/public/sponsorware.md)
+
 ## Promo kit / 转发文案
 
 如果你想把这个项目转到群里、论坛、周刊、awesome list 或发给朋友，直接复制下面这些就够了。

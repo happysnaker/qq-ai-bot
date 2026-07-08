@@ -19,7 +19,8 @@ services:
   qq-ai-bot:
     build:
       context: .
-    image: ghcr.io/happysnaker/qq-ai-bot:v0.1.4
+    # Use a released multi-arch image by default. Change to `latest` if you want the moving mainline tag.
+    image: ghcr.io/happysnaker/qq-ai-bot:v0.1.6
     container_name: qq-ai-bot
     restart: unless-stopped
     env_file:

@@ -8,6 +8,7 @@ For project-specific sponsorship and public roadmap targets, see:
 - [Project page](https://happysnaker.github.io/qq-ai-bot/)
 - [Support this project](https://github.com/happysnaker/qq-ai-bot/issues/28)
 - [arm64 / CasaOS validation target](https://github.com/happysnaker/qq-ai-bot/issues/26)
+- [Sponsor one-pager](https://github.com/happysnaker/happysnaker/releases/tag/v2026.07-sponsor-one-pager)
 
 Support page: <https://happysnaker.github.io/support/#from-qq-ai-bot>
 

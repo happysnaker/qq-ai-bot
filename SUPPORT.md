@@ -4,6 +4,7 @@ If `qq-ai-bot` saved you OneBot + ACP wiring time, the fastest way to support on
 
 - **Project page:** https://happysnaker.github.io/qq-ai-bot/
 - **Support page:** https://happysnaker.github.io/support/#from-qq-ai-bot
+- **Sponsor one-pager:** https://github.com/happysnaker/happysnaker/releases/tag/v2026.07-sponsor-one-pager
 - **Best payment note:** `qq-ai-bot`
 - **Current validation note:** `qq-ai-bot #26 arm64`
 - **Also works well:** `qq-ai-bot setup`

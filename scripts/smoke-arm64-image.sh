@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-IMAGE="${IMAGE:-ghcr.io/happysnaker/qq-ai-bot:v0.1.6}"
+IMAGE="${IMAGE:-ghcr.io/happysnaker/qq-ai-bot:v0.1.7}"
 CONTAINER_NAME="${CONTAINER_NAME:-qq-ai-bot-arm64-smoke}"
 PORT="${PORT:-18082}"
 PLATFORM="${PLATFORM:-linux/arm64}"

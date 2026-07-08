@@ -28,7 +28,7 @@
 - 安全反馈：[SECURITY.md](./SECURITY.md)
 - 生态收录：已进入 [OneBot 生态 / 应用案例](https://onebot.dev/ecosystem)
 - 官方社区展示：已发到 [OneBot 官方 Discussions / 应用 / SDK](https://github.com/orgs/botuniverse/discussions/264)
-- 镜像分发：`ghcr.io/happysnaker/qq-ai-bot:v0.1.6` 与 `ghcr.io/happysnaker/qq-ai-bot:latest` 已发布 `linux/amd64` 与 `linux/arm64`；见 [Deployment validation](docs/deployment-validation.md)
+- 镜像分发：`ghcr.io/happysnaker/qq-ai-bot:v0.1.7` 与 `ghcr.io/happysnaker/qq-ai-bot:latest` 已发布 `linux/amd64` 与 `linux/arm64`；见 [Deployment validation](docs/deployment-validation.md)
 - 社区入口：[Show and tell](https://github.com/happysnaker/qq-ai-bot/discussions/10) · [Deployment matrix Q&A](https://github.com/happysnaker/qq-ai-bot/discussions/11)
 - 想直接拿来改成你自己的 bot 脚手架：点 GitHub 上方的 **Use this template**
 - 技术栈：Node.js 22+、TypeScript、Docker、GitHub Actions

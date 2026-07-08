@@ -1,6 +1,6 @@
 {
   "name": "qq-ai-bot",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "private": false,
   "description": "Production-grade QQ AI bot using OneBot 11 and ACP-compatible agent bridging.",
   "type": "module",

@@ -4,7 +4,7 @@ This document records public deployment evidence without overstating what has ac
 
 ## Current image evidence
 
-`ghcr.io/happysnaker/qq-ai-bot:v0.1.6` is published as an OCI image index with these platforms:
+`ghcr.io/happysnaker/qq-ai-bot:v0.1.7` is published as an OCI image index with these platforms:
 
 - `linux/amd64`
 - `linux/arm64`
@@ -12,21 +12,10 @@ This document records public deployment evidence without overstating what has ac
 Evidence command:
 
 ```bash
-docker buildx imagetools inspect ghcr.io/happysnaker/qq-ai-bot:v0.1.6
+docker buildx imagetools inspect ghcr.io/happysnaker/qq-ai-bot:v0.1.7
 ```
 
-Observed digest:
-
-```text
-sha256:bc300affb14469e968c790c0e6da4cbb68b2c6d0e8d78c98ce66c6e350f369db
-```
-
-Observed platform manifests:
-
-```text
-linux/amd64  sha256:6d28c72ae87bd869ea86343653ddf14e0613b7e0df689f1ba21d0794614303dc
-linux/arm64  sha256:9542ea7771998184ece7732d9f610895dc1c882fc5ffec7ff01c9625e2be80bf
-```
+Use the command output as the current source of truth for digest and per-platform manifest values. Digest values can change whenever the tag is rebuilt for a new release.
 
 ## What this proves
 
@@ -65,7 +54,7 @@ If Docker is available, you can run the reusable smoke script:
 Useful overrides:
 
 ```bash
-IMAGE=ghcr.io/happysnaker/qq-ai-bot:v0.1.6 PORT=18082 ./scripts/smoke-arm64-image.sh
+IMAGE=ghcr.io/happysnaker/qq-ai-bot:v0.1.7 PORT=18082 ./scripts/smoke-arm64-image.sh
 ```
 
 The script pulls the `linux/arm64` image, starts the container, checks `/readyz`, `/status`, and `/metrics`, writes redaction-friendly artifacts under `run-logs/arm64-smoke/`, and removes the container on exit.

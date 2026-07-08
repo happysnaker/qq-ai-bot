@@ -71,7 +71,7 @@
 | 功能 | 目标金额 | 进度 | 状态 |
 |------|---------|------|------|
 | [Redis 会话持久化](https://github.com/happysnaker/qq-ai-bot/issues/24) | ¥50 | 0% | 🚧 等待赞助 |
-| [多实例部署指南](https://github.com/happysnaker/qq-ai-bot/issues/25) | ¥30 | 0% | 🚧 等待赞助 |
+| [多实例部署指南](docs/multi-instance-notes.md) | ¥30 | 100% | ✅ 已发布 |
 | [端到端延迟监控面板](https://github.com/happysnaker/qq-ai-bot/issues/23) | ¥80 | 0% | 🚧 等待赞助 |
 | [微信通知集成](https://github.com/happysnaker/qq-ai-bot/issues/new?title=feat:%20WeChat%20notification%20integration) | ¥100 | 0% | 🚧 等待赞助 |
 | [Web Dashboard (管理面板)](https://github.com/happysnaker/qq-ai-bot/issues/new?title=feat:%20Web%20admin%20dashboard) | ¥150 | 0% | 🚧 等待赞助 |
@@ -210,6 +210,7 @@ ws://127.0.0.1:16700/onebot/v11/ws
 - [Deployment matrix / 部署组合矩阵](docs/deployment-matrix.md)
 - [FAQ / 常见问题](docs/faq.md)
 - [Deployment patterns / 部署形态](docs/deployment-patterns.md)
+- [Multi-instance notes / 多实例运维说明](docs/multi-instance-notes.md)
 - [ACP Agent 接入](docs/agent-integration.md)
 - [配置说明](docs/configuration.md)
 - [macOS 接入 NapCat](docs/macos-napcat.md)

@@ -1,5 +1,8 @@
 blank_issues_enabled: false
 contact_links:
+  - name: arm64 / CasaOS install report
+    url: https://github.com/happysnaker/qq-ai-bot/issues/new?template=arm64_casaos_report.md
+    about: Share a real arm64, NAS, SBC, or CasaOS install attempt with redacted evidence.
   - name: Fastest start / FAQ
     url: https://github.com/happysnaker/qq-ai-bot/blob/main/docs/faq.md
     about: Check the quickest path, common WS/token mistakes, and agent wiring pitfalls before opening an issue.

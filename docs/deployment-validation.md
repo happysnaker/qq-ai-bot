@@ -38,6 +38,8 @@ It does **not** prove that every arm64 homelab path has been fully tested.
 
 Issue [#26](https://github.com/happysnaker/qq-ai-bot/issues/26) tracks the remaining validation work:
 
+Use the [arm64 / CasaOS install report template](../.github/ISSUE_TEMPLATE/arm64_casaos_report.md) when submitting evidence.
+
 - run the stack on a real arm64 host / NAS / SBC;
 - validate the CasaOS app-store flow;
 - document browser-first NapCat / QQ login caveats;

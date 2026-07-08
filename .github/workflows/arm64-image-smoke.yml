@@ -6,6 +6,8 @@ on:
       - Publish Docker image
     types:
       - completed
+  schedule:
+    - cron: '47 3 * * 1'
   workflow_dispatch:
     inputs:
       image:
@@ -22,7 +24,7 @@ permissions:
 
 jobs:
   smoke:
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout matching source
@@ -42,9 +44,12 @@ jobs:
             short_sha="${full_sha:0:7}"
             echo "image=ghcr.io/${{ github.repository_owner }}/qq-ai-bot:sha-${short_sha}" >> "$GITHUB_OUTPUT"
             echo "platform=linux/arm64" >> "$GITHUB_OUTPUT"
-          else
+          elif [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             echo "image=${{ inputs.image }}" >> "$GITHUB_OUTPUT"
             echo "platform=${{ inputs.platform }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "image=ghcr.io/${{ github.repository_owner }}/qq-ai-bot:latest" >> "$GITHUB_OUTPUT"
+            echo "platform=linux/arm64" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Run arm64 image smoke

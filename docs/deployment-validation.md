@@ -66,7 +66,7 @@ Do not paste raw logs into public issues without redacting tokens, account detai
 
 For public CI-style evidence, the repository also has an `Arm64 image smoke` workflow.
 
-It runs after `Publish Docker image` succeeds, resolves the matching `sha-xxxxxxx` GHCR tag, sets up QEMU on the GitHub-hosted runner, pulls the `linux/arm64` image, and runs [`scripts/smoke-arm64-image.sh`](../scripts/smoke-arm64-image.sh).
+It runs after `Publish Docker image` succeeds, resolves the matching `sha-xxxxxxx` GHCR tag, sets up QEMU on the GitHub-hosted runner, pulls the `linux/arm64` image, and runs [`scripts/smoke-arm64-image.sh`](../scripts/smoke-arm64-image.sh). It also runs weekly against the moving `latest` tag so the arm64 image path stays monitored between releases.
 
 The workflow uploads the same smoke artifacts as the local script:
 

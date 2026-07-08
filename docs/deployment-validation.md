@@ -54,6 +54,24 @@ services:
 
 This helps verify that Docker resolves the arm64 manifest, but it still does not replace a real CasaOS / arm64 host report.
 
+## Optional one-command arm64 smoke script
+
+If Docker is available, you can run the reusable smoke script:
+
+```bash
+./scripts/smoke-arm64-image.sh
+```
+
+Useful overrides:
+
+```bash
+IMAGE=ghcr.io/happysnaker/qq-ai-bot:v0.1.6 PORT=18082 ./scripts/smoke-arm64-image.sh
+```
+
+The script pulls the `linux/arm64` image, starts the container, checks `/readyz`, `/status`, and `/metrics`, writes redaction-friendly artifacts under `run-logs/arm64-smoke/`, and removes the container on exit.
+
+Do not paste raw logs into public issues without redacting tokens, account details, private chat content, or local paths.
+
 ## CasaOS / homelab status
 
 Issue [#26](https://github.com/happysnaker/qq-ai-bot/issues/26) tracks the remaining validation work:

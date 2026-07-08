@@ -72,7 +72,7 @@
 |------|---------|------|------|
 | [Redis 会话持久化](https://github.com/happysnaker/qq-ai-bot/issues/24) | ¥50 | 0% | 🚧 等待赞助 |
 | [多实例部署指南](docs/multi-instance-notes.md) | ¥30 | 100% | ✅ 已发布 |
-| [端到端延迟监控面板](https://github.com/happysnaker/qq-ai-bot/issues/23) | ¥80 | 0% | 🚧 等待赞助 |
+| [端到端延迟 histograms](https://github.com/happysnaker/qq-ai-bot/issues/23) | ¥80 | 100% | ✅ 已发布 |
 | [微信通知集成](https://github.com/happysnaker/qq-ai-bot/issues/new?title=feat:%20WeChat%20notification%20integration) | ¥100 | 0% | 🚧 等待赞助 |
 | [Web Dashboard (管理面板)](https://github.com/happysnaker/qq-ai-bot/issues/new?title=feat:%20Web%20admin%20dashboard) | ¥150 | 0% | 🚧 等待赞助 |
 
@@ -101,7 +101,7 @@
 - 处理中进度回传到 QQ
 - 入站图片下载后转给 agent
 - 对暂未自动直传的语音 / 文件 / 视频等 richer media，显式告诉 agent“当前未读到附件”，避免静默丢失
-- Prometheus 风格 `/metrics` 与 runtime counters
+- Prometheus 风格 `/metrics`、runtime counters 与 turn / agent / reply latency histograms
 - `/readyz` / `/status` 中暴露 build / version 信息
 - 可插拔 session store（默认 file，支持 Redis）
 - 轻量入站消息去重，降低 OneBot 重放导致的重复 ACP 调用

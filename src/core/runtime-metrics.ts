@@ -47,6 +47,21 @@ type CounterSnapshot = {
   errorsByKind: Map<string, number>;
 };
 
+type DurationLabels = {
+  chatType: 'private' | 'group';
+  outcome: 'ok' | 'error' | 'dropped';
+  transportMode: 'forward' | 'reverse';
+};
+
+type HistogramSeries = {
+  labels: Record<string, string>;
+  buckets: Map<number, number>;
+  count: number;
+  sum: number;
+};
+
+const DURATION_BUCKETS_SECONDS = [0.1, 0.25, 0.5, 1, 2.5, 5, 10, 30, 60] as const;
+
 export class RuntimeMetrics {
   private readonly counters: CounterSnapshot = {
     inboundMessagesTotal: 0,
@@ -60,6 +75,10 @@ export class RuntimeMetrics {
     outboundByChatType: new Map(),
     errorsByKind: new Map(),
   };
+
+  private readonly turnDuration = new Map<string, HistogramSeries>();
+  private readonly agentRoundtripDuration = new Map<string, HistogramSeries>();
+  private readonly replySendDuration = new Map<string, HistogramSeries>();
 
   recordInboundMessage(): void {
     this.counters.inboundMessagesTotal += 1;
@@ -93,6 +112,18 @@ export class RuntimeMetrics {
 
   recordError(kind: string): void {
     this.bumpMap(this.counters.errorsByKind, kind);
+  }
+
+  recordTurnDuration(seconds: number, labels: DurationLabels): void {
+    this.observeHistogram(this.turnDuration, seconds, this.toMetricLabels(labels));
+  }
+
+  recordAgentRoundtrip(seconds: number, labels: DurationLabels): void {
+    this.observeHistogram(this.agentRoundtripDuration, seconds, this.toMetricLabels(labels));
+  }
+
+  recordReplySend(seconds: number, labels: DurationLabels): void {
+    this.observeHistogram(this.replySendDuration, seconds, this.toMetricLabels(labels));
   }
 
   render(params: {
@@ -222,12 +253,101 @@ export class RuntimeMetrics {
         values: this.mapToValues(this.counters.errorsByKind, 'kind'),
       }),
     );
+    lines.push(
+      ...this.histogramLines({
+        name: 'qq_ai_bot_turn_duration_seconds',
+        help: 'End-to-end user message turn duration from receive to final reply or failure.',
+        series: this.turnDuration,
+      }),
+    );
+    lines.push(
+      ...this.histogramLines({
+        name: 'qq_ai_bot_agent_roundtrip_seconds',
+        help: 'ACP agent round-trip duration for user message prompts.',
+        series: this.agentRoundtripDuration,
+      }),
+    );
+    lines.push(
+      ...this.histogramLines({
+        name: 'qq_ai_bot_reply_send_seconds',
+        help: 'OneBot final reply send action duration.',
+        series: this.replySendDuration,
+      }),
+    );
 
     return `${lines.join('\n')}\n`;
   }
 
   private bumpMap<K>(map: Map<K, number>, key: K): void {
     map.set(key, (map.get(key) ?? 0) + 1);
+  }
+
+  private observeHistogram(
+    map: Map<string, HistogramSeries>,
+    seconds: number,
+    labels: Record<string, string>,
+  ): void {
+    const value = Number.isFinite(seconds) && seconds >= 0 ? seconds : 0;
+    const key = JSON.stringify(Object.entries(labels).sort(([left], [right]) => left.localeCompare(right)));
+    let series = map.get(key);
+    if (!series) {
+      series = {
+        labels,
+        buckets: new Map(DURATION_BUCKETS_SECONDS.map((bucket) => [bucket, 0])),
+        count: 0,
+        sum: 0,
+      };
+      map.set(key, series);
+    }
+
+    series.count += 1;
+    series.sum += value;
+    for (const bucket of DURATION_BUCKETS_SECONDS) {
+      if (value <= bucket) {
+        series.buckets.set(bucket, (series.buckets.get(bucket) ?? 0) + 1);
+      }
+    }
+  }
+
+  private histogramLines(params: {
+    name: string;
+    help: string;
+    series: Map<string, HistogramSeries>;
+  }): string[] {
+    const lines = [
+      `# HELP ${params.name} ${params.help}`,
+      `# TYPE ${params.name} histogram`,
+    ];
+
+    for (const series of [...params.series.values()].sort((left, right) =>
+      JSON.stringify(left.labels).localeCompare(JSON.stringify(right.labels)),
+    )) {
+      for (const bucket of DURATION_BUCKETS_SECONDS) {
+        lines.push(
+          `${params.name}_bucket${formatLabels({ ...series.labels, le: String(bucket) })} ${series.buckets.get(bucket) ?? 0}`,
+        );
+      }
+      lines.push(`${params.name}_bucket${formatLabels({ ...series.labels, le: '+Inf' })} ${series.count}`);
+      lines.push(`${params.name}_sum${formatLabels(series.labels)} ${this.formatNumber(series.sum)}`);
+      lines.push(`${params.name}_count${formatLabels(series.labels)} ${series.count}`);
+    }
+
+    return lines;
+  }
+
+  private toMetricLabels(labels: DurationLabels): Record<string, string> {
+    return {
+      chat_type: labels.chatType,
+      outcome: labels.outcome,
+      transport_mode: labels.transportMode,
+    };
+  }
+
+  private formatNumber(value: number): string {
+    if (Number.isInteger(value)) {
+      return String(value);
+    }
+    return String(Number(value.toFixed(6)));
   }
 
   private mapToValues<K extends string>(

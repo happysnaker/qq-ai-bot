@@ -6,7 +6,7 @@
 
 | Issue | Outcome | Why it matters | Suggested funding |
 |---|---|---|---:|
-| [#23 End-to-end latency histograms](https://github.com/happysnaker/qq-ai-bot/issues/23) | measure receive → agent → reply latency | helps operators debug slow QQ / OneBot / ACP turns | ¥80 |
+| [#23 End-to-end latency histograms](https://github.com/happysnaker/qq-ai-bot/issues/23) | **completed**: measure receive → agent → reply latency | helps operators debug slow QQ / OneBot / ACP turns | shipped |
 | [#24 Postgres session store](https://github.com/happysnaker/qq-ai-bot/issues/24) | add another external session persistence option | useful for operators already standardizing on Postgres | ¥50 |
 | [#26 arm64 / CasaOS deployment validation](https://github.com/happysnaker/qq-ai-bot/issues/26) | validate real deployment path beyond x86 local runs | helps homelab / CasaOS users know what is actually tested | ¥50 |
 
@@ -49,6 +49,7 @@ Sponsorship does not mean:
 
 ## Completed sponsorware-style work
 
+- End-to-end turn / agent / reply latency histograms are implemented for [#23](https://github.com/happysnaker/qq-ai-bot/issues/23).
 - Multi-instance / Redis operator notes are now published in [docs/multi-instance-notes.md](../multi-instance-notes.md).
 - README links the published multi-instance guide from the sponsorware table.
 - Open sponsorware issues are labeled with `sponsorship`.

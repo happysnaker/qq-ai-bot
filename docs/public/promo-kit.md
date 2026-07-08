@@ -78,7 +78,6 @@ That honesty matters for bot infra.
 `qq-ai-bot` is free and open source.
 
 Sponsorware candidates now open:
-- end-to-end latency histograms
 - Postgres session store
 - deployment validation paths
 - more public demo assets
@@ -116,7 +115,7 @@ That is the kind of honesty I want in this repo: useful defaults, clear boundari
 ## Sponsor CTA options
 
 - If this saves you OneBot / ACP wiring time, sponsor the maintenance work.
-- Support the next operator-facing features: latency histograms, Postgres session store, and deployment validation.
+- Support the next operator-facing features: Postgres session store, deployment validation, and public demo assets.
 - The project is free; sponsorship funds the boring but useful packaging work that makes it safer to run.
 
 Support page: <https://happysnaker.github.io/support/#from-qq-ai-bot>

@@ -165,6 +165,7 @@ export class BotApplication {
     if (!event) {
       return;
     }
+    const turnStartedAt = Date.now();
     const correlationId = deriveInboundCorrelationId(event);
     const eventLogger = this.logger.child({
       correlationId,
@@ -197,6 +198,7 @@ export class BotApplication {
         },
         'skip duplicate inbound onebot event',
       );
+      this.recordTurnDurationSince(turnStartedAt, event, 'dropped');
       return;
     }
 
@@ -204,6 +206,7 @@ export class BotApplication {
 
     if (event.isSelfMessage) {
       eventLogger.debug('skip self message');
+      this.recordTurnDurationSince(turnStartedAt, event, 'dropped');
       return;
     }
 
@@ -214,6 +217,7 @@ export class BotApplication {
         },
         'skip inbound event by policy',
       );
+      this.recordTurnDurationSince(turnStartedAt, event, 'dropped');
       return;
     }
 
@@ -389,6 +393,8 @@ export class BotApplication {
     correlationId: string,
     eventLogger: Logger,
   ): Promise<void> {
+    const turnStartedAt = Date.now();
+    let turnOutcome: 'ok' | 'error' = 'error';
     this.metrics.recordProcessedMessage('user_message');
     const conversationKey = conversationKeyOf(event);
     const policy = this.resolveConversationPolicy(event);
@@ -430,6 +436,9 @@ export class BotApplication {
       'processing user message',
     );
 
+    let agentStartedAt: number | null = null;
+    let agentOutcomeRecorded = false;
+
     try {
       await progressReporter.start();
       const images = await downloadInboundImages({
@@ -438,6 +447,7 @@ export class BotApplication {
         maxBytes: this.config.ai.maxInboundImageBytes,
         logger: this.logger.child({ component: 'image-downloader', conversationKey, correlationId }),
       });
+      agentStartedAt = Date.now();
       const response = await runtime.bridge.sendPrompt({
         text: event.cleanedText,
         images,
@@ -450,19 +460,37 @@ export class BotApplication {
           progressReporter.update(state);
         },
       });
+      this.metrics.recordAgentRoundtrip(this.durationSecondsSince(agentStartedAt), {
+        ...this.durationMetricLabels(event),
+        outcome: 'ok',
+      });
+      agentOutcomeRecorded = true;
       progressReporter.stop();
 
       const replyText = this.decorateStopReason(response.text, response.stopReason);
-      await this.gateway.sendPayload(
-        {
-          ...replyContext,
-          purpose: 'reply',
-        },
-        {
-          text: replyText,
-          mediaImages: response.images.map((image) => this.toOutboundImage(image)),
-        },
-      );
+      const replyStartedAt = Date.now();
+      try {
+        await this.gateway.sendPayload(
+          {
+            ...replyContext,
+            purpose: 'reply',
+          },
+          {
+            text: replyText,
+            mediaImages: response.images.map((image) => this.toOutboundImage(image)),
+          },
+        );
+        this.metrics.recordReplySend(this.durationSecondsSince(replyStartedAt), {
+          ...this.durationMetricLabels(event),
+          outcome: 'ok',
+        });
+      } catch (error) {
+        this.metrics.recordReplySend(this.durationSecondsSince(replyStartedAt), {
+          ...this.durationMetricLabels(event),
+          outcome: 'error',
+        });
+        throw error;
+      }
       eventLogger.info(
         {
           conversationKey,
@@ -475,8 +503,15 @@ export class BotApplication {
       );
       runtime.lastActivityAt = Date.now();
       await this.conversations.persistRuntime(runtime);
+      turnOutcome = 'ok';
     } catch (error) {
       progressReporter.stop();
+      if (agentStartedAt !== null && !agentOutcomeRecorded) {
+        this.metrics.recordAgentRoundtrip(this.durationSecondsSince(agentStartedAt), {
+          ...this.durationMetricLabels(event),
+          outcome: 'error',
+        });
+      }
       this.metrics.recordError('message_processing');
       eventLogger.error(
         {
@@ -485,14 +520,57 @@ export class BotApplication {
         },
         'failed to process incoming message',
       );
-      await this.gateway.sendText(
-        {
-          ...replyContext,
-          purpose: 'error',
-        },
-        this.formatUserFacingError(error),
-      );
+      const errorReplyStartedAt = Date.now();
+      try {
+        await this.gateway.sendText(
+          {
+            ...replyContext,
+            purpose: 'error',
+          },
+          this.formatUserFacingError(error),
+        );
+        this.metrics.recordReplySend(this.durationSecondsSince(errorReplyStartedAt), {
+          ...this.durationMetricLabels(event),
+          outcome: 'error',
+        });
+      } catch (replyError) {
+        this.metrics.recordReplySend(this.durationSecondsSince(errorReplyStartedAt), {
+          ...this.durationMetricLabels(event),
+          outcome: 'error',
+        });
+        throw replyError;
+      }
+    } finally {
+      this.metrics.recordTurnDuration(this.durationSecondsSince(turnStartedAt), {
+        ...this.durationMetricLabels(event),
+        outcome: turnOutcome,
+      });
     }
+  }
+
+  private recordTurnDurationSince(
+    startedAt: number,
+    event: NormalizedOneBotEvent,
+    outcome: 'ok' | 'error' | 'dropped',
+  ): void {
+    this.metrics.recordTurnDuration(this.durationSecondsSince(startedAt), {
+      ...this.durationMetricLabels(event),
+      outcome,
+    });
+  }
+
+  private durationMetricLabels(event: NormalizedOneBotEvent): {
+    chatType: 'private' | 'group';
+    transportMode: 'forward' | 'reverse';
+  } {
+    return {
+      chatType: event.mode === 'direct' ? 'private' : 'group',
+      transportMode: this.config.onebot.mode,
+    };
+  }
+
+  private durationSecondsSince(startedAt: number): number {
+    return (Date.now() - startedAt) / 1000;
   }
 
   private buildReplyContext(

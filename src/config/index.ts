@@ -35,12 +35,14 @@ export interface AppConfig {
     port: number;
   };
   storage: {
-    sessionStore: 'file' | 'redis';
+    sessionStore: 'file' | 'redis' | 'postgres';
     dataDir: string;
     sessionFilePath: string;
     sessionTtlMs: number;
     redisUrl?: string;
     redisKeyPrefix: string;
+    postgresUrl?: string;
+    postgresTable: string;
   };
   onebot: {
     mode: 'forward' | 'reverse';
@@ -153,7 +155,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
   const defaultSystemPrompt =
     normalizeOptionalText(env.ACP_DEFAULT_SYSTEM_PROMPT) ?? groupPolicyFile.defaultSystemPrompt;
   const commandPrefix = normalizeOptionalText(env.ONEBOT_COMMAND_PREFIX) || '/';
-  const sessionStore = z.enum(['file', 'redis']).parse(env.SESSION_STORE || 'file');
+  const sessionStore = z.enum(['file', 'redis', 'postgres']).parse(env.SESSION_STORE || 'file');
 
   return {
     server: {
@@ -167,6 +169,8 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
       sessionTtlMs: parseNumber(env.SESSION_TTL_MINUTES, 120) * 60 * 1000,
       redisUrl: normalizeOptionalText(env.REDIS_URL),
       redisKeyPrefix: normalizeOptionalText(env.REDIS_KEY_PREFIX) || 'qq-ai-bot',
+      postgresUrl: normalizeOptionalText(env.POSTGRES_URL),
+      postgresTable: normalizeOptionalText(env.POSTGRES_TABLE) || 'qq_ai_bot_sessions',
     },
     onebot: {
       mode: oneBotModeSchema.parse(env.ONEBOT_MODE || 'reverse'),

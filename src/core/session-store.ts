@@ -1,6 +1,6 @@
 import type { PersistedConversationState } from '../types/session.js';
 
-export type SessionStoreKind = 'file' | 'redis';
+export type SessionStoreKind = 'file' | 'redis' | 'postgres';
 
 export interface SessionStore {
   readonly kind: SessionStoreKind;

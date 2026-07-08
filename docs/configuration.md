@@ -14,11 +14,13 @@
 | `BOT_PORT` | HTTP 服务端口 |
 | `LOG_LEVEL` | 日志级别 |
 | `DATA_DIR` | 数据目录 |
-| `SESSION_STORE` | `file` 或 `redis` |
+| `SESSION_STORE` | `file`、`redis` 或 `postgres` |
 | `SESSION_FILE_PATH` | 会话持久化文件路径 |
 | `SESSION_TTL_MINUTES` | 会话过期时间 |
 | `REDIS_URL` | `SESSION_STORE=redis` 时的 Redis 连接串 |
 | `REDIS_KEY_PREFIX` | Redis key 前缀 |
+| `POSTGRES_URL` | `SESSION_STORE=postgres` 时的 Postgres 连接串 |
+| `POSTGRES_TABLE` | Postgres session 表名，默认 `qq_ai_bot_sessions` |
 | `APP_GIT_COMMIT` | 可选，当前运行版本对应的 git commit |
 | `APP_BUILD_REF` | 可选，构建标识、镜像 tag 或部署版本号 |
 
@@ -88,10 +90,11 @@ ACP_AGENT_ARGS_JSON=["acp","serve"]
 
 ## Session Store
 
-现在支持两种 session store：
+现在支持三种 session store：
 
 - `SESSION_STORE=file`：默认值，适合单机 / 单容器路径
 - `SESSION_STORE=redis`：适合多实例、长运行容器和外部存储
+- `SESSION_STORE=postgres`：适合已有 Postgres、希望更偏持久化 / 查询友好的部署
 
 ### File store
 
@@ -122,6 +125,26 @@ SESSION_TTL_MINUTES=120
 - `REDIS_KEY_PREFIX` 用来隔离不同环境，例如 `qq-ai-bot-prod` / `qq-ai-bot-dev`
 
 如果你已经准备做多实例部署，Redis store 会比本地 JSON 文件更像生产形态。
+
+### Postgres store
+
+最小配置：
+
+```env
+SESSION_STORE=postgres
+POSTGRES_URL=postgres://user:password@127.0.0.1:5432/qq_ai_bot
+POSTGRES_TABLE=qq_ai_bot_sessions
+SESSION_TTL_MINUTES=120
+```
+
+说明：
+
+- bot 会自动创建一张简单 session 表和 `expires_at` 索引
+- `POSTGRES_TABLE` 只允许简单 SQL identifier，避免把任意 SQL 拼进表名
+- 每条记录包含 `conversation_key`、`payload_json`、`updated_at`、`expires_at`
+- `clearExpired` 会删除过期记录并返回被删除的 conversation key
+- 如果你已经有可靠的 Postgres 备份 / 监控，Postgres store 会比本地 JSON 文件更适合长期持久化
+- 如果你只想最短路径跑多实例，Redis store 仍然更轻；如果你想要后续审计 / 查询能力，Postgres store 更合适
 
 ## 分群配置文件
 

@@ -70,7 +70,7 @@
 
 | 功能 | 目标金额 | 进度 | 状态 |
 |------|---------|------|------|
-| [Redis 会话持久化](https://github.com/happysnaker/qq-ai-bot/issues/24) | ¥50 | 0% | 🚧 等待赞助 |
+| [Postgres session store](https://github.com/happysnaker/qq-ai-bot/issues/24) | ¥50 | 100% | ✅ 已发布 |
 | [多实例部署指南](docs/multi-instance-notes.md) | ¥30 | 100% | ✅ 已发布 |
 | [端到端延迟 histograms](https://github.com/happysnaker/qq-ai-bot/issues/23) | ¥80 | 100% | ✅ 已发布 |
 | [微信通知集成](https://github.com/happysnaker/qq-ai-bot/issues/new?title=feat:%20WeChat%20notification%20integration) | ¥100 | 0% | 🚧 等待赞助 |
@@ -255,8 +255,8 @@ ws://127.0.0.1:16700/onebot/v11/ws
 
 当前已经挂出的可认领入口：
 
-- [#23 enhancement: add end-to-end turn latency histograms for receive → agent → reply](https://github.com/happysnaker/qq-ai-bot/issues/23) — 对应 tracing / deeper observability
-- [#24 enhancement: add Postgres session store as another external persistence option](https://github.com/happysnaker/qq-ai-bot/issues/24) — 对应更多外部 session store
+- [#23 enhancement: add end-to-end turn latency histograms for receive → agent → reply](https://github.com/happysnaker/qq-ai-bot/issues/23) — 已在 v0.1.5 发布
+- [#24 enhancement: add Postgres session store as another external persistence option](https://github.com/happysnaker/qq-ai-bot/issues/24) — 已在 v0.1.6 发布
 - [#25 documentation: add multi-instance deployment notes and operator caveats](https://github.com/happysnaker/qq-ai-bot/issues/25) — 对应多实例部署经验和运维文档
 
 如果你准备提 PR，建议先看 [CONTRIBUTING.md](./CONTRIBUTING.md)。

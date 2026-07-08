@@ -93,7 +93,7 @@ QQ / OneBot 11
       ↓
   qq-ai-bot
       ↓
- Redis session store
+ Redis / Postgres session store
       ↓
  ACP-compatible agents
 ```
@@ -112,7 +112,12 @@ QQ / OneBot 11
 - 长运行容器
 - 不想把 session 只写本地 JSON
 
-那就可以把 session store 从 `file` 切到 `redis`。
+那就可以把 session store 从 `file` 切到外部存储：
+
+- `redis`：最短路径的多实例共享会话状态
+- `postgres`：更偏长期持久化、备份、查询和后续审计能力
+
+如果你已经有可靠的 Postgres，或者希望 session 记录更容易查询，`SESSION_STORE=postgres` 会比本地 JSON 更合适；如果你只是想轻量地让多个 bot 实例共享状态，Redis 仍然是更短路径。
 
 对应说明：
 

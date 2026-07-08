@@ -93,6 +93,21 @@ describe('loadConfig', () => {
     expect(config.storage.sessionTtlMs).toBe(30 * 60 * 1000);
   });
 
+
+  it('supports postgres session store config', () => {
+    const config = loadConfig({
+      SESSION_STORE: 'postgres',
+      POSTGRES_URL: 'postgres://user:pass@127.0.0.1:5432/qq_ai_bot',
+      POSTGRES_TABLE: 'custom_sessions',
+      SESSION_TTL_MINUTES: '45',
+    });
+
+    expect(config.storage.sessionStore).toBe('postgres');
+    expect(config.storage.postgresUrl).toBe('postgres://user:pass@127.0.0.1:5432/qq_ai_bot');
+    expect(config.storage.postgresTable).toBe('custom_sessions');
+    expect(config.storage.sessionTtlMs).toBe(45 * 60 * 1000);
+  });
+
   it('supports inbound dedupe tuning config', () => {
     const config = loadConfig({
       ONEBOT_INBOUND_DEDUPE_WINDOW_MS: '45000',

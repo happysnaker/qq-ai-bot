@@ -74,6 +74,7 @@
 | [Postgres session store](https://github.com/happysnaker/qq-ai-bot/issues/24) | ¥50 | 100% | ✅ 已发布 |
 | [多实例部署指南](docs/multi-instance-notes.md) | ¥30 | 100% | ✅ 已发布 |
 | [端到端延迟 histograms](https://github.com/happysnaker/qq-ai-bot/issues/23) | ¥80 | 100% | ✅ 已发布 |
+| [arm64 / CasaOS 真实安装报告](https://github.com/happysnaker/qq-ai-bot/issues/26) | ¥50 | 80% | 🧪 QEMU smoke 已过，等真机报告 |
 | [微信通知集成](https://github.com/happysnaker/qq-ai-bot/issues/new?title=feat:%20WeChat%20notification%20integration) | ¥100 | 0% | 🚧 等待赞助 |
 | [Web Dashboard (管理面板)](https://github.com/happysnaker/qq-ai-bot/issues/new?title=feat:%20Web%20admin%20dashboard) | ¥150 | 0% | 🚧 等待赞助 |
 
@@ -282,6 +283,7 @@ ws://127.0.0.1:16700/onebot/v11/ws
 - **ACP 协议社区技术讨论**：看 [ACP question from a OneBot/QQ client: recommended richer-media boundary for channel clients?](https://github.com/orgs/agentclientprotocol/discussions/1591)
 - **ACP 官方 clients 文档收录（已合并）**：看 [agentclientprotocol/agent-client-protocol#1592](https://github.com/agentclientprotocol/agent-client-protocol/pull/1592)
 - **具体可认领任务**：看 [`help wanted` issues](https://github.com/happysnaker/qq-ai-bot/issues?q=is%3Aopen+label%3A%22help+wanted%22)
+- **arm64 / CasaOS 测试招募**：看 [Call for testers](https://github.com/happysnaker/qq-ai-bot/discussions/43) 与 [#26](https://github.com/happysnaker/qq-ai-bot/issues/26)
 - **直接支持仓库**：看 [SUPPORT.md](./SUPPORT.md)
 
 ## Public promo / sponsor kit

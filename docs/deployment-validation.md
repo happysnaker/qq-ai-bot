@@ -34,6 +34,26 @@ This proves that the public GHCR image tag has both amd64 and arm64 image manife
 
 It does **not** prove that every arm64 homelab path has been fully tested.
 
+
+## Optional arm64 Docker Compose override
+
+For an explicit arm64 image pull in the demo stack, use the override file:
+
+```bash
+docker compose -f docker-compose.demo.yml -f docker-compose.arm64.yml config
+docker compose -f docker-compose.demo.yml -f docker-compose.arm64.yml up -d
+```
+
+The override sets:
+
+```yaml
+services:
+  qq-ai-bot:
+    platform: linux/arm64
+```
+
+This helps verify that Docker resolves the arm64 manifest, but it still does not replace a real CasaOS / arm64 host report.
+
 ## CasaOS / homelab status
 
 Issue [#26](https://github.com/happysnaker/qq-ai-bot/issues/26) tracks the remaining validation work:

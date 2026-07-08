@@ -210,7 +210,7 @@ ws://127.0.0.1:16700/onebot/v11/ws
 - [Deployment matrix / 部署组合矩阵](docs/deployment-matrix.md)
 - [FAQ / 常见问题](docs/faq.md)
 - [Deployment patterns / 部署形态](docs/deployment-patterns.md)
-- [Deployment validation / 部署验证](docs/deployment-validation.md)
+- [Deployment validation / 部署验证](docs/deployment-validation.md)（含 `docker-compose.arm64.yml` override）
 - [Multi-instance notes / 多实例运维说明](docs/multi-instance-notes.md)
 - [ACP Agent 接入](docs/agent-integration.md)
 - [配置说明](docs/configuration.md)

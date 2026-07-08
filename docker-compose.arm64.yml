@@ -1,0 +1,10 @@
+# Optional override for arm64 validation.
+# Usage:
+#   docker compose -f docker-compose.demo.yml -f docker-compose.arm64.yml up -d
+#
+# This forces the qq-ai-bot service to use the linux/arm64 image manifest.
+# It does not prove CasaOS-specific behavior by itself; use it as part of an
+# arm64 / NAS / SBC validation report.
+services:
+  qq-ai-bot:
+    platform: linux/arm64

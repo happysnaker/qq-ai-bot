@@ -15,6 +15,9 @@ contact_links:
   - name: Ideas / roadmap discussion
     url: https://github.com/happysnaker/qq-ai-bot/discussions/categories/ideas
     about: Propose features like Redis session store, metrics, richer media, or new operational tooling.
+  - name: qq-ai-bot project page
+    url: https://happysnaker.github.io/qq-ai-bot/
+    about: Read the public proof ladder, deployment evidence, and promo pack.
   - name: Support / direct feedback
     url: https://happysnaker.github.io/support/#from-qq-ai-bot
-    about: Support qq-ai-bot or ask for async bot / README / packaging feedback.
+    about: Support qq-ai-bot, especially the #26 arm64 / CasaOS validation target, or ask for async bot / README / packaging feedback.

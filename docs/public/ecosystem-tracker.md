@@ -16,6 +16,7 @@
 | Docker Compose sample | open | [docker/awesome-compose#781](https://github.com/docker/awesome-compose/pull/781) | DCO passed; review required; arm64 smoke evidence posted; PR body links project page; rechecked 2026-07-09 | check review weekly |
 | CasaOS app-store path | open | [CasaOS-AppStore-Play#42](https://github.com/Cp0204/CasaOS-AppStore-Play/pull/42) | app-store PR open; arm64 smoke evidence posted; PR body links project page; rechecked 2026-07-09; real CasaOS host report still needed | check review weekly |
 | Umbrel app-store path | open | [umbrel-apps#5834](https://github.com/getumbrel/umbrel-apps/pull/5834) | lint passed; v0.1.7 + arm64 smoke evidence posted; rechecked 2026-07-09, no maintainer feedback | check review weekly |
+| AwesomeHomelab listing | open | [AwesomeHomelab#98](https://github.com/AwesomeHomelab/awesome-homelab/pull/98) | homelab-facing AI listing PR open / mergeable; project page already linked in PR body | check review weekly |
 | ARM/CasaOS tester call | open | [discussion #43](https://github.com/happysnaker/qq-ai-bot/discussions/43) | asks for physical ARM / CasaOS install reports; rechecked 2026-07-09, no reports yet | check for reports weekly |
 | Sponsorware roadmap | open | [discussion #30](https://github.com/happysnaker/qq-ai-bot/discussions/30) | central sponsorware and promo-kit discussion | update after shipped slices |
 

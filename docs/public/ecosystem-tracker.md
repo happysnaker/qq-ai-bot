@@ -34,10 +34,10 @@
 - Sponsorware roadmap: [sponsorware.md](sponsorware.md)
 - Deployment validation: [deployment-validation.md](../deployment-validation.md)
 - Latest release: [v0.1.7](https://github.com/happysnaker/qq-ai-bot/releases/tag/v0.1.7)
-- Latest ecosystem refresh CI: <https://github.com/happysnaker/qq-ai-bot/actions/runs/28995706874>
-- Latest ecosystem refresh CodeQL: <https://github.com/happysnaker/qq-ai-bot/actions/runs/28995706872>
-- Latest ecosystem refresh Docker publish: <https://github.com/happysnaker/qq-ai-bot/actions/runs/28995706911>
-- Latest ecosystem refresh arm64 smoke: <https://github.com/happysnaker/qq-ai-bot/actions/runs/28995792511>
+- Promotion-outcome refresh CI: <https://github.com/happysnaker/qq-ai-bot/actions/runs/28997968153>
+- Promotion-outcome refresh CodeQL: <https://github.com/happysnaker/qq-ai-bot/actions/runs/28997968111>
+- Promotion-outcome refresh Docker publish: <https://github.com/happysnaker/qq-ai-bot/actions/runs/28997968169>
+- Promotion-outcome refresh arm64 smoke: <https://github.com/happysnaker/qq-ai-bot/actions/runs/28998479074>
 - Tag arm64 QEMU smoke: <https://github.com/happysnaker/qq-ai-bot/actions/runs/28968114761>
 
 ## Follow-up checklist

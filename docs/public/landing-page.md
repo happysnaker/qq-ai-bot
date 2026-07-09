@@ -44,7 +44,10 @@ Open these in order if you only have a few minutes:
 - OneBot community discussion: <https://github.com/orgs/botuniverse/discussions/264>
 - ACP clients docs PR merged: <https://github.com/agentclientprotocol/agent-client-protocol/pull/1592>
 - NapCat docs integration merged: <https://github.com/NapNeko/NapCatDocs/pull/132>
+- NapCat Docker compose template merged: <https://github.com/NapNeko/NapCat-Docker/pull/132>
+- ACP community awesome list merged: <https://github.com/nMaroulis/awesome-agent-client-protocol/pull/2>
 - LLOneBot docs PR active: <https://github.com/LLOneBot/LuckyLilliaDoc/pull/20>
+- LLOneBot Nix integration PR active: <https://github.com/LLOneBot/llonebot.nix/pull/22>
 - Docker Compose sample PR active: <https://github.com/docker/awesome-compose/pull/781>
 - CasaOS app-store PR active: <https://github.com/Cp0204/CasaOS-AppStore-Play/pull/42>
 

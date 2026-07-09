@@ -8,11 +8,13 @@
 |---|---|---|---|---|
 | OneBot ecosystem | listed | [onebot.dev/ecosystem](https://onebot.dev/ecosystem) | protocol-native ecosystem placement | monitor for broken link monthly |
 | OneBot community discussion | submitted | [botuniverse discussion #264](https://github.com/orgs/botuniverse/discussions/264) | official community showcase | monitor comments monthly |
+| OneBot homepage application case | merged | [botuniverse/homepage#93](https://github.com/botuniverse/homepage/pull/93) | OneBot homepage application-cases list includes `qq-ai-bot` | no action |
 | ACP clients docs | merged | [agentclientprotocol#1592](https://github.com/agentclientprotocol/agent-client-protocol/pull/1592) | official ACP clients docs now include `qq-ai-bot` | no action |
 | NapCat docs | merged | [NapCatDocs#132](https://github.com/NapNeko/NapCatDocs/pull/132) | NapCat community / integration docs include `qq-ai-bot` | no action |
 | NapCat Docker template | merged | [NapCat-Docker#132](https://github.com/NapNeko/NapCat-Docker/pull/132) | runnable NapCat + `qq-ai-bot` compose template merged into NapCat Docker templates | no action |
 | ACP community awesome list | merged | [awesome-agent-client-protocol#2](https://github.com/nMaroulis/awesome-agent-client-protocol/pull/2) | community ACP list includes `qq-ai-bot` as a local/open-source agent bridge | no action |
 | NapCat community discussion | submitted | [NapCatQQ discussion #1942](https://github.com/NapNeko/NapCatQQ/discussions/1942) | NapCat user-facing showcase | monitor comments monthly |
+| NapCatQQ README recommendation | closed / no-plan | [NapCatQQ#1941](https://github.com/NapNeko/NapCatQQ/pull/1941) | build succeeded, but maintainer said there is no current plan to add more recommendations | no action |
 | LLOneBot docs | open | [LuckyLilliaDoc#20](https://github.com/LLOneBot/LuckyLilliaDoc/pull/20) | Sourcery suggestions addressed; PR body links project page; rechecked 2026-07-09, no maintainer feedback | check review weekly |
 | LLOneBot Nix example | open | [llonebot.nix#22](https://github.com/LLOneBot/llonebot.nix/pull/22) | optional LLOneBot + `qq-ai-bot` integration example; Sourcery security comment prompted TLS wording / placeholder cleanup; no maintainer feedback yet | check review weekly |
 | LLOneBot community discussion | submitted | [LuckyLilliaBot discussion #796](https://github.com/LLOneBot/LuckyLilliaBot/discussions/796) | LLOneBot user-facing showcase | monitor comments monthly |

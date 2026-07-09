@@ -41,10 +41,12 @@ Open these in order if you only have a few minutes:
 - Tag Docker publish: <https://github.com/happysnaker/qq-ai-bot/actions/runs/28968030324>
 - Tag arm64 QEMU smoke: <https://github.com/happysnaker/qq-ai-bot/actions/runs/28968114761>
 - OneBot ecosystem listing: <https://onebot.dev/ecosystem>
+- OneBot homepage application case merged: <https://github.com/botuniverse/homepage/pull/93>
 - OneBot community discussion: <https://github.com/orgs/botuniverse/discussions/264>
 - ACP clients docs PR merged: <https://github.com/agentclientprotocol/agent-client-protocol/pull/1592>
 - NapCat docs integration merged: <https://github.com/NapNeko/NapCatDocs/pull/132>
 - NapCat Docker compose template merged: <https://github.com/NapNeko/NapCat-Docker/pull/132>
+- NapCatQQ README recommendation closed / no-plan: <https://github.com/NapNeko/NapCatQQ/pull/1941>
 - ACP community awesome list merged: <https://github.com/nMaroulis/awesome-agent-client-protocol/pull/2>
 - LLOneBot docs PR active: <https://github.com/LLOneBot/LuckyLilliaDoc/pull/20>
 - LLOneBot Nix integration PR active: <https://github.com/LLOneBot/llonebot.nix/pull/22>

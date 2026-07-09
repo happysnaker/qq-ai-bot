@@ -274,8 +274,10 @@ ws://127.0.0.1:16700/onebot/v11/ws
 - **Deployment matrix / 已验证组合**：看 [Q&A: which NapCat / LLOneBot + WS + ACP combinations have you actually run?](https://github.com/happysnaker/qq-ai-bot/discussions/11)
 - **Feature / roadmap ideas**：用 [Ideas discussions](https://github.com/happysnaker/qq-ai-bot/discussions/categories/ideas)
 - **Show and tell / 真实部署展示**：看 [share your qq-ai-bot deployment, stack, or screenshots](https://github.com/happysnaker/qq-ai-bot/discussions/10)
+- **OneBot 官网应用案例（已合并）**：看 [botuniverse/homepage#93](https://github.com/botuniverse/homepage/pull/93)
 - **OneBot 官方社区展示贴**：看 [OneBot / 应用 / SDK：分享一个基于 OneBot 11 / NapCat / LLOneBot 的 QQ ↔ AI 自托管脚手架](https://github.com/orgs/botuniverse/discussions/264)
 - **NapCat 社区展示贴**：看 [NapCatQQ Show and tell: 做了个基于 NapCat / OneBot 11 的 QQ ↔ AI 自托管脚手架](https://github.com/NapNeko/NapCatQQ/discussions/1942)
+- **NapCatQQ README 推荐尝试（已关闭）**：看 [NapCatQQ#1941](https://github.com/NapNeko/NapCatQQ/pull/1941)；这条不算收录，只作为透明跟踪记录
 - **NapCat 社区文档接入说明**：看 [NapCat community resources / integration docs 中的 qq-ai-bot 接入条目](https://github.com/NapNeko/NapCatDocs/pull/132)
 - **NapCat Docker 模板（已合并）**：看 [NapCat-Docker#132](https://github.com/NapNeko/NapCat-Docker/pull/132)
 - **ACP 社区 awesome list（已合并）**：看 [awesome-agent-client-protocol#2](https://github.com/nMaroulis/awesome-agent-client-protocol/pull/2)

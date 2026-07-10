@@ -44,6 +44,7 @@ It is positioned as bot infrastructure / integration glue, not a toy chat UI.
 - Deployment patterns: <https://github.com/happysnaker/qq-ai-bot/blob/main/docs/deployment-patterns.md>
 - Multi-instance notes: <https://github.com/happysnaker/qq-ai-bot/blob/main/docs/multi-instance-notes.md>
 - Support: <https://happysnaker.github.io/support/#from-qq-ai-bot>
+- Homelab / CasaOS outreach kit: <https://github.com/happysnaker/qq-ai-bot/blob/main/docs/public/homelab-outreach-kit.md>
 - Sponsorware discussion: <https://github.com/happysnaker/qq-ai-bot/discussions/30>
 
 ## X post drafts
@@ -165,6 +166,10 @@ If the project is still too young for this list, I am fine leaving this open or 
 - Do not describe closed/deferred PRs as listings.
 - Do not paste QQ account details, screenshots, tokens, group IDs, or private deployment logs.
 - Do not bump the same PR repeatedly without new evidence.
+
+## Homelab / CasaOS outreach
+
+Use [homelab-outreach-kit.md](homelab-outreach-kit.md) when posting to CasaOS, NAS, SBC, Docker, or homelab communities. It keeps the ask honest: QEMU smoke is green, but a real physical ARM / CasaOS report is still missing.
 
 ## Sponsor CTA options
 

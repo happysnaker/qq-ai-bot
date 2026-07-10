@@ -34,6 +34,7 @@ Open these in order if you only have a few minutes:
 | 6 | [Sponsorware roadmap](sponsorware.md) | current operator-facing funding target is explicit |
 | 7 | [Ecosystem tracker](ecosystem-tracker.md) | public OneBot / NapCat / LLOneBot / Docker / CasaOS / Umbrel surfaces are tracked |
 | 8 | [arm64 / CasaOS tester pack](arm64-casaos-tester-pack.md) | gives physical-host testers one public-safe checklist for closing #26 |
+| 9 | [Homelab outreach kit](homelab-outreach-kit.md) | gives CasaOS / NAS / SBC communities copy-ready validation asks without over-claiming |
 
 ## Current public evidence
 
@@ -68,7 +69,7 @@ What is still open:
 - real NAS / SBC / homelab install report;
 - operator-submitted logs through the [arm64 / CasaOS report template](../../.github/ISSUE_TEMPLATE/arm64_casaos_report.md).
 
-Tracked in [qq-ai-bot#26](https://github.com/happysnaker/qq-ai-bot/issues/26). Testers should start with the [arm64 / CasaOS tester pack](arm64-casaos-tester-pack.md).
+Tracked in [qq-ai-bot#26](https://github.com/happysnaker/qq-ai-bot/issues/26). Testers should start with the [arm64 / CasaOS tester pack](arm64-casaos-tester-pack.md). Community posts can use the [homelab outreach kit](homelab-outreach-kit.md).
 
 ## Reviewer quick path
 

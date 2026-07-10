@@ -24,7 +24,7 @@
 | AwesomeHomelab listing | open | [AwesomeHomelab#98](https://github.com/AwesomeHomelab/awesome-homelab/pull/98) | homelab-facing AI listing PR open / mergeable; project page already linked in PR body; rechecked 2026-07-09, no maintainer feedback | check review weekly |
 | Haxxnet Compose example | closed / deferred | [Compose-Examples#137](https://github.com/Haxxnet/Compose-Examples/pull/137) | closed by maintainer as “too young project”; useful signal for maturity threshold, not a listing | reconsider after more releases / age |
 | awesome-selfhosted listing | closed / rule-deferred | [awesome-selfhosted-data#2668](https://github.com/awesome-selfhosted/awesome-selfhosted-data/issues/2668) | intentionally opened as an early parking issue; closed as not planned because first release is not older than 4 months | reconsider after 2026-11-02 |
-| ARM/CasaOS tester call | open | [discussion #43](https://github.com/happysnaker/qq-ai-bot/discussions/43) / [tester pack](arm64-casaos-tester-pack.md) | asks for physical ARM / CasaOS install reports; tester pack published 2026-07-10; no reports yet | check for reports weekly |
+| ARM/CasaOS tester call | open | [discussion #43](https://github.com/happysnaker/qq-ai-bot/discussions/43) / [tester pack](arm64-casaos-tester-pack.md) / [outreach kit](homelab-outreach-kit.md) | asks for physical ARM / CasaOS install reports; tester pack and outreach kit published 2026-07-10; no reports yet | check for reports weekly |
 | Sponsorware roadmap | open | [discussion #30](https://github.com/happysnaker/qq-ai-bot/discussions/30) | central sponsorware and promo-kit discussion | update after shipped slices |
 
 ## Current proof assets
@@ -33,6 +33,7 @@
 - Promo kit: [promo-kit.md](promo-kit.md)
 - Sponsorware roadmap: [sponsorware.md](sponsorware.md)
 - Deployment validation: [deployment-validation.md](../deployment-validation.md)
+- Homelab / CasaOS outreach kit: [homelab-outreach-kit.md](homelab-outreach-kit.md)
 - Latest release: [v0.1.7](https://github.com/happysnaker/qq-ai-bot/releases/tag/v0.1.7)
 - Promotion-outcome refresh CI: <https://github.com/happysnaker/qq-ai-bot/actions/runs/28997968153>
 - Promotion-outcome refresh CodeQL: <https://github.com/happysnaker/qq-ai-bot/actions/runs/28997968111>
@@ -45,13 +46,13 @@
 When updating an external surface:
 
 - [ ] Link the stable release when relevant.
-- [ ] Link the arm64 smoke run only when the target cares about self-hosted / ARM / app-store packaging.
+- [ ] Link the arm64 smoke run and outreach kit only when the target cares about self-hosted / ARM / app-store packaging.
 - [ ] Avoid over-claiming physical host validation; `qq-ai-bot#26` remains open for real CasaOS / physical ARM evidence.
 - [ ] Keep comments short and source-linked.
 - [ ] Do not paste private QQ details, OneBot tokens, group IDs, user IDs, QR/login screenshots, or private chat content.
 
 ## Sponsor CTA
 
-The clearest current funding target remains [#26 arm64 / CasaOS deployment validation](https://github.com/happysnaker/qq-ai-bot/issues/26): QEMU smoke is green and the [tester pack](arm64-casaos-tester-pack.md) is published, but real physical ARM / CasaOS reports are still missing.
+The clearest current funding target remains [#26 arm64 / CasaOS deployment validation](https://github.com/happysnaker/qq-ai-bot/issues/26): QEMU smoke is green, the [tester pack](arm64-casaos-tester-pack.md) and [outreach kit](homelab-outreach-kit.md) are published, but real physical ARM / CasaOS reports are still missing.
 
 Support page: <https://happysnaker.github.io/support/#from-qq-ai-bot>.

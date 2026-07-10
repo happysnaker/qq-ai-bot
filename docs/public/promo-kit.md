@@ -114,6 +114,57 @@ That is the kind of honesty I want in this repo: useful defaults, clear boundari
 推荐理由：它不是一个只会聊天的 demo，而是把 QQ transport、ACP agent bridge、session store、部署文档和运维边界整理成了一个更像 bot infrastructure 的仓库。
 ```
 
+
+## Review follow-up snippets
+
+Use these only when a PR has gone stale or a maintainer asks for more context. Do not spam maintainers; one short source-linked follow-up is enough.
+
+### LLOneBot docs / Nix follow-up
+
+```markdown
+Small follow-up: this integration doc is meant to give LLOneBot users one concrete QQ ↔ AI deployment path without changing the default LLOneBot quickstart.
+
+Current proof links:
+- qq-ai-bot project page: https://happysnaker.github.io/qq-ai-bot/
+- v0.1.7 release: https://github.com/happysnaker/qq-ai-bot/releases/tag/v0.1.7
+- latest arm64 smoke: https://github.com/happysnaker/qq-ai-bot/actions/runs/29026549935
+
+I am happy to trim wording or move the section if a lighter docs entry fits this repo better.
+```
+
+### Docker / app-store follow-up
+
+```markdown
+Small follow-up with current packaging evidence:
+
+- public image: ghcr.io/happysnaker/qq-ai-bot:v0.1.7 and :latest
+- project page: https://happysnaker.github.io/qq-ai-bot/
+- latest Docker publish: https://github.com/happysnaker/qq-ai-bot/actions/runs/29026418551
+- latest arm64 image smoke: https://github.com/happysnaker/qq-ai-bot/actions/runs/29026549935
+
+The remaining caveat is still physical CasaOS / real ARM host validation, tracked here: https://github.com/happysnaker/qq-ai-bot/issues/26
+```
+
+### Awesome-list follow-up
+
+```markdown
+Small status note: the project now has a stable public release, project page, Docker packaging, and an ecosystem tracker.
+
+Useful review links:
+- project page: https://happysnaker.github.io/qq-ai-bot/
+- ecosystem tracker: https://github.com/happysnaker/qq-ai-bot/blob/main/docs/public/ecosystem-tracker.md
+- latest release: https://github.com/happysnaker/qq-ai-bot/releases/tag/v0.1.7
+
+If the project is still too young for this list, I am fine leaving this open or revisiting after more release age / external usage evidence.
+```
+
+### What not to say
+
+- Do not claim physical CasaOS / real ARM validation until a real install report lands.
+- Do not describe closed/deferred PRs as listings.
+- Do not paste QQ account details, screenshots, tokens, group IDs, or private deployment logs.
+- Do not bump the same PR repeatedly without new evidence.
+
 ## Sponsor CTA options
 
 - If this saves you OneBot / ACP wiring time, sponsor the maintenance work.

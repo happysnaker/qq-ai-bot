@@ -5,9 +5,9 @@ If `qq-ai-bot` saved you OneBot + ACP wiring time, the fastest way to support on
 - **Project page:** https://happysnaker.github.io/qq-ai-bot/
 - **Support page:** https://happysnaker.github.io/support/#from-qq-ai-bot
 - **Sponsor one-pager:** https://github.com/happysnaker/happysnaker/releases/tag/v2026.07-sponsor-one-pager
-- **Best payment note:** `qq-ai-bot`
-- **Current validation note:** `qq-ai-bot #26 arm64`
-- **Also works well:** `qq-ai-bot setup`
+- **Best payment note:** `qq-ai-bot #26 arm64`
+- **Also useful:** `qq-ai-bot maintenance` for docs / CI / dependency / ecosystem follow-up
+- **Review packaging note:** `qq-ai-bot review` for README / project-page / awesome-list packaging work
 - **Low-friction tip:** `¥9.9 / ¥19.9` if the repo saved you ten minutes
 - **Fastest paid help:** `¥29.9` for one blunt deploy / README / landing-page first pass on your own bot / agent repo
 - **Deploy/debug read template:** `Deploy read | qq-ai-bot inbound | repo link`
@@ -16,7 +16,7 @@ If `qq-ai-bot` saved you OneBot + ACP wiring time, the fastest way to support on
 - **Paid feedback:** `¥29.9` quick blunt read or `¥99` async GitHub / README / landing-page packaging review
 - **Good inbound email subject:** `Quick read | qq-ai-bot inbound | repo link`
 - **Typical async-review turnaround:** usually within `72 hours` for the `¥99` path
-- **What direct support funds next:** real arm64 / CasaOS validation, richer media, stronger tracing / observability, and the next production-grade polish pass
+- **What direct support funds next:** real arm64 / CasaOS validation, richer media, stronger tracing / observability, external PR follow-up, and the next production-grade polish pass
 
 If you want the same cleanup for your own bot / AI / infra repo, the review details are on:
 
@@ -32,7 +32,12 @@ Current concrete target:
 Public proof / promo links:
 
 - Project page: <https://happysnaker.github.io/qq-ai-bot/>
-- Promo kit: [docs/public/promo-kit.md](docs/public/promo-kit.md)
+- Latest release: <https://github.com/happysnaker/qq-ai-bot/releases/tag/v0.1.7>
+- Latest CI: <https://github.com/happysnaker/qq-ai-bot/actions/runs/29070102008>
+- Latest CodeQL: <https://github.com/happysnaker/qq-ai-bot/actions/runs/29070102007>
+- Latest Docker publish: <https://github.com/happysnaker/qq-ai-bot/actions/runs/29070102090>
+- Latest arm64 smoke: <https://github.com/happysnaker/qq-ai-bot/actions/runs/29070243291>
+- Promo kit / review follow-up snippets: [docs/public/promo-kit.md](docs/public/promo-kit.md)
 - Sponsorware roadmap: [docs/public/sponsorware.md](docs/public/sponsorware.md)
 - Ecosystem tracker: [docs/public/ecosystem-tracker.md](docs/public/ecosystem-tracker.md)
 - Deployment validation: [docs/deployment-validation.md](docs/deployment-validation.md)

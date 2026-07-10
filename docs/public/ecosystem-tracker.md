@@ -24,7 +24,7 @@
 | AwesomeHomelab listing | open | [AwesomeHomelab#98](https://github.com/AwesomeHomelab/awesome-homelab/pull/98) | homelab-facing AI listing PR open / mergeable; project page already linked in PR body; rechecked 2026-07-09, no maintainer feedback | check review weekly |
 | Haxxnet Compose example | closed / deferred | [Compose-Examples#137](https://github.com/Haxxnet/Compose-Examples/pull/137) | closed by maintainer as “too young project”; useful signal for maturity threshold, not a listing | reconsider after more releases / age |
 | awesome-selfhosted listing | closed / rule-deferred | [awesome-selfhosted-data#2668](https://github.com/awesome-selfhosted/awesome-selfhosted-data/issues/2668) | intentionally opened as an early parking issue; closed as not planned because first release is not older than 4 months | reconsider after 2026-11-02 |
-| ARM/CasaOS tester call | open | [discussion #43](https://github.com/happysnaker/qq-ai-bot/discussions/43) | asks for physical ARM / CasaOS install reports; rechecked 2026-07-09, no reports yet | check for reports weekly |
+| ARM/CasaOS tester call | open | [discussion #43](https://github.com/happysnaker/qq-ai-bot/discussions/43) / [tester pack](arm64-casaos-tester-pack.md) | asks for physical ARM / CasaOS install reports; tester pack published 2026-07-10; no reports yet | check for reports weekly |
 | Sponsorware roadmap | open | [discussion #30](https://github.com/happysnaker/qq-ai-bot/discussions/30) | central sponsorware and promo-kit discussion | update after shipped slices |
 
 ## Current proof assets
@@ -52,6 +52,6 @@ When updating an external surface:
 
 ## Sponsor CTA
 
-The clearest current funding target remains [#26 arm64 / CasaOS deployment validation](https://github.com/happysnaker/qq-ai-bot/issues/26): QEMU smoke is green, but real physical ARM / CasaOS reports are still missing.
+The clearest current funding target remains [#26 arm64 / CasaOS deployment validation](https://github.com/happysnaker/qq-ai-bot/issues/26): QEMU smoke is green and the [tester pack](arm64-casaos-tester-pack.md) is published, but real physical ARM / CasaOS reports are still missing.
 
 Support page: <https://happysnaker.github.io/support/#from-qq-ai-bot>.

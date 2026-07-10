@@ -33,6 +33,7 @@ Open these in order if you only have a few minutes:
 | 5 | [Multi-instance notes](../multi-instance-notes.md) | Redis and horizontal deployment limits are documented honestly |
 | 6 | [Sponsorware roadmap](sponsorware.md) | current operator-facing funding target is explicit |
 | 7 | [Ecosystem tracker](ecosystem-tracker.md) | public OneBot / NapCat / LLOneBot / Docker / CasaOS / Umbrel surfaces are tracked |
+| 8 | [arm64 / CasaOS tester pack](arm64-casaos-tester-pack.md) | gives physical-host testers one public-safe checklist for closing #26 |
 
 ## Current public evidence
 
@@ -67,7 +68,7 @@ What is still open:
 - real NAS / SBC / homelab install report;
 - operator-submitted logs through the [arm64 / CasaOS report template](../../.github/ISSUE_TEMPLATE/arm64_casaos_report.md).
 
-Tracked in [qq-ai-bot#26](https://github.com/happysnaker/qq-ai-bot/issues/26).
+Tracked in [qq-ai-bot#26](https://github.com/happysnaker/qq-ai-bot/issues/26). Testers should start with the [arm64 / CasaOS tester pack](arm64-casaos-tester-pack.md).
 
 ## Reviewer quick path
 
@@ -88,7 +89,7 @@ IMAGE=ghcr.io/happysnaker/qq-ai-bot:v0.1.7 ./scripts/smoke-arm64-image.sh
 
 The project is free and open source. Sponsorship accelerates boring but useful operator work:
 
-- real CasaOS / physical ARM validation;
+- real CasaOS / physical ARM validation and tester report cleanup;
 - deployment docs and troubleshooting;
 - demo bundles and screenshots;
 - WebSocket mode compatibility checks;

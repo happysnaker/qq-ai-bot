@@ -31,6 +31,7 @@ It is positioned as bot infrastructure / integration glue, not a toy chat UI.
 - `/readyz` and `/status`
 - Docker image and demo compose path
 - v0.1.7 tag with CI / Docker publish / arm64 QEMU smoke evidence
+- arm64 / CasaOS tester pack: https://github.com/happysnaker/qq-ai-bot/blob/main/docs/public/arm64-casaos-tester-pack.md
 - multi-instance / Redis caveats documented honestly
 
 ## Best links to share
@@ -142,7 +143,7 @@ Small follow-up with current packaging evidence:
 - latest Docker publish: https://github.com/happysnaker/qq-ai-bot/actions/runs/29026418551
 - latest arm64 image smoke: https://github.com/happysnaker/qq-ai-bot/actions/runs/29026549935
 
-The remaining caveat is still physical CasaOS / real ARM host validation, tracked here: https://github.com/happysnaker/qq-ai-bot/issues/26
+The remaining caveat is still physical CasaOS / real ARM host validation. Tester checklist: https://github.com/happysnaker/qq-ai-bot/blob/main/docs/public/arm64-casaos-tester-pack.md. Tracker: https://github.com/happysnaker/qq-ai-bot/issues/26
 ```
 
 ### Awesome-list follow-up
@@ -168,7 +169,7 @@ If the project is still too young for this list, I am fine leaving this open or 
 ## Sponsor CTA options
 
 - If this saves you OneBot / ACP wiring time, sponsor the maintenance work.
-- Support the next operator-facing features: physical ARM/CasaOS validation, deployment troubleshooting, public demo assets, and richer operations docs.
+- Support the next operator-facing features: physical ARM/CasaOS validation via the tester pack, deployment troubleshooting, public demo assets, and richer operations docs.
 - The project is free; sponsorship funds the boring but useful packaging work that makes it safer to run.
 
 Support page: <https://happysnaker.github.io/support/#from-qq-ai-bot>

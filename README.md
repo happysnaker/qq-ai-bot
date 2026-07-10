@@ -29,7 +29,7 @@
 - 安全反馈：[SECURITY.md](./SECURITY.md)
 - 生态收录：已进入 [OneBot 生态 / 应用案例](https://onebot.dev/ecosystem)
 - 官方社区展示：已发到 [OneBot 官方 Discussions / 应用 / SDK](https://github.com/orgs/botuniverse/discussions/264)
-- 镜像分发：`ghcr.io/happysnaker/qq-ai-bot:v0.1.7` 与 `ghcr.io/happysnaker/qq-ai-bot:latest` 已发布 `linux/amd64` 与 `linux/arm64`；见 [Deployment validation](docs/deployment-validation.md)
+- 镜像分发：`ghcr.io/happysnaker/qq-ai-bot:v0.1.7` 与 `ghcr.io/happysnaker/qq-ai-bot:latest` 已发布 `linux/amd64` 与 `linux/arm64`；见 [Deployment validation](docs/deployment-validation.md) 与 [arm64 / CasaOS tester pack](docs/public/arm64-casaos-tester-pack.md)
 - 社区入口：[Show and tell](https://github.com/happysnaker/qq-ai-bot/discussions/10) · [Deployment matrix Q&A](https://github.com/happysnaker/qq-ai-bot/discussions/11) · [Ecosystem tracker](docs/public/ecosystem-tracker.md)
 - 想直接拿来改成你自己的 bot 脚手架：点 GitHub 上方的 **Use this template**
 - 技术栈：Node.js 22+、TypeScript、Docker、GitHub Actions
@@ -74,7 +74,7 @@
 | [Postgres session store](https://github.com/happysnaker/qq-ai-bot/issues/24) | ¥50 | 100% | ✅ 已发布 |
 | [多实例部署指南](docs/multi-instance-notes.md) | ¥30 | 100% | ✅ 已发布 |
 | [端到端延迟 histograms](https://github.com/happysnaker/qq-ai-bot/issues/23) | ¥80 | 100% | ✅ 已发布 |
-| [arm64 / CasaOS 真实安装报告](https://github.com/happysnaker/qq-ai-bot/issues/26) | ¥50 | 80% | 🧪 QEMU smoke 已过，等真机报告 |
+| [arm64 / CasaOS 真实安装报告](docs/public/arm64-casaos-tester-pack.md) | ¥50 | 80% | 🧪 QEMU smoke 已过，等真机报告 |
 | [微信通知集成](https://github.com/happysnaker/qq-ai-bot/issues/new?title=feat:%20WeChat%20notification%20integration) | ¥100 | 0% | 🚧 等待赞助 |
 | [Web Dashboard (管理面板)](https://github.com/happysnaker/qq-ai-bot/issues/new?title=feat:%20Web%20admin%20dashboard) | ¥150 | 0% | 🚧 等待赞助 |
 
@@ -289,13 +289,14 @@ ws://127.0.0.1:16700/onebot/v11/ws
 - **ACP 协议社区技术讨论**：看 [ACP question from a OneBot/QQ client: recommended richer-media boundary for channel clients?](https://github.com/orgs/agentclientprotocol/discussions/1591)
 - **ACP 官方 clients 文档收录（已合并）**：看 [agentclientprotocol/agent-client-protocol#1592](https://github.com/agentclientprotocol/agent-client-protocol/pull/1592)
 - **具体可认领任务**：看 [`help wanted` issues](https://github.com/happysnaker/qq-ai-bot/issues?q=is%3Aopen+label%3A%22help+wanted%22)
-- **arm64 / CasaOS 测试招募**：看 [Call for testers](https://github.com/happysnaker/qq-ai-bot/discussions/43) 与 [#26](https://github.com/happysnaker/qq-ai-bot/issues/26)
+- **arm64 / CasaOS 测试招募**：先看 [tester pack](docs/public/arm64-casaos-tester-pack.md)，再看 [Call for testers](https://github.com/happysnaker/qq-ai-bot/discussions/43) 与 [#26](https://github.com/happysnaker/qq-ai-bot/issues/26)
 - **直接支持仓库**：看 [SUPPORT.md](./SUPPORT.md)
 
 ## Public promo / sponsor kit
 
 - [Promo kit / 推广素材](docs/public/promo-kit.md)
 - [Sponsorware roadmap / 赞助路线](docs/public/sponsorware.md)
+- [arm64 / CasaOS tester pack](docs/public/arm64-casaos-tester-pack.md)
 - [Sponsorware discussion / 赞助讨论](https://github.com/happysnaker/qq-ai-bot/discussions/30)
 
 ## Promo kit / 转发文案

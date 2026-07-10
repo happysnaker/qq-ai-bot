@@ -82,7 +82,7 @@ This is stronger than a manifest-only check because it boots the arm64 image and
 
 Issue [#26](https://github.com/happysnaker/qq-ai-bot/issues/26) tracks the remaining validation work:
 
-Use the [arm64 / CasaOS install report template](../.github/ISSUE_TEMPLATE/arm64_casaos_report.md) when submitting evidence.
+Use the [arm64 / CasaOS tester pack](public/arm64-casaos-tester-pack.md) and the [install report template](../.github/ISSUE_TEMPLATE/arm64_casaos_report.md) when submitting evidence.
 
 - run the stack on a real arm64 host / NAS / SBC;
 - validate the CasaOS app-store flow;

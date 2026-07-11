@@ -7,6 +7,7 @@ If `qq-ai-bot` saved you OneBot + ACP wiring time, the fastest way to support on
 - **Support page:** https://happysnaker.github.io/support/#from-qq-ai-bot
 - **Current concrete asks:** https://happysnaker.github.io/support/#current-asks
 - **Sponsor one-pager:** https://github.com/happysnaker/happysnaker/releases/tag/v2026.07-sponsor-one-pager
+- **Share kit:** https://github.com/happysnaker/happysnaker/blob/master/docs/share-kit.md
 - **Best payment note:** `qq-ai-bot #26 arm64`
 - **Tester pack:** [docs/public/arm64-casaos-tester-pack.md](docs/public/arm64-casaos-tester-pack.md)
 - **Also useful:** `qq-ai-bot maintenance` for docs / CI / dependency / ecosystem follow-up

@@ -14,7 +14,7 @@ contact_links:
     about: See the current qq-ai-bot #26 arm64 validation ask, RDLeader #27, and quick-read route.
   - name: Share kit
     url: https://github.com/happysnaker/happysnaker/blob/master/docs/share-kit.md
-    about: Copy-ready X / LinkedIn / WeChat / curator snippets with proof and sponsor guardrails before promoting qq-ai-bot.
+    about: Copy-ready X / LinkedIn / WeChat / curator snippets plus sponsor / paid-support intake replies with proof, privacy, and sponsor guardrails before promoting qq-ai-bot.
   - name: Fastest start / FAQ
     url: https://github.com/happysnaker/qq-ai-bot/blob/main/docs/faq.md
     about: Check the quickest path, common WS/token mistakes, and agent wiring pitfalls before opening an issue.

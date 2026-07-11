@@ -14,8 +14,10 @@ For project-specific sponsorship and public roadmap targets, see:
 - [arm64 / CasaOS tester pack](../docs/public/arm64-casaos-tester-pack.md)
 - [Sponsor one-pager](https://github.com/happysnaker/happysnaker/releases/tag/v2026.07-sponsor-one-pager)
 - [Share kit](https://github.com/happysnaker/happysnaker/blob/master/docs/share-kit.md)
+- [Deploy-read sample](https://happysnaker.github.io/review/deploy-read-sample/) for your own bot / agent / infra repo packaging
 - [Flagship status snapshot](https://github.com/happysnaker/happysnaker/blob/master/docs/flagship-status-snapshot.md)
 
 Support page: <https://happysnaker.github.io/support/#from-qq-ai-bot>
+Paid review paths: `¥29.9` quick read or `¥99` async GitHub / README / landing-page packaging review.
 
 Best payment notes: `qq-ai-bot #26 arm64` for the current physical-host validation target, `qq-ai-bot maintenance` for docs / CI / ecosystem follow-up, or `qq-ai-bot review` for README / project-page packaging work. Latest proof links are in the root `SUPPORT.md`.

@@ -3,7 +3,9 @@
 If `qq-ai-bot` saved you OneBot + ACP wiring time, the fastest way to support ongoing maintenance is here:
 
 - **Project page:** https://happysnaker.github.io/qq-ai-bot/
+- **Proof before payment:** https://happysnaker.github.io/support/#proof-before-payment
 - **Support page:** https://happysnaker.github.io/support/#from-qq-ai-bot
+- **Current concrete asks:** https://happysnaker.github.io/support/#current-asks
 - **Sponsor one-pager:** https://github.com/happysnaker/happysnaker/releases/tag/v2026.07-sponsor-one-pager
 - **Best payment note:** `qq-ai-bot #26 arm64`
 - **Tester pack:** [docs/public/arm64-casaos-tester-pack.md](docs/public/arm64-casaos-tester-pack.md)
@@ -34,10 +36,10 @@ Public proof / promo links:
 
 - Project page: <https://happysnaker.github.io/qq-ai-bot/>
 - Latest release: <https://github.com/happysnaker/qq-ai-bot/releases/tag/v0.1.7>
-- Latest CI: <https://github.com/happysnaker/qq-ai-bot/actions/runs/29070102008>
-- Latest CodeQL: <https://github.com/happysnaker/qq-ai-bot/actions/runs/29070102007>
-- Latest Docker publish: <https://github.com/happysnaker/qq-ai-bot/actions/runs/29070102090>
-- Latest arm64 smoke: <https://github.com/happysnaker/qq-ai-bot/actions/runs/29070243291>
+- Latest CI: <https://github.com/happysnaker/qq-ai-bot/actions/runs/29102776397>
+- Latest CodeQL: <https://github.com/happysnaker/qq-ai-bot/actions/runs/29102776374>
+- Latest Docker publish: <https://github.com/happysnaker/qq-ai-bot/actions/runs/29102776459>
+- Latest arm64 smoke: <https://github.com/happysnaker/qq-ai-bot/actions/runs/29102901202>
 - Promo kit / review follow-up snippets: [docs/public/promo-kit.md](docs/public/promo-kit.md)
 - Sponsorware roadmap: [docs/public/sponsorware.md](docs/public/sponsorware.md)
 - Ecosystem tracker: [docs/public/ecosystem-tracker.md](docs/public/ecosystem-tracker.md)

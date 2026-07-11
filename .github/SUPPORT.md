@@ -8,6 +8,7 @@ For project-specific sponsorship and public roadmap targets, see:
 - [Ecosystem tracker](../docs/public/ecosystem-tracker.md)
 - [Project page](https://happysnaker.github.io/qq-ai-bot/)
 - [Proof before payment](https://happysnaker.github.io/support/#proof-before-payment)
+- [10-second support router](https://happysnaker.github.io/support/#sponsor-router)
 - [Current concrete asks](https://happysnaker.github.io/support/#current-asks)
 - [Support this project](https://github.com/happysnaker/qq-ai-bot/issues/28)
 - [arm64 / CasaOS validation target](https://github.com/happysnaker/qq-ai-bot/issues/26)

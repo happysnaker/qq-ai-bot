@@ -6,6 +6,9 @@ contact_links:
   - name: Proof before payment
     url: https://happysnaker.github.io/support/#proof-before-payment
     about: Check current workflow / alert proof and concrete payment notes before supporting qq-ai-bot or buying a deploy/readme review.
+  - name: 10-second support router
+    url: https://happysnaker.github.io/support/#sponsor-router
+    about: Choose Tip / Proof / Review / Fund before paying, sponsoring qq-ai-bot #26, or buying a deploy/read pass.
   - name: Current concrete asks
     url: https://happysnaker.github.io/support/#current-asks
     about: See the current qq-ai-bot #26 arm64 validation ask, RDLeader #27, and quick-read route.

@@ -3,6 +3,12 @@ contact_links:
   - name: arm64 / CasaOS install report
     url: https://github.com/happysnaker/qq-ai-bot/issues/new?template=arm64_casaos_report.md
     about: Share a real arm64, NAS, SBC, or CasaOS install attempt with redacted evidence.
+  - name: Proof before payment
+    url: https://happysnaker.github.io/support/#proof-before-payment
+    about: Check current workflow / alert proof and concrete payment notes before supporting qq-ai-bot or buying a deploy/readme review.
+  - name: Current concrete asks
+    url: https://happysnaker.github.io/support/#current-asks
+    about: See the current qq-ai-bot #26 arm64 validation ask, RDLeader #27, and quick-read route.
   - name: Fastest start / FAQ
     url: https://github.com/happysnaker/qq-ai-bot/blob/main/docs/faq.md
     about: Check the quickest path, common WS/token mistakes, and agent wiring pitfalls before opening an issue.

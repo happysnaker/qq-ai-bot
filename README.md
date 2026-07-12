@@ -11,7 +11,7 @@
 
 
 
-> 💛 **这个项目完全免费开源。如果它帮你省了时间，请考虑 [请我喝杯咖啡](https://happysnaker.github.io/support/#from-qq-ai-bot)（¥9.9 起，微信/支付宝）。不确定该打赏、看 proof、买 deploy-read，还是资助 `qq-ai-bot #26 arm64` 真机验证？先走 [10-second support router](https://happysnaker.github.io/support/#sponsor-router)。**
+> 💛 **这个项目完全免费开源。如果它帮你省了时间，请考虑 [请我喝杯咖啡](https://happysnaker.github.io/support/#from-qq-ai-bot)（¥9.9 起，微信/支付宝）。不确定该打赏、看 proof、买 deploy-read，还是资助 `qq-ai-bot #26 arm64` 真机验证？先走 [10-second support router](https://happysnaker.github.io/support/#sponsor-router)；如果你是 homelab tester / bot builder / curator / sponsor，先看 [sponsor prospect pipeline](https://github.com/happysnaker/happysnaker/blob/master/docs/sponsor-prospect-pipeline.md) 选对 proof、CTA、support note 和 guardrail。**
 
 一个面向实际部署的 **QQ ↔ AI** 机器人项目。
 
@@ -300,6 +300,7 @@ ws://127.0.0.1:16700/onebot/v11/ws
 - [Homelab / CasaOS outreach kit](docs/public/homelab-outreach-kit.md)
 - [Sponsorware discussion / 赞助讨论](https://github.com/happysnaker/qq-ai-bot/discussions/30)
 - [Sponsor / paid-support intake replies](https://github.com/happysnaker/happysnaker/blob/master/docs/share-kit.md#sponsor--paid-support-intake-replies)
+- [Sponsor prospect pipeline](https://github.com/happysnaker/happysnaker/blob/master/docs/sponsor-prospect-pipeline.md) — route homelab testers, bot builders, curators, sponsors, and paid-review customers to the right proof, CTA, support note, and guardrail
 
 ## Promo kit / 转发文案
 

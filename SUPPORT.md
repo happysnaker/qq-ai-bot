@@ -10,6 +10,7 @@ If `qq-ai-bot` saved you OneBot + ACP wiring time, the fastest way to support on
 - **Sponsor one-pager:** https://github.com/happysnaker/happysnaker/releases/tag/v2026.07-sponsor-one-pager
 - **Share kit:** https://github.com/happysnaker/happysnaker/blob/master/docs/share-kit.md
 - **Sponsor / paid-support intake replies:** https://github.com/happysnaker/happysnaker/blob/master/docs/share-kit.md#sponsor--paid-support-intake-replies
+- **Sponsor prospect pipeline:** https://github.com/happysnaker/happysnaker/blob/master/docs/sponsor-prospect-pipeline.md
 - **Best payment note:** `qq-ai-bot #26 arm64`
 - **Tester pack:** [docs/public/arm64-casaos-tester-pack.md](docs/public/arm64-casaos-tester-pack.md)
 - **Also useful:** `qq-ai-bot maintenance` for docs / CI / dependency / ecosystem follow-up
@@ -23,6 +24,8 @@ If `qq-ai-bot` saved you OneBot + ACP wiring time, the fastest way to support on
 - **Good inbound email subject:** `Quick read | qq-ai-bot inbound | repo link`
 - **Typical async-review turnaround:** usually within `72 hours` for the `¥99` path
 - **What direct support funds next:** real arm64 / CasaOS validation, richer media, stronger tracing / observability, external PR follow-up, and the next production-grade polish pass
+
+Use the sponsor prospect pipeline to choose the right proof, CTA, support note, and guardrail before outreach or payment: https://github.com/happysnaker/happysnaker/blob/master/docs/sponsor-prospect-pipeline.md
 
 If you want the same cleanup for your own bot / AI / infra repo, the review details are on:
 

@@ -11,6 +11,7 @@ If `qq-ai-bot` saved you OneBot + ACP wiring time, the fastest way to support on
 - **Share kit:** https://github.com/happysnaker/happysnaker/blob/master/docs/share-kit.md
 - **Sponsor / paid-support intake replies:** https://github.com/happysnaker/happysnaker/blob/master/docs/share-kit.md#sponsor--paid-support-intake-replies
 - **Sponsor prospect pipeline:** https://github.com/happysnaker/happysnaker/blob/master/docs/sponsor-prospect-pipeline.md
+- **Sponsor conversion scorecard:** https://github.com/happysnaker/happysnaker/blob/master/docs/sponsor-conversion-scorecard.md
 - **Best payment note:** `qq-ai-bot #26 arm64`
 - **Tester pack:** [docs/public/arm64-casaos-tester-pack.md](docs/public/arm64-casaos-tester-pack.md)
 - **Also useful:** `qq-ai-bot maintenance` for docs / CI / dependency / ecosystem follow-up
@@ -53,4 +54,4 @@ Public proof / promo links:
 
 If you support a specific `qq-ai-bot` feature, include the issue number in the payment note or email subject.
 
-Do not paste private logs, credentials, QR codes, payment screenshots, internal URLs, or raw live integration output in public issues. Keep paid-review intake on public repo/profile/landing-page material unless you move details to private email.
+Do not paste private logs, credentials, QR codes, payment screenshots, internal URLs, or raw live integration output in public issues. Use Hot / Warm / Nurture / No-send qualification before support/outreach asks, and keep paid-review intake on public repo/profile/landing-page material unless you move details to private email.

@@ -11,7 +11,7 @@
 
 
 
-> 💛 **这个项目完全免费开源。如果它帮你省了时间，请考虑 [请我喝杯咖啡](https://happysnaker.github.io/support/#from-qq-ai-bot)（¥9.9 起，微信/支付宝）。不确定该打赏、看 proof、买 deploy-read，还是资助 `qq-ai-bot #26 arm64` 真机验证？先走 [10-second support router](https://happysnaker.github.io/support/#sponsor-router)；如果你是 homelab tester / bot builder / curator / sponsor，先看 [sponsor prospect pipeline](https://github.com/happysnaker/happysnaker/blob/master/docs/sponsor-prospect-pipeline.md) 选对 proof、CTA、support note 和 guardrail。**
+> 💛 **这个项目完全免费开源。如果它帮你省了时间，请考虑 [请我喝杯咖啡](https://happysnaker.github.io/support/#from-qq-ai-bot)（¥9.9 起，微信/支付宝）。不确定该打赏、看 proof、买 deploy-read，还是资助 `qq-ai-bot #26 arm64` 真机验证？先走 [10-second support router](https://happysnaker.github.io/support/#sponsor-router)；如果你是 homelab tester / bot builder / curator / sponsor，先看 [sponsor prospect pipeline](https://github.com/happysnaker/happysnaker/blob/master/docs/sponsor-prospect-pipeline.md) 选对 proof、CTA、support note 和 guardrail，再用 [sponsor conversion scorecard](https://github.com/happysnaker/happysnaker/blob/master/docs/sponsor-conversion-scorecard.md) 判断 Hot / Warm / Nurture / No-send，避免泛泛 donation bump。**
 
 一个面向实际部署的 **QQ ↔ AI** 机器人项目。
 
@@ -301,6 +301,7 @@ ws://127.0.0.1:16700/onebot/v11/ws
 - [Sponsorware discussion / 赞助讨论](https://github.com/happysnaker/qq-ai-bot/discussions/30)
 - [Sponsor / paid-support intake replies](https://github.com/happysnaker/happysnaker/blob/master/docs/share-kit.md#sponsor--paid-support-intake-replies)
 - [Sponsor prospect pipeline](https://github.com/happysnaker/happysnaker/blob/master/docs/sponsor-prospect-pipeline.md) — route homelab testers, bot builders, curators, sponsors, and paid-review customers to the right proof, CTA, support note, and guardrail
+- [Sponsor conversion scorecard](https://github.com/happysnaker/happysnaker/blob/master/docs/sponsor-conversion-scorecard.md) — classify Hot / Warm / Nurture / No-send before posting a support ask or external follow-up
 
 ## Promo kit / 转发文案
 
@@ -361,5 +362,5 @@ qq-ai-bot is a self-hosted QQ ↔ AI bot scaffold for OneBot 11 / NapCat / LLOne
 - 如果你想让我先 blunt 地看一眼你自己的 bot / agent / infra 仓库，可直接发这个模板：[¥29.9 Quick read | repo link](mailto:happysnaker@foxmail.com?subject=Quick%20read%20%7C%20bot%20repo%20link&body=Repo%20link%3A%0AWhat%20feels%20weak%3A%20README%20/%20positioning%20/%20landing%20page%0APayment%20screenshot%3A%20attach%20privately%20by%20email%20only%2C%20never%20in%20public%20issues)
 - 如果你想要更完整的 GitHub / README / landing-page 包装 pass，可直接发这个模板：[¥99 Async review | repo link](mailto:happysnaker@foxmail.com?subject=Async%20review%20%7C%20bot%20repo%20link&body=Repo%20link(s)%3A%0ATarget%20role%20or%20use%20case%3A%0AWhat%20feels%20weak%3A%20README%20/%20positioning%20/%20landing%20page%20/%20GitHub%20profile%0APayment%20screenshot%3A%20attach%20privately%20by%20email%20only%2C%20never%20in%20public%20issues)
 - 如果你就是从 `qq-ai-bot` 进来的，邮件标题直接写：`Quick read | qq-ai-bot inbound | repo link` 或 `Async review | qq-ai-bot inbound | repo link`，我能更快识别上下文
-- 不要在 public issue 里贴 private logs、credentials、QR codes、payment screenshots、internal URLs 或 raw live integration output；先用 [sponsor / paid-support intake replies](https://github.com/happysnaker/happysnaker/blob/master/docs/share-kit.md#sponsor--paid-support-intake-replies) 选正确入口。
+- 不要在 public issue 里贴 private logs、credentials、QR codes、payment screenshots、internal URLs 或 raw live integration output；先用 [sponsor conversion scorecard](https://github.com/happysnaker/happysnaker/blob/master/docs/sponsor-conversion-scorecard.md) 做 Hot / Warm / Nurture / No-send 判断，再用 [sponsor / paid-support intake replies](https://github.com/happysnaker/happysnaker/blob/master/docs/share-kit.md#sponsor--paid-support-intake-replies) 选正确入口。
 - 如果你想把自己的 bot / agent / infra 仓库也整理成这种更像成品的状态，可看轻量付费反馈：[happysnaker.github.io/review](https://happysnaker.github.io/review/)
